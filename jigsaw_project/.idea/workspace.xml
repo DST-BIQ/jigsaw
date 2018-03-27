@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eda3aeb5-cdb2-4347-922a-8fbb5be84576" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__junit_junit_4_12.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_hamcrest_hamcrest_core_1_3.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_0_0_M4.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_params_5_0_0_M4.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_0_0_M4.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_mockito_mockito_all_2_0_2_beta.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/libraries/Maven__org_opentest4j_opentest4j_1_0_0_M2.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../.idea/modules.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/jigsaw.iml" afterPath="$PROJECT_DIR$/jigsaw.iml" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -428,12 +417,12 @@
       <option name="presentableId" value="Default" />
       <updated>1522152814130</updated>
       <workItem from="1522152817502" duration="188000" />
-      <workItem from="1522160071326" duration="569000" />
+      <workItem from="1522160071326" duration="735000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="757000" />
+    <option name="totallyTimeSpent" value="923000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
