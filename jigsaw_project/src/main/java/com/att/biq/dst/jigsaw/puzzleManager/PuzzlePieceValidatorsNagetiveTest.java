@@ -1,7 +1,6 @@
-package Puzzle;
+package com.att.biq.dst.jigsaw.puzzleManager;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
