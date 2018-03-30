@@ -42,7 +42,7 @@ return null; // if fails and nothing to return.
      *
      */
 
-    public static void writeToFile(String data, File file){
+    public void writeToFile(String data, File file){
 
         try(FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw))
@@ -51,7 +51,7 @@ return null; // if fails and nothing to return.
             bw.newLine();
         } catch (IOException e) {
 
-            System.out.println(e.getMessage());
+            System.out.println("you have any error accessing your file:  "+e.getMessage());
 
         }
 
