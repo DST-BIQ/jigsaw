@@ -16,9 +16,6 @@ import static org.junit.Assert.assertEquals;
 
 class FileManagerTest {
 
-    /**
-     * create temporary file
-     */
     static String basePath = "C:\\git_clone\\bit_std\\jigsaw\\jigsaw_project\\src\\resources\\";
     static String fileToCreate = "testFile.txt";
     File file;
