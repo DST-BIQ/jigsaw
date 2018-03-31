@@ -1,7 +1,6 @@
 package com.att.biq.dst.jigsaw.fileUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class FileInputParser {
 
@@ -48,79 +47,79 @@ public class FileInputParser {
     }
 
 
+
     /**
      * recieves list of lines from the file, return valid lines for puzzle
      *
      * @param list
      * @return
      */
-//TODO TESTS
-    public int[][] produceArrayForPuzzle(List<String> list) {
+//TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
+    public ArrayList<int[]> produceArrayForPuzzle(List<String> list) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<String> missingElementsIDs = new ArrayList<>();
 
+        ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+
+
         for ( String line : list ) {
             int countErrors = 0;
-            if (!wrongIDRange(list, line)) {
-                countErrors += 1;
-                fm.reportError("id:  " + getLinePuzzlePieceID(line) + "  in not in the range:  " + getFileRange(list));
-            }
+            if (!line.contains("Num"))  // ignore first line
+            {
+                if (isLineContainsOnlySpaces(line) || isLineEmpty(line)) {
+                    countErrors += 1;
+                    fm.reportError("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
 
-            if (isLineContainsOnlySpaces(line) || isLineEmpty(line)) {
-                countErrors += 1;
-                //TODO should be ignored, should we report it?
-                fm.reportError("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
+                }
 
-            }
+                if (isLineBeginswithDash(line)) {
+                    countErrors += 1;
+                    fm.reportError("lineNumber:  " + indexLines + "  begins with dash, ignore ");
 
-            if (isLineBeginswithDash(line)) {
-                countErrors += 1;
-                fm.reportError("lineNumber:  " + indexLines + "  begins with dash, ignore ");
-
-            }
-            if (isMissingElementInInputFile()) {
-                countErrors += 1;
-                missingElementsIDs.add(String.valueOf(getElementID(line)));
+                }
 
 
-            }
+                if (!idInRange(list, line)) {
+                    countErrors += 1;
+                    wrongElementIDs.add(String.valueOf(getElementID(line)));
+
+                }
+
+                if (isWrongElementFormat(line)) {
+                    countErrors += 1;
+                    fm.reportError("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
 
 
-            if (isMissingElementInInputFile()) {
-                countErrors += 1;
-                fm.reportError("Missing puzzle element(s) with the following IDs:  " + "");
-
-            }
-
-            if (wrongIDRange(list,  line)) {
-                countErrors += 1;
-                wrongElementIDs.add(String.valueOf(getElementID(line)));
-
-            }
-
-            if (isWrongElementFormat()) {
-                countErrors += 1;
-                fm.reportError("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
-
-
-            }
+                }
 
 //            Puzzle ID <id> has wrong data: <complete line from file including ID>
-            //check if line is valid
+                //check if line is valid
 
-            if (countErrors == 0) {
-                //add to intArray
+                if (countErrors == 0) {
+
+                    int[] puzzlePieceArray = new int[5]; // create new array in list size - max number of lines
+                    //parse line to prepare to enter to array
+                    String[] tempLine = line.split(",");
+
+                    for ( int i = 0; i <= 4; i++ ) {
+                        puzzlePieceArray[i] = Integer.valueOf(tempLine[i]);
+                    }
+
+                    puzzlePieceList.add(puzzlePieceArray);
+
+
+                }
             }
 
-            indexLines = +1;
+            indexLines =+1;
         }
 
         fm.reportError("Puzzle of size " + getNumberOfElements(list) + " cannot have the following IDs:" + wrongElementIDs);
-      //TODO sort before report
+
         fm.reportError("Puzzle of size " + getNumberOfElements(list) + " cannot have the following IDs:" + missingElementsIDs);
 
-        return new int[][]{{0, 0, 1, -1}, {1, 0, 0, 1}, {0, 1, 1, 0}, {-1, 1, 0, 0}};
+        return puzzlePieceList;
     }
 
 
@@ -131,16 +130,20 @@ public class FileInputParser {
      * @return string contains the puzzle piece
      */
     public String getPuzzlePieceData(String line) {
-        String[] lineArr = line.split(",");
+        try {
+            String[] lineArr = line.split(",");
 
-        String piece = "";
-        for ( int i = 1; i < lineArr.length; i++ ) {
+            String piece = "";
+            for ( int i = 1; i < lineArr.length; i++ ) {
 
-            piece = piece + lineArr[i] + ",";
+                piece = piece + lineArr[i] + ",";
 
+            }
+            return piece.substring(0, piece.lastIndexOf(",")).replace(" ", "");
         }
-        return piece.substring(0, piece.lastIndexOf(",")).replace(" ", "");
-
+        catch(IndexOutOfBoundsException e){
+            return "-1";
+        }
     }
 
     /**
@@ -150,7 +153,7 @@ public class FileInputParser {
      * @param line
      * @return true/false
      */
-    public boolean wrongIDRange(List<String> list, String line) {
+    public boolean idInRange(List<String> list, String line) {
 
         int numberOfElements = getNumberOfElements(list);
         int puzzlePieceID = getLinePuzzlePieceID(line);
@@ -190,19 +193,16 @@ public class FileInputParser {
     }
 
 
-
-
-
-
     /**
      * get the file ID range
+     *
      * @param list
      * @return String
      */
 
     public String getFileRange(List<String> list) {
-        if (getNumberOfElements(list)==1) return "1";
-        if (getNumberOfElements(list)==(-1)) return "N/A";
+        if (getNumberOfElements(list) == 1) return "1";
+        if (getNumberOfElements(list) == (-1)) return "N/A";
         return "1-" + getNumberOfElements(list);
     }
 
@@ -212,7 +212,7 @@ public class FileInputParser {
      * @param line
      * @return pieceID
      */
-     public int getLinePuzzlePieceID(String line) {
+    public int getLinePuzzlePieceID(String line) {
         try {
             String[] lineArr = line.split(",");
             return Integer.valueOf(lineArr[0]);
@@ -225,30 +225,82 @@ public class FileInputParser {
 
     /**
      * is this line begins with # (should be reported and ignored)
+     *
      * @param line
      * @return
      */
 
     public boolean isLineBeginswithDash(String line) {
-        line = line.replace(" ","");
+        line = line.replace(" ", "");
 
-         if(line.startsWith("#")){
-             return true;
-         }
+        if (line.startsWith("#")) {
+            return true;
+        }
 
         return false;
     }
 
+    /**
+     * go over the final list of valid elements, compare to range, if ID is not on the final list report missing
+     *
+     * @return set for print the IDs of missing elements
+     */
+    public SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
-    //TODO + TESTS
-    private boolean isMissingElementInInputFile() {
+        SortedSet<Integer> missingIDs = new TreeSet<>();
+        SortedSet<Integer> existingIDs = new TreeSet<>();
+        try {
+            // insert existing IDs to set
+            for ( int j = 0; j < pieceArray.length; j++ ) {
+                existingIDs.add(pieceArray[j][0]);
+            }
 
-        return true;
+            for ( int i = 1; i <= numberOfElements; i++ ) {
+                if (!existingIDs.contains(i)) {
+                    missingIDs.add(i);
+                }
+
+            }
+        } catch (NullPointerException e) {
+
+            for ( int i = 1; i <= numberOfElements; i++ ) {
+                missingIDs.add(i);
+            }
+
+        }
+
+
+        return missingIDs;
     }
 
     //TODO + TESTS
-    private boolean isWrongElementFormat() {
 
-        return true;
+    /**
+     * if the line has more than 5 parts (ID + 4 edges) or if the edges are not 1,0,-1 return wront element
+     * @param line
+     * @return
+     */
+    public boolean isWrongElementFormat(String line) {
+
+
+            String[] tempLine;
+            String lineWithNoSpaces= line.replace(" ","");
+            tempLine = lineWithNoSpaces.split(",");
+
+            if (tempLine.length!=5) {return true;}
+
+            for (int i=1;i<=4;i++){
+
+                if (!(tempLine[i].equals("1")||tempLine[i].equals("-1")||tempLine[i].equals("0") )){
+                    return true;
+                }
+
+            }
+
+
+
+        return false;
     }
+
+    
 }

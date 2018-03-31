@@ -1,7 +1,11 @@
 package com.att.biq.dst.jigsaw.fileUtils;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
@@ -9,7 +13,7 @@ import static java.nio.file.Files.readAllLines;
 public class FileManager {
 
 
-
+ArrayList<String> errorReportList = new ArrayList<>();
 
     /**
      * Read lines from file
@@ -54,6 +58,15 @@ return null; // if fails and nothing to return.
             System.out.println("you have any error accessing your file:  "+e.getMessage());
 
         }
+
+    }
+
+    //Adds to an arrayList a list of errors
+    public void reportError(String s) {
+
+        errorReportList.add(s);
+
+
 
     }
 }
