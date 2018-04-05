@@ -13,7 +13,7 @@ import static org.junit.Assert.assertFalse;
 public class PuzzlePieceValidatorsTest {
     List<int[]> puzzlePieces;
     PuzzlePieceValidators ppv;
-    FileManager fm = new FileManager();
+    FileManager fm = new FileManager("\"src/resources/output/report_"+ System.currentTimeMillis());
 
 
 
@@ -31,7 +31,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertTrue(ppv.validatePuzzle(puzzlePieces));
+        assertTrue(ppv.validatePuzzle(puzzlePieces, fm));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
 
 
     }

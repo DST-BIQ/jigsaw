@@ -13,7 +13,16 @@ import static java.nio.file.Files.readAllLines;
 public class FileManager {
 
 
-ArrayList<String> errorReportList = new ArrayList<>();
+    public static  File outputFile;
+    private ArrayList<String> errorReportList = new ArrayList<>();
+
+    public FileManager(String filePath){
+        outputFile = new File(filePath + "output_"+ System.currentTimeMillis()+ ".txt");
+    }
+
+    public FileManager(){
+        outputFile = new File("c:/output_"+ System.currentTimeMillis()+".txt");
+    }
 
     /**
      * Read lines from file
@@ -46,9 +55,9 @@ return null; // if fails and nothing to return.
      *
      */
 
-    public void writeToFile(String data, File file){
+    public void writeToFile(String data){
 
-        try(FileWriter fw = new FileWriter(file, true);
+        try(FileWriter fw = new FileWriter(outputFile, true);
             BufferedWriter bw = new BufferedWriter(fw))
         {
             bw.write(data);
@@ -66,8 +75,10 @@ return null; // if fails and nothing to return.
 
         errorReportList.add(s);
 
+    }
 
-
+    public ArrayList<String> getErrorReportList() {
+        return errorReportList;
     }
 }
 

@@ -4,7 +4,7 @@ import java.util.*;
 
 public class FileInputParser {
 
-    FileManager fm = new FileManager();
+
 
     /**
      * get number of elements by realing the first line in the file.
@@ -13,10 +13,11 @@ public class FileInputParser {
      * @param list
      * @return int containing number of elements
      */
-    public int getNumberOfElements(List<String> list) {
+    public int getNumberOfElements(List<String> list, FileManager fm) {
 
         String firstLine = list.get(0);
         String[] tempStr = firstLine.split("=");
+        tempStr[1] = tempStr[1].replace(" ", "");
         if ((tempStr[0].contains("NumElements") || tempStr[0].contains(" ")) && (tempStr.length == 2)) {
             try {
                 return Integer.valueOf(tempStr[1]);
@@ -55,13 +56,11 @@ public class FileInputParser {
      * @return
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public ArrayList<int[]> produceArrayForPuzzle(List<String> list) {
+    public ArrayList<int[]> produceArrayForPuzzle(List<String> list, FileManager fm) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
-        List<String> missingElementsIDs = new ArrayList<>();
-
+        List<Integer> missingElementsIDs = new ArrayList<>();
         ArrayList<int[]> puzzlePieceList = new ArrayList<>();
-
 
         for ( String line : list ) {
             int countErrors = 0;
@@ -80,10 +79,10 @@ public class FileInputParser {
                 }
 
 
-                if (!idInRange(list, line)) {
+                if (!idInRange(list, line, fm)) {
                     countErrors += 1;
                     wrongElementIDs.add(String.valueOf(getElementID(line)));
-
+                    fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " cannot have the following IDs:" + wrongElementIDs);
                 }
 
                 if (isWrongElementFormat(line)) {
@@ -103,22 +102,26 @@ public class FileInputParser {
                     String[] tempLine = line.split(",");
 
                     for ( int i = 0; i <= 4; i++ ) {
-                        puzzlePieceArray[i] = Integer.valueOf(tempLine[i]);
+                        puzzlePieceArray[i] = Integer.valueOf(tempLine[i].replace(" ",""));
                     }
 
                     puzzlePieceList.add(puzzlePieceArray);
 
 
+                }else{
+                    fm.writeToFile(fm.getErrorReportList().toString());
+                    return null;
                 }
+
             }
 
             indexLines =+1;
         }
 
-        fm.reportError("Puzzle of size " + getNumberOfElements(list) + " cannot have the following IDs:" + wrongElementIDs);
-
-        fm.reportError("Puzzle of size " + getNumberOfElements(list) + " cannot have the following IDs:" + missingElementsIDs);
-
+        if (!validateMissingIds(puzzlePieceList, missingElementsIDs)){
+            fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " is missing the following IDs:" + missingElementsIDs);
+            return null;
+        }
         return puzzlePieceList;
     }
 
@@ -153,9 +156,9 @@ public class FileInputParser {
      * @param line
      * @return true/false
      */
-    public boolean idInRange(List<String> list, String line) {
+    public boolean idInRange(List<String> list, String line, FileManager fm) {
 
-        int numberOfElements = getNumberOfElements(list);
+        int numberOfElements = getNumberOfElements(list, fm);
         int puzzlePieceID = getLinePuzzlePieceID(line);
         if (puzzlePieceID <= numberOfElements) {
             return true;
@@ -200,10 +203,11 @@ public class FileInputParser {
      * @return String
      */
 
-    public String getFileRange(List<String> list) {
-        if (getNumberOfElements(list) == 1) return "1";
-        if (getNumberOfElements(list) == (-1)) return "N/A";
-        return "1-" + getNumberOfElements(list);
+    public String getFileRange(List<String> list, FileManager fm) {
+        int numberOfElements = getNumberOfElements(list, fm);
+        if (numberOfElements == 1) return "1";
+        if (numberOfElements == (-1)) return "N/A";
+        return "1-" + numberOfElements;
     }
 
     /**
@@ -305,15 +309,21 @@ public class FileInputParser {
 
 
 
-    public static boolean validateIds(Integer[][] text) {
+    public static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
 
-        Set<Integer> ids = new HashSet<>();
+        List<Integer> ids = new ArrayList<>();
 
-        for (int i=0;i<text.length;i++){
-            ids.add(text[i][0]);
+        int numberOfElements = text.size();
+        for (int i = 0; i< numberOfElements; i++){
+            ids.add(text.get(i)[0]);
         }
         boolean result = true;
-        if (ids.size()!=text.length || Collections.min(ids)!=1 || Collections.max(ids)!= text.length)result=false;
+        for (int j=1; j<=numberOfElements;j++){
+            if (!ids.contains(j)){
+                missingIds.add(j);
+                result = false;
+            }
+        }
 
         return result;
     }

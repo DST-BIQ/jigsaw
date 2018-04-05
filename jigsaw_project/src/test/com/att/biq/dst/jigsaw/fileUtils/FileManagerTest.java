@@ -34,7 +34,7 @@ class FileManagerTest {
             }
         }
 
-        fm = new FileManager();
+        fm = new FileManager("src/resources/output/report_"+ System.currentTimeMillis());
 
     }
 
@@ -98,7 +98,7 @@ class FileManagerTest {
         file.setReadOnly();
 
 
-        fm.writeToFile("3,1,6,7,8", file);
+        fm.writeToFile("3,1,6,7,8");
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
@@ -125,7 +125,7 @@ class FileManagerTest {
     public void WriteToFileEmptyFile() {
         String lineToCompare = null;
 //        File file = new File(basePath + fileToCreate);
-        fm.writeToFile("3,1,6,7,8", file);
+        fm.writeToFile("3,1,6,7,8");
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
@@ -164,7 +164,7 @@ class FileManagerTest {
         }
 
 
-        fm.writeToFile("3,1,6,7,7", file);
+        fm.writeToFile("3,1,6,7,7");
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 
