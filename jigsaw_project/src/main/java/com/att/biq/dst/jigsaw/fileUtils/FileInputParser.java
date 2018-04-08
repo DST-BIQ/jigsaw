@@ -1,5 +1,7 @@
 package com.att.biq.dst.jigsaw.fileUtils;
 
+import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
+
 import java.util.*;
 
 public class FileInputParser {
@@ -56,7 +58,7 @@ public class FileInputParser {
      * @return
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public ArrayList<int[]> produceArrayForPuzzle(List<String> list, FileManager fm) {
+    public List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fm) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
@@ -122,7 +124,18 @@ public class FileInputParser {
             fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " is missing the following IDs:" + missingElementsIDs);
             return null;
         }
-        return puzzlePieceList;
+
+        return convertPuzzleArray(puzzlePieceList);
+    }
+
+
+    public List<PuzzlePiece> convertPuzzleArray(List<int []> puzzleArray ){
+        List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
+        for (int [] puzzlePiece:puzzleArray){
+            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0],puzzlePiece[1],puzzlePiece[2],puzzlePiece[3],puzzlePiece[4]);
+            puzzlePiecesList.add(pp);
+        }
+        return puzzlePiecesList;
     }
 
 

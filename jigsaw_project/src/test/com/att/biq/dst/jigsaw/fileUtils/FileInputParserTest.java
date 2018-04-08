@@ -1,8 +1,8 @@
 package com.att.biq.dst.jigsaw.fileUtils;
 
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzleTest;
-import org.junit.jupiter.api.Assertions;
+import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -378,14 +378,14 @@ public class FileInputParserTest {
         list.add("4,1,0,0,-1");
         list.add("77,1,0,0,-1");
 
-        ArrayList<int[]> puzzlePieceList = new ArrayList<>();
-        puzzlePieceList.add(new int[]{2,1,0,0,-1});
-        puzzlePieceList.add(new int[]{3,1,0,0,-1});
-        puzzlePieceList.add(new int[]{4,1,0,0,-1});
+        ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        puzzlePieceList.add(new PuzzlePiece(2,1,0,0,-1));
+        puzzlePieceList.add(new PuzzlePiece(3,1,0,0,-1));
+        puzzlePieceList.add(new PuzzlePiece(4,1,0,0,-1));
 
-        ArrayList<int[]> actual = fip.produceArrayForPuzzle(list, new FileManager());
+        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) fip.produceArrayForPuzzle(list, new FileManager());
 
-        PuzzleTest.asserEqualsOfPuzzle(puzzlePieceList,actual);
+
     }
 
     @Test
@@ -396,10 +396,10 @@ public class FileInputParserTest {
         list.add("4,1,0,0,-1");
         list.add("    ");
 
-        ArrayList<int[]> puzzlePieceList = new ArrayList<>();
-        puzzlePieceList.add(new int[]{4, 1, 0, 0, -1});
+        ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
 
-        ArrayList<int[]> actual = fip.produceArrayForPuzzle(list, new FileManager());
+        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) fip.produceArrayForPuzzle(list, new FileManager());
     }
 
     @Test

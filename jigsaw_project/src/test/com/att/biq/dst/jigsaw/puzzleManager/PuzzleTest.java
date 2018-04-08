@@ -12,16 +12,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class PuzzleTest {
 
     FileManager fm = new FileManager("src/resources/output/report_"+ System.currentTimeMillis());
+    PuzzlePieceValidators puzzlePieceValidators = new PuzzlePieceValidators();
 
     @Test
     public void getPuzzlePositiveTest(){
-        ArrayList<int[]> expected = new ArrayList<>();
-        expected.add(new int[]{1,0,0,0,0});
-        expected.add(new int[]{2,0,0,0,0});
-        expected.add(new int[]{3,0,0,0,0});
-        expected.add(new int[]{4,0,0,0,0});
-        ArrayList<int[]> receivedPuzzle = Puzzle.getPuzzle("src/resources/input/getPuzzlePositiveTest.txt", fm);
-        asserEqualsOfPuzzle(expected, receivedPuzzle);
+        ArrayList<PuzzlePiece> expected = new ArrayList<>();
+
+        expected.add(new PuzzlePiece(1,0,0,0,0));
+        expected.add(new PuzzlePiece(2,0,0,0,0));
+        expected.add(new PuzzlePiece(3,0,0,0,0));
+        expected.add(new PuzzlePiece(4,0,0,0,0));
+
+        ArrayList<PuzzlePiece> receivedPuzzle = Puzzle.getPuzzle("src/resources/input/getPuzzlePositiveTest.txt", fm, puzzlePieceValidators);
+        assertEquals(expected, receivedPuzzle);
     }
 
 
@@ -30,7 +33,7 @@ public class PuzzleTest {
 
         Throwable exception = assertThrows(RuntimeException.class,
                 () -> {
-                    Puzzle.getPuzzle("src/resources/input/getPuzzleMissingIdTest.txt", fm);
+                    Puzzle.getPuzzle("src/resources/input/getPuzzleMissingIdTest.txt", fm,puzzlePieceValidators);
                 }
         );
 
@@ -38,18 +41,6 @@ public class PuzzleTest {
     }
 
 
-    /**
-     * Applies assertEquals on each element of the expected puzzle ArrayList<int[]></int[]> and the received one
-     * @param expected
-     * @param receivedPuzzle
-     */
-    public static void asserEqualsOfPuzzle(ArrayList<int[]> expected, ArrayList<int[]> receivedPuzzle) {
-        for (int i=0;i<expected.size();i++){
-            int[] currentExpectedPiece = expected.get(i);
-            for(int j = 0; j< currentExpectedPiece.length; j++){
-                assertEquals(currentExpectedPiece[j],receivedPuzzle.get(i)[j]);
-            }
-        }
-    }
+
 
 }
