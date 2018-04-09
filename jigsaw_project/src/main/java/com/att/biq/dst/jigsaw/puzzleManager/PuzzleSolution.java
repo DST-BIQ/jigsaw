@@ -4,9 +4,11 @@ public class PuzzleSolution {
 
 
     private PuzzlePiece[][] solutionPieces;
+    private int size;
 
-    public PuzzleSolution(int rows, int lines){
-        solutionPieces = new PuzzlePiece[rows][lines];
+    public PuzzleSolution(int rows, int columns){
+        size = rows*columns;
+        solutionPieces = new PuzzlePiece[rows][columns];
     }
 
 
@@ -15,5 +17,19 @@ public class PuzzleSolution {
     }
 
 
+    public boolean contains(PuzzlePiece puzzlePiece) {
 
+        for (int row=0;row<solutionPieces.length;row++){
+            for (int column=0; column<=solutionPieces[row].length;column++){
+                if (solutionPieces[row][column].equals(puzzlePiece)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int getSize() {
+        return size;
+    }
 }
