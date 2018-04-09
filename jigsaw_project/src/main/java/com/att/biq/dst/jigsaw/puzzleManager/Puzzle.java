@@ -12,15 +12,14 @@ public class Puzzle {
 
 
     private PuzzleSolution solution;
-
+    private static PuzzlePieceValidators puzzlePieceValidators = new PuzzlePieceValidators();
 
     public static void main(String[] args) {
         String inputFilePath = "c:/puzzle/puzzle.txt";
         FileManager fm = new FileManager("c:/puzzle/output_");
-        List<int[]> puzzleDataFromFile = getPuzzle(inputFilePath, fm);
-        //TODO - convert List<int[]> to List<PuzzlePiece>
-        //TODO - find solution
-        //TODO - print solution to file
+        List<PuzzlePiece> puzzleDataFromFile = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
+
+
 
     }
 
@@ -30,11 +29,11 @@ public class Puzzle {
      * @param fileManager
      * @return
      */
-    private static ArrayList<int[]> getPuzzle(String filePath, FileManager fileManager){
+    public static ArrayList<PuzzlePiece> getPuzzle(String filePath, FileManager fileManager, PuzzlePieceValidators puzzlePieceValidators){
         Path inputFilePath = Paths.get(filePath);
         FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<int[]> puzzle =fileInputParser.produceArrayForPuzzle(FileManager.readFromFile(inputFilePath), fileManager);
-        if (puzzle==null || !PuzzlePieceValidators.validatePuzzle(puzzle, fileManager)){
+        ArrayList<PuzzlePiece> puzzle = (ArrayList<PuzzlePiece>) fileInputParser.produceArrayForPuzzle(fileManager.readFromFile(inputFilePath), fileManager);
+        if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, fileManager)){
             for(String error: fileManager.getErrorReportList()){
                 fileManager.writeToFile(error);
             }
