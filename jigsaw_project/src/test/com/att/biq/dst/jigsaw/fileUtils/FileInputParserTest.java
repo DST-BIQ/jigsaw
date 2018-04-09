@@ -141,11 +141,11 @@ public class FileInputParserTest {
     public void IDInRange() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        list.add("34, 1, 0,-1 ,1,1");
-        list.add("24, 1, 0,-1 ,1,1");
-        list.add("100, 1, 0,-1 ,1,1");
-        list.add("101, 1, 0,-1 ,1,1");
-        list.add("109, 1, 0,-1 ,1,1");
+        list.add("34  1  0 -1  1 1");
+        list.add("24  1  0 -1  1 1");
+        list.add("100  1  0 -1  1 1");
+        list.add("101  1  0 -1  1 1");
+        list.add("109  1  0 -1  1 1");
 
         assertTrue(fip.idInRange(list, list.get(1), new FileManager()));
         assertTrue(fip.idInRange(list, list.get(2), new FileManager()));
@@ -162,7 +162,7 @@ public class FileInputParserTest {
     public void linePuzzlePieceIDValid() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        list.add("34, 1, 0,-1 ,1,1");
+        list.add("34  1  0 -1  1 1");
         assertEquals(34, fip.getLinePuzzlePieceID(list.get(1)));
     }
 
@@ -173,7 +173,7 @@ public class FileInputParserTest {
 
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        list.add("aa, 1, 0,-1 ,1,1");
+        list.add("aa  1  0 -1  1 1");
         assertEquals(-1, fip.getLinePuzzlePieceID(list.get(1)));
     }
 
@@ -185,8 +185,8 @@ public class FileInputParserTest {
 
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        list.add("5,0,-1,1,1");
-        assertEquals("0,-1,1,1", fip.getPuzzlePieceData(list.get(1)));
+        list.add("5 0 -1 1 1");
+        assertEquals("0 -1 1 1",  fip.getPuzzlePieceData(list.get(1)));
     }
 
 
@@ -195,8 +195,8 @@ public class FileInputParserTest {
 
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        list.add("5, 0,-1 ,1,1");
-        assertEquals("0,-1,1,1", fip.getPuzzlePieceData(list.get(1)));
+        list.add("5  0 -1  1 1");
+        assertEquals("0 -1 1 1",  fip.getPuzzlePieceData(list.get(1)));
     }
 
     // *************************   Verify getFileRange
@@ -231,7 +231,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("#NumElements=t");
         assertTrue(fip.isLineBeginswithDash(list.get(0)));
-        list.add("#5, 0,-1 ,1,1");
+        list.add("#5  0 -1  1 1");
         assertTrue(fip.isLineBeginswithDash(list.get(1)));
     }
 
@@ -310,7 +310,7 @@ public class FileInputParserTest {
     public void isWrongElementFormatNotWrong() {
 
         List<String> list = new ArrayList<>();
-        list.add("2,1,0,0,-1");
+        list.add("2 1 0 0 -1");
 
         assertFalse(fip.isWrongElementFormat(list.get(0)));
 
@@ -322,7 +322,7 @@ public class FileInputParserTest {
     public void isWrongElementFormat() {
 
         List<String> list = new ArrayList<>();
-        list.add("2,2,0,0,-1");
+        list.add("2 2 0 0 -1");
 
         assertTrue(fip.isWrongElementFormat(list.get(0)));
 
@@ -333,7 +333,7 @@ public class FileInputParserTest {
     public void isWrongElementFormat1() {
 
         List<String> list = new ArrayList<>();
-        list.add("2,1,0,0,99");
+        list.add("2 1 0 0 99");
 
         assertTrue(fip.isWrongElementFormat(list.get(0)));
 
@@ -345,7 +345,7 @@ public class FileInputParserTest {
     public void isWrongElementFormatNotNumber() {
 
         List<String> list = new ArrayList<>();
-        list.add("2,1,0,0,a");
+        list.add("2 1 0 0 a");
 
         assertTrue(fip.isWrongElementFormat(list.get(0)));
 
@@ -356,7 +356,7 @@ public class FileInputParserTest {
     public void isWrongElementFormatIgnoreSpaces() {
 
         List<String> list = new ArrayList<>();
-        list.add("2,1,0,  0,-1");
+        list.add("2 1 0   0 -1");
 
         assertFalse(fip.isWrongElementFormat(list.get(0)));
 
@@ -373,10 +373,10 @@ public class FileInputParserTest {
 
         List<String> list = new ArrayList<>();
         list.add("NumElements=4");
-        list.add("2,1,0,0,-1");
-        list.add("3,1,0,0,-1");
-        list.add("4,1,0,0,-1");
-        list.add("77,1,0,0,-1");
+        list.add("2 1 0 0 -1");
+        list.add("3 1 0 0 -1");
+        list.add("4 1 0 0 -1");
+        list.add("77 1 0 0 -1");
 
         ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
         puzzlePieceList.add(new PuzzlePiece(2,1,0,0,-1));
@@ -393,7 +393,7 @@ public class FileInputParserTest {
 
         List<String> list = new ArrayList<>();
         list.add("NumElements=4");
-        list.add("4,1,0,0,-1");
+        list.add("4 1 0 0 -1");
         list.add("    ");
 
         ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
