@@ -42,48 +42,28 @@ public class Puzzle {
         return puzzle;
     }
 
-    private static boolean checkPuzzleSolution(ArrayList<PuzzlePiece> puzzle,PuzzleSolution solution ){
-        PuzzlePiece[][] solutionPieces = solution.getSolutionPieces();
+    public static boolean checkGivenSolutionAndPuzzleFiles(String puzzleFilePath, String solutionFilePath){
+        FileManager fm =new FileManager();
+        return checkPuzzleSolution(getPuzzle(puzzleFilePath,fm,new PuzzlePieceValidators()),generateSolutionFromFile(solutionFilePath));
+    }
+
+    private static PuzzleSolution generateSolutionFromFile(String solutionFilePath) {
+
+        List<String> solutionFileData = FileManager.readFromFile(solutionFilePath);
+
+
+    }
+
+    public static boolean checkPuzzleSolution(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution ){
+
         if (verifySolutionSize(puzzle, solution)) return false;
         for (PuzzlePiece puzzlePiece: puzzle){
             if (!solution.contains(puzzlePiece)){
                 return false;
             }
         }
+        if (!solution.isValid()){ return false;}
 
-        for (int row = 0; row<= solutionPieces.length; row++){
-            int rowSum = 0;
-            for (int column = 0; column<= solutionPieces[row].length; column++){
-                rowSum+= solutionPieces[row][column].getSumEdges();
-            }
-            if (rowSum!=0){
-                return false;
-            }
-        }
-        //Verify all puzzle tops are 0
-        for (int column = 0;column<=solutionPieces.length;column++){
-            if (solutionPieces[0][column].getTop()!=0){
-                return false;
-            }
-        }
-        //Verify all puzzle bottoms are 0
-        for (int column = 0;column<=solutionPieces.length;column++){
-            if (solutionPieces[solutionPieces.length][column].getBottom()!=0){
-                return false;
-            }
-        }
-        //Verify all puzzle lefts are 0
-        for (int row = 0;row<=solutionPieces.length;row++){
-            if (solutionPieces[row][0].getLeft()!=0){
-                return false;
-            }
-        }
-        //Verify all puzzle rights are 0
-        for (int row = 0;row<=solutionPieces.length;row++){
-            if (solutionPieces[row][solutionPieces[0].length].getRight()!=0){
-                return false;
-            }
-        }
         return true;
     }
 
@@ -93,4 +73,7 @@ public class Puzzle {
         }
         return false;
     }
+
+
+
 }
