@@ -41,4 +41,39 @@ public class Puzzle {
         }
         return puzzle;
     }
+
+    public static boolean checkGivenSolutionAndPuzzleFiles(String puzzleFilePath, String solutionFilePath){
+        FileManager fm =new FileManager();
+        return checkPuzzleSolution(getPuzzle(puzzleFilePath,fm,new PuzzlePieceValidators()),generateSolutionFromFile(solutionFilePath));
+    }
+
+    private static PuzzleSolution generateSolutionFromFile(String solutionFilePath) {
+
+        List<String> solutionFileData = FileManager.readFromFile(solutionFilePath);
+
+
+    }
+
+    public static boolean checkPuzzleSolution(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution ){
+
+        if (verifySolutionSize(puzzle, solution)) return false;
+        for (PuzzlePiece puzzlePiece: puzzle){
+            if (!solution.contains(puzzlePiece)){
+                return false;
+            }
+        }
+        if (!solution.isValid()){ return false;}
+
+        return true;
+    }
+
+    private static boolean verifySolutionSize(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution) {
+        if (puzzle.size()==(solution.getSize())){
+            return true;
+        }
+        return false;
+    }
+
+
+
 }
