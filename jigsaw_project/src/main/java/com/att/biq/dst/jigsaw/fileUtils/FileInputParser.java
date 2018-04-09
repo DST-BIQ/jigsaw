@@ -110,7 +110,7 @@ public class FileInputParser {
                     String[] tempLine = temp.split(" ");
 
                     for ( int i = 0; i <= 4; i++ ) {
-//                        puzzlePieceArray[i] = Integer.valueOf(tempLine[i].replace(" ", ""));
+
                         puzzlePieceArray[i] = Integer.valueOf(tempLine[i]);
                     }
 
@@ -119,7 +119,7 @@ public class FileInputParser {
 
                 } else {
                     fm.writeToFile(fm.getErrorReportList().toString());
-                    return null;
+
                 }
 
             }
@@ -129,7 +129,7 @@ public class FileInputParser {
 
         if (!validateMissingIds(puzzlePieceList, missingElementsIDs)) {
             fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " is missing the following IDs:" + missingElementsIDs);
-            return null;
+
         }
 
         return convertPuzzleArray(puzzlePieceList);
@@ -358,5 +358,7 @@ public class FileInputParser {
         String after = line.trim().replaceAll(" +", " ");
         return after;
     }
+
+
 }
 
