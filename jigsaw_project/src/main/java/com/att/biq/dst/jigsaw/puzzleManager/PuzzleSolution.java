@@ -104,4 +104,38 @@ public class PuzzleSolution {
         }
         return true;
     }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getCurRow() {
+        return curRow;
+    }
+
+    public int getCurCol() {
+        return curCol;
+    }
+
+    public void setSolution(PuzzlePiece[][] solution) {
+        this.solution = solution;
+    }
+
+    public PuzzlePiece getFormerPiece() {
+        if(curCol==0 && curRow>0){
+            return solution[curRow-1][columns-1];
+        }else if(curCol==0 && curRow==0){
+            return null;
+        }else return solution[curRow][curCol-1];
+
+    }
+
+    public PuzzlePiece getAbovePiece() {
+       if (curRow==0){return null;}
+       return solution[curRow-1][curCol];
+    }
 }
