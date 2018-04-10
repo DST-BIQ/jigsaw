@@ -20,9 +20,21 @@ public class Puzzle {
     public static void main(String[] args) {
         String inputFilePath = "c:/puzzle/puzzle.txt";
         FileManager fm = new FileManager("c:/puzzle/output_");
-        List<PuzzlePiece> puzzleDataFromFile = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
+        List<PuzzlePiece> puzzlePieces = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
+        List<int[]> puzzleStructures = calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
+        PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
+        printSolution(solution, fm);
 
+    }
 
+    private static void printSolution(PuzzleSolution solution, FileManager fileManager) {
+        PuzzlePiece[][] finalSolution = solution.getSolution();
+        for (int i=0;i<finalSolution[0].length;i++){
+            fileManager.writeToFile(finalSolution[i].toString());
+        }
+    }
+
+    private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
 
     }
 
@@ -79,6 +91,20 @@ public class Puzzle {
     }
 
 
+    private static List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
+        List<int[]> structureOptions = new ArrayList<>();
+        for (int rows=1; rows<=puzzleSize;rows++){
+            int columns;
+            if (puzzleSize%rows==0){
+                columns = puzzleSize/rows;
+                if (columns<=puzzlePieceValidator.getMinTopBottom() && rows<=puzzlePieceValidator.getMinLeftRigh() ){
+                    structureOptions.add(new int[]{rows,columns});
+                }
+            }
+
+        }
+        return structureOptions;
+    }
     private PuzzlePiece getMatch(int left, int top, int right, int bottom, ArrayList<PuzzlePiece> puzzlePieceArray ){
 
         for (PuzzlePiece piece : puzzlePieceArray){
@@ -89,6 +115,10 @@ public class Puzzle {
         }
 
         return null;
+
+    }
+
+    private static PuzzleSolution solve(){
 
     }
 

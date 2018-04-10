@@ -7,10 +7,10 @@ import java.util.List;
 public class PuzzlePieceValidators {
 
 
+    private int minTopButtom;
+    private int minLeftRigh;
 
-
-
-   public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fm) {
+    public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fm) {
 
       boolean TL=false;
       boolean TR=false;
@@ -102,4 +102,11 @@ public class PuzzlePieceValidators {
    }
 
 
+    public int getMinTopBottom() {
+        return minTopButtom;
+    }
+
+    public int getMinLeftRigh() {
+        return minLeftRigh;
+    }
 }
