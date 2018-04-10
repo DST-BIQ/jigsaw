@@ -69,7 +69,7 @@ public class FileInputParser {
         List<Integer> missingElementsIDs = new ArrayList<>();
         ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 // TODO move to sseperate method
-        for ( String line : list ) {
+        for (String line : list) {
             int countErrors = 0;
             if (!line.contains("Num"))  // ignore first line
             {
@@ -109,7 +109,7 @@ public class FileInputParser {
                     String temp = trimRedundantSpacesFromLine(line);
                     String[] tempLine = temp.split(" ");
 
-                    for ( int i = 0; i <= 4; i++ ) {
+                    for (int i = 0; i <= 4; i++) {
 
                         puzzlePieceArray[i] = Integer.valueOf(tempLine[i]);
                     }
@@ -136,10 +136,10 @@ public class FileInputParser {
     }
 
 
-    private static List<PuzzlePiece> convertPuzzleArray(List<int []> puzzleArray ){
+    private static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
         List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
-        for (int [] puzzlePiece:puzzleArray){
-            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0],puzzlePiece[1],puzzlePiece[2],puzzlePiece[3],puzzlePiece[4]);
+        for (int[] puzzlePiece : puzzleArray) {
+            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
             puzzlePiecesList.add(pp);
         }
         return puzzlePiecesList;
@@ -158,7 +158,7 @@ public class FileInputParser {
             String[] lineArr = lineTemp.split(" ");
 
             String piece = "";
-            for ( int i = 1; i < lineArr.length; i++ ) {
+            for (int i = 1; i < lineArr.length; i++) {
 
                 piece = piece + lineArr[i] + " ";
 
@@ -174,7 +174,6 @@ public class FileInputParser {
      *
      * @param list of lines from file
      * @param line line to inspect
-     *
      * @return true/false
      */
     private static boolean idInRange(List<String> list, String line, FileManager fm) {
@@ -257,35 +256,34 @@ public class FileInputParser {
      */
 
     private static boolean isLineBeginswithDash(String line) {
-        line = line.replace(" ", "");
-    public boolean isLineBeginswithDash(String line) {
+
 //        line = line.replace("  ", " ");
         line = trimRedundantSpacesFromLine(line);
 
         if (line.startsWith("#")) {
             return true;
         }
-
         return false;
     }
 
     /**
      * go over the final list of valid elements, compare to range, if ID is not on the final list report missing
-     * @param numberOfElements  - number of elements suppose to be in the file
-     * @param pieceArray  - missing elements in the file
+     *
+     * @param numberOfElements - number of elements suppose to be in the file
+     * @param pieceArray       - missing elements in the file
      * @return set for print the IDs of missing elements
      */
-     private static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
+    private static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
         SortedSet<Integer> missingIDs = new TreeSet<>();
         SortedSet<Integer> existingIDs = new TreeSet<>();
         try {
             // insert existing IDs to set
-            for ( int j = 0; j < pieceArray.length; j++ ) {
+            for (int j = 0; j < pieceArray.length; j++) {
                 existingIDs.add(pieceArray[j][0]);
             }
 
-            for ( int i = 1; i <= numberOfElements; i++ ) {
+            for (int i = 1; i <= numberOfElements; i++) {
                 if (!existingIDs.contains(i)) {
                     missingIDs.add(i);
                 }
@@ -293,7 +291,7 @@ public class FileInputParser {
             }
         } catch (NullPointerException e) {
 
-            for ( int i = 1; i <= numberOfElements; i++ ) {
+            for (int i = 1; i <= numberOfElements; i++) {
                 missingIDs.add(i);
             }
 
@@ -317,20 +315,19 @@ public class FileInputParser {
             return true;
         }
 
-        for ( int i = 1; i <= 4; i++ ) {
+        for (int i = 1; i <= 4; i++) {
 
             if (!(tempLine[i].equals("1") || tempLine[i].equals("-1") || tempLine[i].equals("0"))) {
                 return true;
             }
 
         }
-
-
         return false;
     }
 
     /**
      * valids list of missing IDs
+     *
      * @param text
      * @param missingIds missing IDs list
      * @return true/false
@@ -340,11 +337,11 @@ public class FileInputParser {
         List<Integer> ids = new ArrayList<>();
 
         int numberOfElements = text.size();
-        for ( int i = 0; i < numberOfElements; i++ ) {
+        for (int i = 0; i < numberOfElements; i++) {
             ids.add(text.get(i)[0]);
         }
         boolean result = true;
-        for ( int j = 1; j <= numberOfElements; j++ ) {
+        for (int j = 1; j <= numberOfElements; j++) {
             if (!ids.contains(j)) {
                 missingIds.add(j);
                 result = false;
@@ -359,3 +356,4 @@ public class FileInputParser {
         String after = line.trim().replaceAll(" +", " ");
         return after;
     }
+}
