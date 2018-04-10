@@ -79,5 +79,17 @@ public class Puzzle {
     }
 
 
+    private PuzzlePiece getMatch(int left, int top, int right, int bottom, ArrayList<PuzzlePiece> puzzlePieceArray ){
+
+        for (PuzzlePiece piece : puzzlePieceArray){
+
+            if (left == piece.getLeft()&& top ==piece.getTop()&& right == piece.getRight()&& bottom==piece.getBottom()){
+                return piece;
+            }
+        }
+
+        return null;
+
+    }
 
 }

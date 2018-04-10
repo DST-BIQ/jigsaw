@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
-
+//TODO javadoc desc
 public class FileManager {
 
 
-    public static  File outputFile;
+    private   File outputFile;
+
     private ArrayList<String> errorReportList = new ArrayList<>();
 
     public FileManager(String filePath){
@@ -33,7 +34,7 @@ public class FileManager {
     public static List<String> readFromFile(Path path) {
 
         try {
-             return readAllLines(path);
+            return readAllLines(path);
 
         } catch (IOException|NullPointerException ex) {
 
@@ -44,7 +45,7 @@ public class FileManager {
             //TODO close file
         }
 
-return null; // if fails and nothing to return.
+        return null; // if fails and nothing to return.
 
     }
 
