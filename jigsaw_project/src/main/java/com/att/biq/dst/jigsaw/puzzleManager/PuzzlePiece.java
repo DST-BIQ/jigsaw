@@ -7,6 +7,7 @@ public class PuzzlePiece {
     private int bottom;
     private int right;
     private int left;
+    private int sumEdges;
 
     public PuzzlePiece(int id,int left, int top, int right, int bottom){
         this.id=id;
@@ -14,6 +15,7 @@ public class PuzzlePiece {
         this.bottom = bottom;
         this.left = left;
         this.right = right;
+        this.sumEdges = top+bottom+left+right;
     }
 
     public boolean isTopLeft() {
@@ -70,6 +72,10 @@ public class PuzzlePiece {
 
     public void setLeft(int left) {
         this.left = left;
+    }
+
+    public int getSumEdges() {
+        return sumEdges;
     }
 
     @Override
