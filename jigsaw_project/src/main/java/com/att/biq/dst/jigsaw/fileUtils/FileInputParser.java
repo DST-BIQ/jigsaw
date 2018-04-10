@@ -152,7 +152,7 @@ public class FileInputParser {
      * @param line from file input
      * @return string contains the puzzle piece
      */
-    private static String getPuzzlePieceData(String line) {
+    static String getPuzzlePieceData(String line) {
         try {
             String lineTemp = trimRedundantSpacesFromLine(line);
             String[] lineArr = lineTemp.split(" ");
@@ -176,7 +176,7 @@ public class FileInputParser {
      * @param line line to inspect
      * @return true/false
      */
-    private static boolean idInRange(List<String> list, String line, FileManager fm) {
+    static boolean idInRange(List<String> list, String line, FileManager fm) {
 
         int numberOfElements = getNumberOfElements(list, fm);
         int puzzlePieceID = getLinePuzzlePieceID(line);
@@ -208,7 +208,7 @@ public class FileInputParser {
      * @param line from file
      * @return true/false
      */
-    private static boolean isLineContainsOnlySpaces(String line) {
+    static boolean isLineContainsOnlySpaces(String line) {
         if (line.length() == line.chars().filter(ch -> ch == ' ').count()) {
             return true;
         }
@@ -223,7 +223,7 @@ public class FileInputParser {
      * @return String
      */
 
-    private static String getFileRange(List<String> list, FileManager fm) {
+    static String getFileRange(List<String> list, FileManager fm) {
         int numberOfElements = getNumberOfElements(list, fm);
         if (numberOfElements == 1) return "1";
         if (numberOfElements == (-1)) return "N/A";
@@ -236,7 +236,7 @@ public class FileInputParser {
      * @param line from file
      * @return pieceID
      */
-    private static int getLinePuzzlePieceID(String line) {
+    static int getLinePuzzlePieceID(String line) {
         try {
             String tempLine = trimRedundantSpacesFromLine(line);
             String[] lineArr = tempLine.split(" ");
@@ -255,7 +255,7 @@ public class FileInputParser {
      * @return true/false
      */
 
-    private static boolean isLineBeginswithDash(String line) {
+    static boolean isLineBeginswithDash(String line) {
 
 //        line = line.replace("  ", " ");
         line = trimRedundantSpacesFromLine(line);
@@ -273,7 +273,7 @@ public class FileInputParser {
      * @param pieceArray       - missing elements in the file
      * @return set for print the IDs of missing elements
      */
-    private static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
+    static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
         SortedSet<Integer> missingIDs = new TreeSet<>();
         SortedSet<Integer> existingIDs = new TreeSet<>();
