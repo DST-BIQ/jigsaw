@@ -10,6 +10,7 @@ public class PuzzlePieceValidators {
     private int minTopButtom;
     private int minLeftRigh;
 
+
     public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fm) {
 
       boolean TL=false;
@@ -95,7 +96,9 @@ public class PuzzlePieceValidators {
    }
 
    private  boolean validateStraightEdges(int top, int left, int right, int bottom , int puzzeleLength) {
-     int min=Math.min(top,bottom)*Math.min(right,left);
+        minLeftRigh = Math.min(left,right);
+        minTopButtom = Math.min(top,bottom);
+        int min=minTopButtom*minLeftRigh;
 
         return (min>=puzzeleLength);
 

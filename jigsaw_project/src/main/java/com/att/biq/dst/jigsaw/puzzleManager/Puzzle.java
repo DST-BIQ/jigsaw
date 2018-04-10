@@ -36,6 +36,14 @@ public class Puzzle {
 
     private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
 
+        for(int[] structure:puzzleStructures){
+            PuzzleSolution solution = new PuzzleSolution(structure[0],structure[1]);
+            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
+            if (possibleSolution!=null)
+            {return possibleSolution;}
+        }
+
+        return null;
     }
 
     /**
@@ -118,7 +126,7 @@ public class Puzzle {
 
     }
 
-    private static PuzzleSolution solve(){
+    private static PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
 
     }
 
