@@ -78,7 +78,7 @@ public class PuzzlePiece {
             return false;
         }
         PuzzlePiece o = (PuzzlePiece) other;
-        return (o.id==id);
+        return (o.id==id && o.top==top && o.right==right && o.left==left && o.bottom==bottom);
     }
 
     //TODO - implement toString
