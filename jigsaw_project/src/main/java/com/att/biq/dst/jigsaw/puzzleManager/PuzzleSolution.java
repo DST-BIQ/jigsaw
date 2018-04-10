@@ -7,6 +7,8 @@ public class PuzzleSolution {
     private int size;
     private int rows;
     private int columns;
+    private int curRow = 0;
+    private int curCol = 0;
 
     public PuzzleSolution(int rows, int columns){
         size = rows*columns;
@@ -47,6 +49,23 @@ public class PuzzleSolution {
         }
         return true;
     }
+
+    public void insertPiece(PuzzlePiece piece){
+        solution[curRow][curCol] = piece;
+        updateCurLocation();
+
+
+    }
+
+    private void updateCurLocation() {
+        if (curCol==columns-1) {
+            if (curRow != rows - 1) {
+                curRow++;
+                curCol=0;
+            } else {return;}
+        }else {curCol++;}
+    }
+
 
     private boolean verifyColumns() {
         for (int column=0;column<columns;column++){

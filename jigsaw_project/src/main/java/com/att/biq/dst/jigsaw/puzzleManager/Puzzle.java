@@ -8,7 +8,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.att.biq.dst.jigsaw.fileUtils.FileManager.*;
+
 public class Puzzle {
+
 
 
     private PuzzleSolution solution;
@@ -44,14 +47,15 @@ public class Puzzle {
 
     public static boolean checkGivenSolutionAndPuzzleFiles(String puzzleFilePath, String solutionFilePath){
         FileManager fm =new FileManager();
-        return checkPuzzleSolution(getPuzzle(puzzleFilePath,fm,new PuzzlePieceValidators()),generateSolutionFromFile(solutionFilePath));
+        ArrayList<PuzzlePiece> puzzlePieces = getPuzzle(puzzleFilePath,fm,new PuzzlePieceValidators());
+        return checkPuzzleSolution(puzzlePieces,generateSolutionFromFile(solutionFilePath, puzzlePieces));
     }
 
-    private static PuzzleSolution generateSolutionFromFile(String solutionFilePath) {
-
-        List<String> solutionFileData = FileManager.readFromFile(solutionFilePath);
-
-
+    private static PuzzleSolution generateSolutionFromFile(String solutionFilePath, List<PuzzlePiece> puzzlePieces) {
+        List<String> solutionFileData = readFromFile(Paths.get(solutionFilePath));
+        PuzzleSolution solution = new PuzzleSolution(solutionFileData.size(), solutionFileData.get(0).length());
+        //TODO - parse List<String> to List<Integer> and generate solution
+        return solution;
     }
 
     public static boolean checkPuzzleSolution(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution ){
