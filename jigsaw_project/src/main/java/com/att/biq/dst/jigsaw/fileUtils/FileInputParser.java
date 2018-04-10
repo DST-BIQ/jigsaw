@@ -15,7 +15,7 @@ public class FileInputParser {
      * @param list
      * @return int containing number of elements
      */
-    public int getNumberOfElements(List<String> list, FileManager fm) {
+    public static int getNumberOfElements(List<String> list, FileManager fm) {
 
         String firstLine = list.get(0);
         String[] tempStr = firstLine.split("=");
@@ -41,7 +41,7 @@ public class FileInputParser {
      * @param line
      * @return
      */
-    public boolean isLineEmpty(String line) {
+    public static boolean isLineEmpty(String line) {
 
         if (line.isEmpty()) {
 
@@ -58,7 +58,7 @@ public class FileInputParser {
      * @return
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fm) {
+    public static List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fm) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
@@ -129,7 +129,7 @@ public class FileInputParser {
     }
 
 
-    public List<PuzzlePiece> convertPuzzleArray(List<int []> puzzleArray ){
+    private static List<PuzzlePiece> convertPuzzleArray(List<int []> puzzleArray ){
         List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
         for (int [] puzzlePiece:puzzleArray){
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0],puzzlePiece[1],puzzlePiece[2],puzzlePiece[3],puzzlePiece[4]);
@@ -145,7 +145,7 @@ public class FileInputParser {
      * @param line
      * @return string contains the puzzle piece
      */
-    public String getPuzzlePieceData(String line) {
+    private static String getPuzzlePieceData(String line) {
         try {
             String[] lineArr = line.split(",");
 
@@ -169,7 +169,7 @@ public class FileInputParser {
      * @param line
      * @return true/false
      */
-    public boolean idInRange(List<String> list, String line, FileManager fm) {
+    private static boolean idInRange(List<String> list, String line, FileManager fm) {
 
         int numberOfElements = getNumberOfElements(list, fm);
         int puzzlePieceID = getLinePuzzlePieceID(line);
@@ -187,7 +187,7 @@ public class FileInputParser {
      * @param line
      * @return true/false
      */
-    public int getElementID(String line) {
+    private static int getElementID(String line) {
 
 
         return getLinePuzzlePieceID(line);
@@ -201,7 +201,7 @@ public class FileInputParser {
      * @param line
      * @return
      */
-    public boolean isLineContainsOnlySpaces(String line) {
+    private static boolean isLineContainsOnlySpaces(String line) {
         if (line.length() == line.chars().filter(ch -> ch == ' ').count()) {
             return true;
         }
@@ -216,7 +216,7 @@ public class FileInputParser {
      * @return String
      */
 
-    public String getFileRange(List<String> list, FileManager fm) {
+    private static String getFileRange(List<String> list, FileManager fm) {
         int numberOfElements = getNumberOfElements(list, fm);
         if (numberOfElements == 1) return "1";
         if (numberOfElements == (-1)) return "N/A";
@@ -229,7 +229,7 @@ public class FileInputParser {
      * @param line
      * @return pieceID
      */
-    public int getLinePuzzlePieceID(String line) {
+    private static int getLinePuzzlePieceID(String line) {
         try {
             String[] lineArr = line.split(",");
             return Integer.valueOf(lineArr[0]);
@@ -247,7 +247,7 @@ public class FileInputParser {
      * @return
      */
 
-    public boolean isLineBeginswithDash(String line) {
+    private static boolean isLineBeginswithDash(String line) {
         line = line.replace(" ", "");
 
         if (line.startsWith("#")) {
@@ -262,7 +262,7 @@ public class FileInputParser {
      *
      * @return set for print the IDs of missing elements
      */
-    public SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
+     private static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
         SortedSet<Integer> missingIDs = new TreeSet<>();
         SortedSet<Integer> existingIDs = new TreeSet<>();
@@ -297,7 +297,7 @@ public class FileInputParser {
      * @param line
      * @return
      */
-    public boolean isWrongElementFormat(String line) {
+    private static boolean isWrongElementFormat(String line) {
 
 
             String[] tempLine;
@@ -322,7 +322,7 @@ public class FileInputParser {
 
 
 
-    public static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
+    private static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
 
         List<Integer> ids = new ArrayList<>();
 
