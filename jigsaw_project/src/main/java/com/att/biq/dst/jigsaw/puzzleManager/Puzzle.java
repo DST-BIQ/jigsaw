@@ -22,8 +22,8 @@ public class Puzzle {
         FileManager fm = new FileManager("c:/puzzle/output_");
         List<PuzzlePiece> puzzlePieces = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
         List<int[]> puzzleStructures = calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
-//        PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
-//        printSolution(solution, fm);
+        PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
+        printSolution(solution, fm);
 
     }
 
@@ -34,10 +34,17 @@ public class Puzzle {
         }
     }
 
-//    private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
-//
-//
-//    }
+    private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
+
+        for(int[] structure:puzzleStructures){
+            PuzzleSolution solution = new PuzzleSolution(structure[0],structure[1]);
+            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
+            if (possibleSolution!=null)
+            {return possibleSolution;}
+        }
+
+        return null;
+    }
 
     /**
      *
@@ -165,6 +172,7 @@ public class Puzzle {
             }
         }
         return null;
+
     }
 
     private static PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){

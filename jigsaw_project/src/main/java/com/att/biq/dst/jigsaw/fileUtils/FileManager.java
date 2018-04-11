@@ -18,7 +18,7 @@ public class FileManager {
     private ArrayList<String> errorReportList = new ArrayList<>();
 
     public FileManager(String filePath){
-        outputFile = new File(filePath + "output_"+ System.currentTimeMillis()+ ".txt");
+        outputFile = new File(filePath + "output_" + ".txt");
     }
 
     public FileManager(){
@@ -58,6 +58,9 @@ public class FileManager {
 
     public void writeToFile(String data){
 
+        if (outputFile.exists()){
+            outputFile.delete();
+        }
         try(FileWriter fw = new FileWriter(outputFile, true);
             BufferedWriter bw = new BufferedWriter(fw))
         {

@@ -18,6 +18,7 @@ public class FileInputParserTest {
     static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\resources\\input\\";
 
     FileInputParser fip = new FileInputParser();
+    FileManager fm = new FileManager();
 
 
     // *************************   Verify first line Tests
@@ -27,6 +28,23 @@ public class FileInputParserTest {
         list.add("NumElements=4");
 
         assertEquals(4, fip.getNumberOfElements(list, new FileManager()));
+    }
+
+
+    @Test
+    public void convertPuzzleArrayPossitive() {
+        List<int []> list = new ArrayList<>();
+        list.add(new int[]{1,0,1,0,-1});
+        list.add(new int[]{2,1,0,0,1});
+
+        List<PuzzlePiece> puzzlePieces = new ArrayList<>();
+        puzzlePieces.add(new PuzzlePiece(1,0,1,0,-1));
+        puzzlePieces.add(new PuzzlePiece(2,1,0,0,1));
+
+        assertTrue(puzzlePieces.get(0).equals(FileInputParser.convertPuzzleArray(list).get(0)));
+        assertTrue(puzzlePieces.get(1).equals(FileInputParser.convertPuzzleArray(list).get(1)));
+
+
     }
 
     @Test
