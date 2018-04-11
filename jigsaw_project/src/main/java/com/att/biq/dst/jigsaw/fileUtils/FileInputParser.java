@@ -340,7 +340,6 @@ public class FileInputParser {
     public static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
 
         List<Integer> ids = new ArrayList<>();
-        for (int i = 0; i < text.size(); i++) {
 
         int numberOfElements = text.size();
         for (int i = 0; i < numberOfElements; i++) {
@@ -356,6 +355,9 @@ public class FileInputParser {
 
         return result;
     }
+
+
+
 
     protected static String trimRedundantSpacesFromLine(String line) {
 // todo replace with regex
