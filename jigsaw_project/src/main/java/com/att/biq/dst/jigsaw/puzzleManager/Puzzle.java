@@ -45,6 +45,7 @@ public class Puzzle {
         Path inputFilePath = Paths.get(filePath);
         FileInputParser fileInputParser = new FileInputParser();
         ArrayList<PuzzlePiece> puzzle = (ArrayList<PuzzlePiece>) fileInputParser.produceArrayForPuzzle(readFromFile(inputFilePath), fileManager);
+
         if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, fileManager)){
             for(String error: fileManager.getErrorReportList()){
                 fileManager.writeToFile(error);
@@ -106,38 +107,39 @@ public class Puzzle {
     private  List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray ){
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         for (PuzzlePiece piece : puzzlePieceArray){
-
-            if (left!=2&& left != piece.getLeft()){return null;}
-            if (top!=2 && top!=piece.getTop()){return null;}
-            if (right!=2 && right!=piece.getRight()){return null;}
-            if (bottom!=2 && bottom!=piece.getBottom()){return null;}
-                matchedPieces.add(piece);
+            boolean isValidPiece = true;
+            if (left!=2&& left != piece.getLeft()){isValidPiece=false;}
+            if (top!=2 && top!=piece.getTop()){isValidPiece=false;}
+            if (right!=2 && right!=piece.getRight()){isValidPiece=false;}
+            if (bottom!=2 && bottom!=piece.getBottom()){isValidPiece=false;}
+             if (isValidPiece){matchedPieces.add(piece);}
             }
         return matchedPieces;
     }
 
     private  PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
-        if (puzzlePieces.size()!=0 && !solution.isValid()) {
+        if (puzzlePieces.size()==0 && solution.isValid()) {return solution;}
+        else if (puzzlePieces.size()==0){return null;}
             List<PuzzlePiece> foundPieces =null;
             if (solution.getCurRow() == 0) {
                 if (solution.getCurCol() == 0) {
                     foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
-                } else if (solution.getCurCol() < solution.getColumns()) {
+                } else if (solution.getCurCol() < solution.getColumns()-1) {
                      foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2, puzzlePieces);
-                }else if (solution.getCurCol() == solution.getColumns()){
+                }else if (solution.getCurCol() == solution.getColumns()-1){
                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2, puzzlePieces);
                 }
-            }else if (solution.getCurRow() == solution.getColumns()-1){
+            }else if (solution.getCurRow() == solution.getRows()-1){
                 if (solution.getCurCol() == 0) {
                     foundPieces = getMatch(0, 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                } else if (solution.getCurCol() < solution.getColumns()) {
+                } else if (solution.getCurCol() < solution.getColumns()-1) {
                      foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                }else if (solution.getCurCol() == solution.getColumns()){
+                }else if (solution.getCurCol() == solution.getColumns()-1){
                      foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 0, 0, puzzlePieces);
                 }else{
                     if (solution.getCurCol()==0){
                          foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                    }else if (solution.getCurCol()==solution.getColumns()){
+                    }else if (solution.getCurCol()==solution.getColumns()-1){
                         foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
                     }else{
                         foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
@@ -148,8 +150,7 @@ public class Puzzle {
                 PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
                 if (possibleSolution != null) return possibleSolution;
             }
-        }
-        return solution;
+       return solution;
     }
 
     private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {

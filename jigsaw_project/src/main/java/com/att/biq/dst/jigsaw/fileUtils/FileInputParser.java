@@ -10,7 +10,7 @@ import java.util.TreeSet;
 //TODO javadoc desc
 public class FileInputParser {
 
-
+    private static int numberOfElements;
     /**
      * get number of elements by reading the first line in the file.
      * if there is an error on the first line, return -1, and report to file.
@@ -26,7 +26,8 @@ public class FileInputParser {
 //            tempStr[1] = tempStr[1].replace(" ", "");
             if ((firstLineArr[0].equals("NumElements")) && (firstLineArr.length == 2)) {
                 try {
-                    return Integer.valueOf(firstLineArr[1]);
+                    numberOfElements = Integer.valueOf(firstLineArr[1]);
+                    return numberOfElements  ;
                 } catch (NumberFormatException e) {
                     fileManager.reportError("Number of elements does not indicate number");
                     return -1;
@@ -40,7 +41,7 @@ public class FileInputParser {
 
         } catch (ArrayIndexOutOfBoundsException e) {
 // TODO error
-            return -1;
+    return  -1;
         }
 
 
@@ -228,6 +229,7 @@ public class FileInputParser {
 
     static String getFileRange(List<String> list, FileManager fileManager) {
         int numberOfElements = getNumberOfElements(list, fileManager);
+
         if (numberOfElements == 1) return "1";
         if (numberOfElements == (-1)) return "N/A";
         return "1-" + numberOfElements;
@@ -338,6 +340,7 @@ public class FileInputParser {
     public static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
 
         List<Integer> ids = new ArrayList<>();
+        for (int i = 0; i < text.size(); i++) {
 
         int numberOfElements = text.size();
         for (int i = 0; i < numberOfElements; i++) {
