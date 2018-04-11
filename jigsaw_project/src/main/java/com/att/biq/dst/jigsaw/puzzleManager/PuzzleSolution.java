@@ -56,8 +56,8 @@ public class PuzzleSolution {
     }
 
     private boolean hasNullPieces() {
-        for (int i=0;i<=solution.length;i++){
-            for (int j=0;j<=solution[i].length;j++){
+        for (int i=0;i<solution.length;i++){
+            for (int j=0;j<solution[i].length;j++){
                 if (solution[i][j]==null){
                     return true;
                 }
@@ -88,7 +88,7 @@ public class PuzzleSolution {
             for (int row = 0;row<rows;row++){
                 if (row==0){
                     if (solution[row][column].getTop()!=0){return false;}
-                    if (solution[row][column].getBottom()+solution[row+1][column].getTop()!=0){return false;}
+                    if (row!=rows-1 && solution[row][column].getBottom()+solution[row+1][column].getTop()!=0){return false;}
                 }else if (row==rows-1){
                     if (solution[row][column].getBottom()!=0){return false;}
                     if (solution[row][column].getTop()+solution[row-1][column].getBottom()!=0){return false;}
@@ -107,7 +107,7 @@ public class PuzzleSolution {
             for (int column = 0;column<columns;column++){
                 if (column==0){
                     if (solution[row][column].getLeft()!=0){return false;}
-                    if (solution[row][column].getRight()+solution[row][column+1].getLeft()!=0){return false;}
+                    if (column!=columns-1 && solution[row][column].getRight()+solution[row][column+1].getLeft()!=0){return false;}
                 }else if (column==columns-1){
                     if (solution[row][column].getRight()!=0){return false;}
                     if (solution[row][column].getLeft()+solution[row][column-1].getRight()!=0){return false;}
