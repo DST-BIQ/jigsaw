@@ -18,20 +18,33 @@ public class Puzzle {
     private static PuzzlePieceValidators puzzlePieceValidators = new PuzzlePieceValidators();
 
     public static void main(String[] args) {
-        String inputFilePath = "c:/puzzle/puzzle.txt";
-        FileManager fm = new FileManager("c:/puzzle/output_");
+        String inputFilePath = "c:/puzzle/test14.in";
+        FileManager fm = new FileManager("c:/puzzle/output/");
         List<PuzzlePiece> puzzlePieces = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
         List<int[]> puzzleStructures = calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
         PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
-        printSolution(solution, fm);
+        if (solution!=null) {
+            printSolution(solution, fm);
+        }
 
     }
 
     private static void printSolution(PuzzleSolution solution, FileManager fileManager) {
         PuzzlePiece[][] finalSolution = solution.getSolution();
-        for (int i=0;i<finalSolution.length;i++){
-            fileManager.writeToFile(finalSolution[i].toString());
+        for(int i=0;i<finalSolution.length;i++){
+            fileManager.writeToFile(convertPuzzlePiecesToString(finalSolution[i]));
+
         }
+
+    }
+
+    private static String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {
+
+        StringBuilder builder = new StringBuilder();
+        for(PuzzlePiece piece:puzzlePieces){
+            builder.append(piece.toString());
+        }
+        return builder.toString();
     }
 
     private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
@@ -39,7 +52,7 @@ public class Puzzle {
         for(int[] structure:puzzleStructures){
             PuzzleSolution solution = new PuzzleSolution(structure[0],structure[1]);
             PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
-            if (possibleSolution!=null)
+            if (possibleSolution!=null && possibleSolution.isValid())
             {return possibleSolution;}
         }
 
@@ -165,7 +178,6 @@ public class Puzzle {
 
     private static PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         for (PuzzlePiece piece : foundPieces) {
-            puzzlePieces.remove(piece);
             PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
             if (possibleSolution != null) {
                 return possibleSolution;
@@ -178,7 +190,10 @@ public class Puzzle {
     private static PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){
         PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(),curSolution.getColumns());
         newSolution.setSolution(curSolution.getSolution());
+        newSolution.setCurRow(curSolution.getCurRow());
+        newSolution.setCurCol(curSolution.getCurCol());
         newSolution.insertPiece(enteredPiece);
+
         return newSolution;
     }
 

@@ -90,6 +90,6 @@ public class PuzzlePiece {
     //TODO - implement toString
     @Override
     public String toString() {
-        return "";
+       return  ( id +" ");
     }
 }

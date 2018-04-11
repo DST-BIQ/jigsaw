@@ -154,4 +154,12 @@ public class PuzzleSolution {
        if (curRow==0){return null;}
        return solution[curRow-1][curCol];
     }
+
+    public void setCurRow(int curRow) {
+        this.curRow=curRow;
+    }
+
+    public void setCurCol(int curCol) {
+        this.curCol = curCol;
+    }
 }
