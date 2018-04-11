@@ -29,7 +29,7 @@ public class Puzzle {
 
     private static void printSolution(PuzzleSolution solution, FileManager fileManager) {
         PuzzlePiece[][] finalSolution = solution.getSolution();
-        for (int i=0;i<finalSolution[0].length;i++){
+        for (int i=0;i<finalSolution.length;i++){
             fileManager.writeToFile(finalSolution[i].toString());
         }
     }
@@ -114,8 +114,8 @@ public class Puzzle {
         return structureOptions;
     }
 
-    private static ArrayList<PuzzlePiece> getMatch(int left, int top, int right, int bottom, ArrayList<PuzzlePiece> puzzlePieceArray ){
-        ArrayList<PuzzlePiece> matchedPieces = new ArrayList<>();
+    private static List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray ){
+        List<PuzzlePiece> matchedPieces = new ArrayList<>();
         for (PuzzlePiece piece : puzzlePieceArray){
 
             if (left!=2&& left != piece.getLeft()){return null;}
@@ -127,9 +127,9 @@ public class Puzzle {
         return matchedPieces;
     }
 
-    private static PuzzleSolution solve(PuzzleSolution solution, ArrayList<PuzzlePiece> puzzlePieces){
+    private static PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
         if (puzzlePieces.size()!=0 && !solution.isValid()) {
-            ArrayList<PuzzlePiece> foundPieces =null;
+            List<PuzzlePiece> foundPieces =null;
             if (solution.getCurRow() == 0) {
                 if (solution.getCurCol() == 0) {
                     foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
@@ -163,7 +163,7 @@ public class Puzzle {
         return solution;
     }
 
-    private static PuzzleSolution findSolution(PuzzleSolution solution, ArrayList<PuzzlePiece> puzzlePieces, ArrayList<PuzzlePiece> foundPieces) {
+    private static PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         for (PuzzlePiece piece : foundPieces) {
             puzzlePieces.remove(piece);
             PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
@@ -182,8 +182,8 @@ public class Puzzle {
         return newSolution;
     }
 
-    private static ArrayList<PuzzlePiece> clonePuzzlePiecesList(ArrayList<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
-        ArrayList<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
+    private static List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
+        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
         for (PuzzlePiece piece: puzzlePieces){
             if (!piece.equals(removedPiece)){
                 newPuzzlePiecesList.add(piece);

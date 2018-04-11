@@ -136,7 +136,7 @@ public class FileInputParser {
     }
 
 
-    private static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
+    static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
         List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
         for (int[] puzzlePiece : puzzleArray) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);

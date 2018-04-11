@@ -14,7 +14,8 @@ public class PuzzleSolution {
         size = rows*columns;
         this.rows=rows;
         this.columns=columns;
-        solution = new PuzzlePiece[rows-1][columns-1];
+        solution = new PuzzlePiece[rows][columns];
+
     }
 
 
@@ -41,6 +42,10 @@ public class PuzzleSolution {
 
     public boolean isValid(){
 
+        if (hasNullPieces()){
+            return false;
+        }
+
         if (!verifyRows()){
             return false;
         }
@@ -48,6 +53,17 @@ public class PuzzleSolution {
             return false;
         }
         return true;
+    }
+
+    private boolean hasNullPieces() {
+        for (int i=0;i<=solution.length;i++){
+            for (int j=0;j<=solution[i].length;j++){
+                if (solution[i][j]==null){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void insertPiece(PuzzlePiece piece){
