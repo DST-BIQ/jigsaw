@@ -14,7 +14,8 @@ public class PuzzleSolution {
         size = rows*columns;
         this.rows=rows;
         this.columns=columns;
-        solution = new PuzzlePiece[rows-1][columns-1];
+        solution = new PuzzlePiece[rows][columns];
+
     }
 
 
@@ -41,6 +42,10 @@ public class PuzzleSolution {
 
     public boolean isValid(){
 
+        if (hasNullPieces()){
+            return false;
+        }
+
         if (!verifyRows()){
             return false;
         }
@@ -48,6 +53,17 @@ public class PuzzleSolution {
             return false;
         }
         return true;
+    }
+
+    private boolean hasNullPieces() {
+        for (int i=0;i<=solution.length;i++){
+            for (int j=0;j<=solution[i].length;j++){
+                if (solution[i][j]==null){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void insertPiece(PuzzlePiece piece){
@@ -103,5 +119,47 @@ public class PuzzleSolution {
             }
         }
         return true;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public int getCurRow() {
+        return curRow;
+    }
+
+    public int getCurCol() {
+        return curCol;
+    }
+
+    public void setSolution(PuzzlePiece[][] solution) {
+        this.solution = solution;
+    }
+
+    public PuzzlePiece getFormerPiece() {
+        if(curCol==0 && curRow>0){
+            return solution[curRow-1][columns-1];
+        }else if(curCol==0 && curRow==0){
+            return null;
+        }else return solution[curRow][curCol-1];
+
+    }
+
+    public PuzzlePiece getAbovePiece() {
+       if (curRow==0){return null;}
+       return solution[curRow-1][curCol];
+    }
+
+    public void setCurRow(int curRow) {
+        this.curRow=curRow;
+    }
+
+    public void setCurCol(int curCol) {
+        this.curCol = curCol;
     }
 }

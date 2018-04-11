@@ -91,7 +91,7 @@ public class PuzzlePieceValidators {
 
    private  boolean validateZero(int rightSum, int topSum , int leftSum, int bottomSum){
 
-         return (rightSum==0&&topSum==0&&leftSum==0&&bottomSum==0);
+         return (rightSum+leftSum==0&&topSum+bottomSum==0);
 
    }
 

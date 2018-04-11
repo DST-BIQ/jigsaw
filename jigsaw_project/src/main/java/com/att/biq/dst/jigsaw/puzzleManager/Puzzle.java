@@ -18,20 +18,33 @@ public class Puzzle {
     private static PuzzlePieceValidators puzzlePieceValidators = new PuzzlePieceValidators();
 
     public static void main(String[] args) {
-        String inputFilePath = "c:/puzzle/puzzle.txt";
-        FileManager fm = new FileManager("c:/puzzle/output_");
+        String inputFilePath = "c:/puzzle/test14.in";
+        FileManager fm = new FileManager("c:/puzzle/output/");
         List<PuzzlePiece> puzzlePieces = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
         List<int[]> puzzleStructures = calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
         PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
-        printSolution(solution, fm);
+        if (solution!=null) {
+            printSolution(solution, fm);
+        }
 
     }
 
     private static void printSolution(PuzzleSolution solution, FileManager fileManager) {
         PuzzlePiece[][] finalSolution = solution.getSolution();
-        for (int i=0;i<finalSolution[0].length;i++){
-            fileManager.writeToFile(finalSolution[i].toString());
+        for(int i=0;i<finalSolution.length;i++){
+            fileManager.writeToFile(convertPuzzlePiecesToString(finalSolution[i]));
+
         }
+
+    }
+
+    private static String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {
+
+        StringBuilder builder = new StringBuilder();
+        for(PuzzlePiece piece:puzzlePieces){
+            builder.append(piece.toString());
+        }
+        return builder.toString();
     }
 
     private static PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
@@ -39,7 +52,7 @@ public class Puzzle {
         for(int[] structure:puzzleStructures){
             PuzzleSolution solution = new PuzzleSolution(structure[0],structure[1]);
             PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
-            if (possibleSolution!=null)
+            if (possibleSolution!=null && possibleSolution.isValid())
             {return possibleSolution;}
         }
 
@@ -113,21 +126,85 @@ public class Puzzle {
         }
         return structureOptions;
     }
-    private PuzzlePiece getMatch(int left, int top, int right, int bottom, ArrayList<PuzzlePiece> puzzlePieceArray ){
 
+    private static List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray ){
+        List<PuzzlePiece> matchedPieces = new ArrayList<>();
         for (PuzzlePiece piece : puzzlePieceArray){
 
-            if (left == piece.getLeft()&& top ==piece.getTop()&& right == piece.getRight()&& bottom==piece.getBottom()){
-                return piece;
+            if (left!=2&& left != piece.getLeft()){return null;}
+            if (top!=2 && top!=piece.getTop()){return null;}
+            if (right!=2 && right!=piece.getRight()){return null;}
+            if (bottom!=2 && bottom!=piece.getBottom()){return null;}
+                matchedPieces.add(piece);
+            }
+        return matchedPieces;
+    }
+
+    private static PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
+        if (puzzlePieces.size()!=0 && !solution.isValid()) {
+            List<PuzzlePiece> foundPieces =null;
+            if (solution.getCurRow() == 0) {
+                if (solution.getCurCol() == 0) {
+                    foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
+                } else if (solution.getCurCol() < solution.getColumns()) {
+                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2, puzzlePieces);
+                }else if (solution.getCurCol() == solution.getColumns()){
+                    foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2, puzzlePieces);
+                }
+            }else if (solution.getCurRow() == solution.getColumns()-1){
+                if (solution.getCurCol() == 0) {
+                    foundPieces = getMatch(0, 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+                } else if (solution.getCurCol() < solution.getColumns()) {
+                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+                }else if (solution.getCurCol() == solution.getColumns()){
+                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 0, 0, puzzlePieces);
+                }else{
+                    if (solution.getCurCol()==0){
+                         foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+                    }else if (solution.getCurCol()==solution.getColumns()){
+                        foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
+                    }else{
+                        foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
+                    }
+                }
+            }
+            if (foundPieces!=null) {
+                PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
+                if (possibleSolution != null) return possibleSolution;
             }
         }
+        return solution;
+    }
 
+    private static PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
+        for (PuzzlePiece piece : foundPieces) {
+            PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
+            if (possibleSolution != null) {
+                return possibleSolution;
+            }
+        }
         return null;
 
     }
 
-    private static PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
+    private static PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){
+        PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(),curSolution.getColumns());
+        newSolution.setSolution(curSolution.getSolution());
+        newSolution.setCurRow(curSolution.getCurRow());
+        newSolution.setCurCol(curSolution.getCurCol());
+        newSolution.insertPiece(enteredPiece);
 
+        return newSolution;
+    }
+
+    private static List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
+        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
+        for (PuzzlePiece piece: puzzlePieces){
+            if (!piece.equals(removedPiece)){
+                newPuzzlePiecesList.add(piece);
+            }
+        }
+        return newPuzzlePiecesList;
     }
 
 }
