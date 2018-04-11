@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FileInputParserTest {
 
-    static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\resources\\input\\";
+    static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
 
     FileInputParser fip = new FileInputParser();
     FileManager fm = new FileManager();

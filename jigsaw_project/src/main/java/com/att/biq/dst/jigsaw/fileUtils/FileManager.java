@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
+
 //TODO javadoc desc
 public class FileManager {
 
 
-    private   File outputFile;
+    private File outputFile;
     FileWriter fw;
     BufferedWriter bw;
 
