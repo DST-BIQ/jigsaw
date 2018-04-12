@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
 
 import java.util.List;
 
@@ -10,7 +10,12 @@ public class PuzzlePieceValidators {
     private int minTopButtom;
     private int minLeftRigh;
 
-
+    /**
+     *
+     * @param puzzlePieces
+     * @param errorsManager
+     * @return
+     */
     public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, ErrorsManager errorsManager) {
 
       boolean TL=false;

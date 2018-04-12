@@ -1,7 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.fileUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,6 @@ public class Puzzle {
             if (possibleSolution!=null && possibleSolution.isValid())
             {return possibleSolution;}
         }
-
         return null;
     }
 
@@ -39,8 +38,7 @@ public class Puzzle {
      */
     public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
-        FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<int[]> puzzleArray = fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        ArrayList<int[]> puzzleArray = FileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray==null){ return null;}
 
         ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(puzzleArray);
@@ -196,7 +194,6 @@ public class Puzzle {
             }
         }
         return null;
-
     }
 
     private  PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){

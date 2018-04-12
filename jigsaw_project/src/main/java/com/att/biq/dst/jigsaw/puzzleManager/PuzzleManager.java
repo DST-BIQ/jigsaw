@@ -179,9 +179,9 @@ public class PuzzleManager {
     private void reportErrors(String message) {
         if (puzzle.getErrorsManager().hasFatalErrors()){
             reportData(puzzle.getErrorsManager().getFatalErrorsList(),"file");
+            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
             throw new RuntimeException(message);
-        }
-        if (puzzle.getErrorsManager().hasNonFatalErrors()){
+        }else if (puzzle.getErrorsManager().hasNonFatalErrors()){
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
         }
     }
