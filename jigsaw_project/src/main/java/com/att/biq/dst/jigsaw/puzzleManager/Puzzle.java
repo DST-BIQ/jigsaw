@@ -101,39 +101,92 @@ public class Puzzle {
     }
 
     private  PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
-        if (puzzlePieces.size()==0 && solution.isValid()) {return solution;}
-        else if (puzzlePieces.size()==0){return null;}
+        if (foundSolution(solution, puzzlePieces)) {return solution;}
+        else if (noMorePiecesAndNoValidSolution(puzzlePieces)){return null;}
             List<PuzzlePiece> foundPieces =null;
-            if (solution.getCurRow() == 0) {
-                if (solution.getCurCol() == 0) {
-                    foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
-                } else if (solution.getCurCol() < solution.getColumns()-1) {
-                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2, puzzlePieces);
-                }else if (solution.getCurCol() == solution.getColumns()-1){
-                    foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2, puzzlePieces);
-                }
-            }else if (solution.getCurRow() == solution.getRows()-1){
-                if (solution.getCurCol() == 0) {
-                    foundPieces = getMatch(0, 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                } else if (solution.getCurCol() < solution.getColumns()-1) {
-                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                }else if (solution.getCurCol() == solution.getColumns()-1){
-                     foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 0, 0, puzzlePieces);
-                }else{
-                    if (solution.getCurCol()==0){
-                         foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
-                    }else if (solution.getCurCol()==solution.getColumns()-1){
-                        foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
-                    }else{
-                        foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
-                    }
-                }
+            if (isOnFirstRow(solution)) {
+                foundPieces = handleFirstRowSolution(solution, puzzlePieces, foundPieces);
+            }else if (isOnLastRow(solution)){
+                foundPieces = handleBottomRowSolution(solution, puzzlePieces);
+            }else {
+                foundPieces = handleBetweenTopAndBottomRows(solution, puzzlePieces);
             }
             if (foundPieces!=null) {
-                PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
+                PuzzleSolution possibleSolution = handleNonTopOrBottomSolution(solution, puzzlePieces, foundPieces);
                 if (possibleSolution != null) return possibleSolution;
             }
        return solution;
+    }
+
+    private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+        List<PuzzlePiece> foundPieces;
+        if (isOnFirstColumn(solution)){
+            foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+        }else if (isOnLastColumn(solution)){
+            foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
+        }else{
+            foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
+        }
+        return foundPieces;
+    }
+
+    private boolean noMorePiecesAndNoValidSolution(List<PuzzlePiece> puzzlePieces) {
+        return puzzlePieces.size()==0;
+    }
+
+    private boolean foundSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+        return puzzlePieces.size()==0 && solution.isValid();
+    }
+
+    private PuzzleSolution handleNonTopOrBottomSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
+        PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
+        if (possibleSolution != null) return possibleSolution;
+        return null;
+    }
+
+    private boolean isOnLastRow(PuzzleSolution solution) {
+        return solution.getCurRow() == solution.getRows()-1;
+    }
+
+    private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+        List<PuzzlePiece> foundPieces =null;
+        if (isOnFirstColumn(solution)) {
+            foundPieces = getMatch(0, 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+        } else if (isBetweenFirstAndLastColumns(solution)) {
+             foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+        }else if (isOnLastColumn(solution)){
+             foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 0, 0, puzzlePieces);
+        }
+        return foundPieces;
+    }
+
+
+
+    private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
+        if (isOnFirstColumn(solution)) {
+            foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
+        } else if (isBetweenFirstAndLastColumns(solution)) {
+             foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2, puzzlePieces);
+        }else if (isOnLastColumn(solution)){
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2, puzzlePieces);
+        }
+        return foundPieces;
+    }
+
+    private boolean isOnLastColumn(PuzzleSolution solution) {
+        return solution.getCurCol() == solution.getColumns()-1;
+    }
+
+    private boolean isBetweenFirstAndLastColumns(PuzzleSolution solution) {
+        return solution.getCurCol() < solution.getColumns()-1;
+    }
+
+    private boolean isOnFirstColumn(PuzzleSolution solution) {
+        return solution.getCurCol() == 0;
+    }
+
+    private boolean isOnFirstRow(PuzzleSolution solution) {
+        return solution.getCurRow() == 0;
     }
 
     private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
