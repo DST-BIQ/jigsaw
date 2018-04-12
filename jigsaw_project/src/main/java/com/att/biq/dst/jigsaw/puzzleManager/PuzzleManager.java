@@ -5,7 +5,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
@@ -161,7 +164,7 @@ public class PuzzleManager {
     private void writeToFile(String data) {
 
 
-        try (FileWriter fw = new FileWriter(outputFilePath, true);
+        try (FileWriter fw = new FileWriter(outputFilePath +"output_"+getTimeStamp()+".txt", true);
              BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write(data);
             bw.newLine();
@@ -181,6 +184,13 @@ public class PuzzleManager {
         if (puzzle.getErrorsManager().hasNonFatalErrors()){
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
         }
+    }
+
+    public static String getTimeStamp() {
+        DateFormat df = new SimpleDateFormat("dd-MM-yy HH.mm.ss");
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        return df.format(cal.getTime());
     }
 
 }
