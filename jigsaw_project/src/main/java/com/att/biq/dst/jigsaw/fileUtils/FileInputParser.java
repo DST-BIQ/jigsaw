@@ -1,7 +1,5 @@
 package com.att.biq.dst.jigsaw.fileUtils;
 
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -67,7 +65,7 @@ public class FileInputParser {
      * @return list of puzzle pieces
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public static List<PuzzlePiece> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
+    public static ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
@@ -133,18 +131,10 @@ public class FileInputParser {
 
         }
 
-        return convertPuzzleArray(puzzlePieceList);
+        return puzzlePieceList;
     }
 
 
-    static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
-        List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
-        for (int[] puzzlePiece : puzzleArray) {
-            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
-            puzzlePiecesList.add(pp);
-        }
-        return puzzlePiecesList;
-    }
 
 
     /**
