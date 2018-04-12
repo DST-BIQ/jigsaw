@@ -1,11 +1,10 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.FileManager;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class PuzzleManager {
     private PuzzleSolution solution;
     private PuzzlePieceValidators puzzlePieceValidators;
     private Puzzle puzzle;
-    private FileManager fileManager;
     private String inputFilePath; // input file path
     private String outputFilePath; // output filepath
     private ArrayList<String> reportList; // all reports to file will be written to this list
@@ -44,7 +42,7 @@ public class PuzzleManager {
         reportList = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-        fileManager = new FileManager();
+
     }
 
 
@@ -54,7 +52,10 @@ public class PuzzleManager {
 
 
     public void loadPuzzle() {
-        puzzlePieces = puzzle.getPuzzle(inputFilePath, fileManager, puzzlePieceValidators);
+        puzzlePieces = puzzle.getPuzzle(readFromFile(Paths.get(inputFilePath)),  puzzlePieceValidators);
+        if (puzzlePieces==null){
+            reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
+        }
 
     }
 
@@ -70,10 +71,10 @@ public class PuzzleManager {
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
+        }else if(puzzle.getErrorsManager().hasFatalErrors()){
+            reportErrors("A FATAL Error has occurred, cannot solve Puzzle");
         }
-
     }
-
 
     /**
      * report solution to general array list
@@ -121,7 +122,6 @@ public class PuzzleManager {
         }
 
     }
-
 
     /**
      * Files handling section
@@ -173,25 +173,15 @@ public class PuzzleManager {
         }
 
     }
+
+    private void reportErrors(String message) {
+        if (puzzle.getErrorsManager().hasFatalErrors()){
+            reportData(puzzle.getErrorsManager().getFatalErrorsList(),"file");
+            throw new RuntimeException(message);
+        }
+        if (puzzle.getErrorsManager().hasNonFatalErrors()){
+            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
+        }
+    }
+
 }
-
-
-
-
-
-//    public String getFileInputPath() {
-//        return inputFilePath;
-//    }
-//    public static void main(String[] args) {
-//     *   String inputFilePath = "c:/puzzle/test14.in";
-//    *    FileManager fm = new FileManager("c:/puzzle/output/");
-//   *     List<PuzzlePiece> puzzlePieces = getPuzzle(inputFilePath, fm, puzzlePieceValidators);
-//   *     List<int[]> puzzleStructures = calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
-//        PuzzleSolution solution = calculatePuzzleSolution(puzzlePieces,puzzleStructures);
-//        if (solution!=null) {
-//            printSolution(solution, fm);
-//        }
-//
-//    }
-
-
