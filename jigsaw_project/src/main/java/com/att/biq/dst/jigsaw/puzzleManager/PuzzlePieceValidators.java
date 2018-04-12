@@ -11,7 +11,7 @@ public class PuzzlePieceValidators {
     private int minLeftRigh;
 
 
-    public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fm) {
+    public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fileManager) {
 
       boolean TL=false;
       boolean TR=false;
@@ -58,23 +58,23 @@ public class PuzzlePieceValidators {
 
       }
       if (!validateStraightEdges(top,left,right,bottom,puzzlePieces.size())){
-         fm.writeToFile("Cannot solve puzzle: wrong number of straight edges");
+         fileManager.writeToFile("Cannot solve puzzle: wrong number of straight edges");
       }
       if (!TL){
-         fm. writeToFile("Cannot solve puzzle: missing corner element: TL");
+         fileManager. writeToFile("Cannot solve puzzle: missing corner element: TL");
       }
       if (!TR){
-         fm.writeToFile("Cannot solve puzzle: missing corner element: TR");
+         fileManager.writeToFile("Cannot solve puzzle: missing corner element: TR");
       }
       if (!BL){
-         fm.writeToFile("Cannot solve puzzle: missing corner element: BL");
+         fileManager.writeToFile("Cannot solve puzzle: missing corner element: BL");
       }
       if (!BR){
-         fm.writeToFile("Cannot solve puzzle: missing corner element: BR");
+         fileManager.writeToFile("Cannot solve puzzle: missing corner element: BR");
       }
 
       if (!validateZero(rightSum,topSum,leftSum,bottomSum)){
-         fm.writeToFile("Cannot solve puzzle: sum of edges is not zero");
+         fileManager.writeToFile("Cannot solve puzzle: sum of edges is not zero");
       }
 
 

@@ -2,12 +2,15 @@ package com.att.biq.dst.jigsaw.fileUtils;
 
 import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 //TODO javadoc desc
 public class FileInputParser {
 
-
+    private static int numberOfElements;
     /**
      * get number of elements by reading the first line in the file.
      * if there is an error on the first line, return -1, and report to file.
@@ -15,7 +18,7 @@ public class FileInputParser {
      * @param list
      * @return int containing number of elements
      */
-    public static int getNumberOfElements(List<String> list, FileManager fm) {
+    public static int getNumberOfElements(List<String> list, FileManager fileManager) {
 // TODO verify the array contains 2 elements only, verify syntax
         String firstLine = list.get(0).trim();
         String[] firstLineArr = firstLine.split("\\s*=\\s*");
@@ -23,21 +26,22 @@ public class FileInputParser {
 //            tempStr[1] = tempStr[1].replace(" ", "");
             if ((firstLineArr[0].equals("NumElements")) && (firstLineArr.length == 2)) {
                 try {
-                    return Integer.valueOf(firstLineArr[1]);
+                    numberOfElements = Integer.valueOf(firstLineArr[1]);
+                    return numberOfElements  ;
                 } catch (NumberFormatException e) {
-                    fm.reportError("Number of elements does not indicate number");
+                    fileManager.reportError("Number of elements does not indicate number");
                     return -1;
 
                     //TODO consider exception instead of -1
                 }
             } else {
-                fm.reportError("Either string does not contains the prefix \"NumElements\" or any other error on the first line");
+                fileManager.reportError("Either string does not contains the prefix \"NumElements\" or any other error on the first line");
                 return -1;
             }
 
         } catch (ArrayIndexOutOfBoundsException e) {
 // TODO error
-            return -1;
+    return  -1;
         }
 
 
@@ -63,7 +67,7 @@ public class FileInputParser {
      * @return list of puzzle pieces
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public static List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fm) {
+    public static List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fileManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
@@ -75,26 +79,26 @@ public class FileInputParser {
             {
                 if (isLineContainsOnlySpaces(line) || isLineEmpty(line)) {
                     countErrors += 1;
-                    fm.reportError("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
+                    fileManager.reportError("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
 
                 }
 
                 if (isLineBeginswithDash(line)) {
                     countErrors += 1;
-                    fm.reportError("lineNumber:  " + indexLines + "  begins with dash, ignore ");
+                    fileManager.reportError("lineNumber:  " + indexLines + "  begins with dash, ignore ");
 
                 }
 
 
-                if (!idInRange(list, line, fm)) {
+                if (!idInRange(list, line, fileManager)) {
                     countErrors += 1;
                     wrongElementIDs.add(String.valueOf(getElementID(line)));
-                    fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " cannot have the following IDs:" + wrongElementIDs);
+                    fileManager.reportError("Puzzle of size " + getNumberOfElements(list, fileManager) + " cannot have the following IDs:" + wrongElementIDs);
                 }
 
                 if (isWrongElementFormat(line)) {
                     countErrors += 1;
-                    fm.reportError("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
+                    fileManager.reportError("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
 
 
                 }
@@ -118,7 +122,7 @@ public class FileInputParser {
 
 
                 } else {
-                    fm.writeToFile(fm.getErrorReportList().toString());
+                    fileManager.writeToFile(fileManager.getErrorReportList().toString());
 
                 }
 
@@ -128,7 +132,7 @@ public class FileInputParser {
         }
 
         if (!validateMissingIds(puzzlePieceList, missingElementsIDs)) {
-            fm.reportError("Puzzle of size " + getNumberOfElements(list, fm) + " is missing the following IDs:" + missingElementsIDs);
+            fileManager.reportError("Puzzle of size " + getNumberOfElements(list, fileManager) + " is missing the following IDs:" + missingElementsIDs);
 
         }
 
@@ -176,9 +180,9 @@ public class FileInputParser {
      * @param line line to inspect
      * @return true/false
      */
-    static boolean idInRange(List<String> list, String line, FileManager fm) {
+    static boolean idInRange(List<String> list, String line, FileManager fileManager) {
 
-        int numberOfElements = getNumberOfElements(list, fm);
+        int numberOfElements = getNumberOfElements(list,fileManager);
         int puzzlePieceID = getLinePuzzlePieceID(line);
         if (puzzlePieceID <= numberOfElements) {
             return true;
@@ -223,8 +227,9 @@ public class FileInputParser {
      * @return String
      */
 
-    static String getFileRange(List<String> list, FileManager fm) {
-        int numberOfElements = getNumberOfElements(list, fm);
+    static String getFileRange(List<String> list, FileManager fileManager) {
+        int numberOfElements = getNumberOfElements(list, fileManager);
+
         if (numberOfElements == 1) return "1";
         if (numberOfElements == (-1)) return "N/A";
         return "1-" + numberOfElements;
@@ -350,6 +355,9 @@ public class FileInputParser {
 
         return result;
     }
+
+
+
 
     protected static String trimRedundantSpacesFromLine(String line) {
 // todo replace with regex

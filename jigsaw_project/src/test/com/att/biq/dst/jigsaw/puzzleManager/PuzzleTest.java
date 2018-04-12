@@ -11,8 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class PuzzleTest {
 
-    FileManager fm = new FileManager("src/resources/output/report_"+ System.currentTimeMillis());
+    FileManager fm = new FileManager("src/main/resources/output/report_"+ System.currentTimeMillis());
     PuzzlePieceValidators puzzlePieceValidators = new PuzzlePieceValidators();
+    Puzzle puzzle = new Puzzle();
 
     @Test
     public void getPuzzlePositiveTest(){
@@ -23,7 +24,7 @@ public class PuzzleTest {
         expected.add(new PuzzlePiece(3,0,0,0,0));
         expected.add(new PuzzlePiece(4,0,0,0,0));
 
-        ArrayList<PuzzlePiece> receivedPuzzle = Puzzle.getPuzzle("src/resources/input/getPuzzlePositiveTest.txt", fm, puzzlePieceValidators);
+        ArrayList<PuzzlePiece> receivedPuzzle = puzzle.getPuzzle("src/main/resources/input/getPuzzlePositiveTest.txt", fm, puzzlePieceValidators);
         assertEquals(expected, receivedPuzzle);
     }
 
@@ -33,7 +34,7 @@ public class PuzzleTest {
 
         Throwable exception = assertThrows(RuntimeException.class,
                 () -> {
-                    Puzzle.getPuzzle("src/resources/input/getPuzzleMissingIdTest.txt", fm,puzzlePieceValidators);
+                    puzzle.getPuzzle("src/main/resources/input/getPuzzleMissingIdTest.txt", fm,puzzlePieceValidators);
                 }
         );
 
