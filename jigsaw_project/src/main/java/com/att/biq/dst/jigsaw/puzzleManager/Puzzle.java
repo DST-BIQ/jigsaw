@@ -40,7 +40,7 @@ public class Puzzle {
     public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
         FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<PuzzlePiece> puzzle = (ArrayList<PuzzlePiece>) fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager));
 
         if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, errorsManager)){
 
@@ -219,6 +219,16 @@ public class Puzzle {
         }
         return newPuzzlePiecesList;
     }
+
+    public ArrayList<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
+        ArrayList<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
+        for (int[] puzzlePiece : puzzleArray) {
+            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
+            puzzlePiecesList.add(pp);
+        }
+        return puzzlePiecesList;
+    }
+
 
     public ErrorsManager getErrorsManager() {
         return errorsManager;
