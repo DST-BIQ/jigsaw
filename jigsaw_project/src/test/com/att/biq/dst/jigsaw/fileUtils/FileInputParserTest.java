@@ -20,7 +20,7 @@ public class FileInputParserTest {
     static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
 
     FileInputParser fip = new FileInputParser();
-    FileManager fm = new FileManager();
+//    FileManager fm = new FileManager();
 
 
     // *************************   Verify first line Tests
@@ -382,8 +382,9 @@ public class FileInputParserTest {
         puzzlePieceList.add(new PuzzlePiece(3, 1, 0, 0, -1));
         puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
 
-        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
+        ArrayList<int[]> actual =  FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
 
+        assertNull(actual);
 
     }
 
@@ -398,7 +399,9 @@ public class FileInputParserTest {
         ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
         puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
 
-        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
+        ArrayList<int[]> actual =  FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
+
+        assertNull(actual);
     }
 
     @Test

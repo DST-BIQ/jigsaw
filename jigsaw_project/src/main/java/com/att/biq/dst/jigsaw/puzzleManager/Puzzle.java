@@ -40,7 +40,10 @@ public class Puzzle {
     public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
         FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager));
+        ArrayList<int[]> puzzleArray = fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        if (puzzleArray==null){ return null;}
+
+        ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(puzzleArray);
 
         if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, errorsManager)){
 

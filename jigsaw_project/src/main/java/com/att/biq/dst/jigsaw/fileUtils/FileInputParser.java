@@ -333,8 +333,8 @@ public class FileInputParser {
 
         List<Integer> ids = new ArrayList<>();
 
-        int numberOfElements = text.size();
-        for ( int i = 0; i < numberOfElements; i++ ) {
+
+        for ( int i = 0; i < text.size(); i++ ) {
             ids.add(text.get(i)[0]);
         }
         boolean result = true;
