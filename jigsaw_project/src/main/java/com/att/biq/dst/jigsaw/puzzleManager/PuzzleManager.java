@@ -141,11 +141,10 @@ public class PuzzleManager {
             return readAllLines(path);
 
         } catch (IOException | NullPointerException ex) {
-
+        //TODO handle exceptions
             System.out.println(ex.getMessage()); //handle an exception here
 
-        } finally {
-            //TODO close file
+
         }
 
         return null; // if fails and nothing to return.
@@ -167,7 +166,7 @@ public class PuzzleManager {
             bw.write(data);
             bw.newLine();
         } catch (IOException e) {
-
+//TODO
             System.out.println("you have any error accessing your file:  " + e.getMessage());
 
         }
