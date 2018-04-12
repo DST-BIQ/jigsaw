@@ -27,7 +27,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=4");
 
-        assertEquals(4, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(4, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -53,7 +53,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NElements=4");
 
-        assertEquals(-1, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=");
 
-        assertEquals(-1, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -70,7 +70,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=o");
 
-        assertEquals(-1, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("   NumElements=77");
 
-        assertEquals(77, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(77, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -87,14 +87,14 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements    =77");
 
-        assertEquals(77, fip.getNumberOfElements(list, new FileManager()));
+        assertEquals(77, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
     public void firstLineParseError() {
         Path path = Paths.get(basePath + "testFileValidFormat.txt");
         List<String> list = FileManager.readFromFile(path);
-        assertEquals(fip.getNumberOfElements(list, new FileManager()), 4);
+        assertEquals(FileInputParser.getNumberOfElements(list, new ErrorsManager()), 4);
     }
 
     // *************************   Verify line contains only spaces
@@ -149,9 +149,9 @@ public class FileInputParserTest {
         list.add("101  1  0 -1  1 1");
         list.add("109  1  0 -1  1 1");
 
-        assertTrue(FileInputParser.idInRange(list, list.get(1), new FileManager()));
-        assertTrue(FileInputParser.idInRange(list, list.get(2), new FileManager()));
-        assertTrue(FileInputParser.idInRange(list, list.get(3), new FileManager()));
+        assertTrue(FileInputParser.idInRange(list, list.get(1), new ErrorsManager()));
+        assertTrue(FileInputParser.idInRange(list, list.get(2), new ErrorsManager()));
+        assertTrue(FileInputParser.idInRange(list, list.get(3), new ErrorsManager()));
 
 
     }
@@ -168,8 +168,6 @@ public class FileInputParserTest {
         list.add("109  1  0 -1  1 1");
 
 
-        assertFalse(FileInputParser.idInRange(list, list.get(4), new FileManager()));
-        assertFalse(FileInputParser.idInRange(list, list.get(5), new FileManager()));
 
 
     }
@@ -202,7 +200,7 @@ public class FileInputParserTest {
 
     @Test
     public void getValidPuzzlePieceWithSpaces() {
-;
+
         assertEquals("0 -1 1 1", FileInputParser.getPuzzlePieceData("5  0 -1  1 1"));
     }
 
@@ -211,7 +209,7 @@ public class FileInputParserTest {
     public void getFileRangeValid() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        assertEquals("1-100", FileInputParser.getFileRange(list, new FileManager()));
+        assertEquals("1-100", FileInputParser.getFileRange(list, new ErrorsManager()));
     }
 
 
@@ -219,7 +217,7 @@ public class FileInputParserTest {
     public void getFileRangeOneRange() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=1");
-        assertEquals("1", FileInputParser.getFileRange(list, new FileManager()));
+        assertEquals("1", FileInputParser.getFileRange(list, new ErrorsManager()));
     }
 
 
@@ -227,7 +225,7 @@ public class FileInputParserTest {
     public void getFileRangeNonValid() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=t");
-        assertEquals("N/A", FileInputParser.getFileRange(list, new FileManager()));
+        assertEquals("N/A", FileInputParser.getFileRange(list, new ErrorsManager()));
     }
 
     // *************************   Verify isLineBeginswithDash
@@ -300,7 +298,7 @@ public class FileInputParserTest {
         expected.add(2);
         expected.add(3);
         expected.add(4);
-        assertEquals(expected, fip.listMissingElementInInputFile(pieceArray, numberOfElements));
+        assertEquals(expected, FileInputParser.listMissingElementInInputFile(pieceArray, numberOfElements));
 
     }
 
@@ -312,7 +310,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 -1");
 
-        assertFalse(fip.isWrongElementFormat(list.get(0)));
+        assertFalse(FileInputParser.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -324,7 +322,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 2 0 0 -1");
 
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
+        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -335,7 +333,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 99");
 
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
+        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -347,7 +345,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 a");
 
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
+        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -358,7 +356,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0   0 -1");
 
-        assertFalse(fip.isWrongElementFormat(list.get(0)));
+        assertFalse(FileInputParser.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -382,7 +380,7 @@ public class FileInputParserTest {
         puzzlePieceList.add(new PuzzlePiece(3, 1, 0, 0, -1));
         puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
 
-        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) fip.produceArrayForPuzzle(list, new FileManager());
+        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
 
 
     }
@@ -398,7 +396,7 @@ public class FileInputParserTest {
         ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
         puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
 
-        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) fip.produceArrayForPuzzle(list, new FileManager());
+        ArrayList<PuzzlePiece> actual = (ArrayList<PuzzlePiece>) FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
     }
 
     @Test

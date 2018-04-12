@@ -19,7 +19,7 @@ public class FileInputParser {
      * @param list
      * @return int containing number of elements
      */
-    public static int getNumberOfElements(List<String> list, FileManager fileManager) {
+    public static int getNumberOfElements(List<String> list, ErrorsManager errorsManager) {
 // TODO verify the array contains 2 elements only, verify syntax
         String firstLine = list.get(0).trim();
         String[] firstLineArr = firstLine.split("\\s*=\\s*");
@@ -30,13 +30,13 @@ public class FileInputParser {
                     numberOfElements = Integer.valueOf(firstLineArr[1]);
                     return numberOfElements;
                 } catch (NumberFormatException e) {
-                    fileManager.reportError("Number of elements does not indicate number");
+                    errorsManager.addFatalErrorsList("Number of elements does not indicate number");
                     return -1;
 
                     //TODO consider exception instead of -1
                 }
             } else {
-                fileManager.reportError("Either string does not contains the prefix \"NumElements\" or any other error on the first line");
+                errorsManager.addFatalErrorsList("Either string does not contains the prefix \"NumElements\" or any other error on the first line");
                 return -1;
             }
 
@@ -68,7 +68,7 @@ public class FileInputParser {
      * @return list of puzzle pieces
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public static List<PuzzlePiece> produceArrayForPuzzle(List<String> list, FileManager fileManager) {
+    public static ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
@@ -80,26 +80,26 @@ public class FileInputParser {
             {
                 if (isLineContainsOnlySpaces(line) || isLineEmpty(line)) {
                     countErrors += 1;
-                    fileManager.reportError("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
+                    errorsManager.addNonFatalErrorsList("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
 
                 }
 
                 if (isLineBeginswithDash(line)) {
                     countErrors += 1;
-                    fileManager.reportError("lineNumber:  " + indexLines + "  begins with dash, ignore ");
+                    errorsManager.addFatalErrorsList("lineNumber:  " + indexLines + "  begins with dash, ignore ");
 
                 }
 
 
-                if (!idInRange(list, line, fileManager)) {
+                if (!idInRange(list, line, errorsManager)) {
                     countErrors += 1;
                     wrongElementIDs.add(String.valueOf(getElementID(line)));
-                    fileManager.reportError("Puzzle of size " + getNumberOfElements(list, fileManager) + " cannot have the following IDs:" + wrongElementIDs);
+                    errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list, errorsManager) + " cannot have the following IDs:" + wrongElementIDs);
                 }
 
                 if (isWrongElementFormat(line)) {
                     countErrors += 1;
-                    fileManager.reportError("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
+                    errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
 
 
                 }
@@ -122,9 +122,6 @@ public class FileInputParser {
                     puzzlePieceList.add(puzzlePieceArray);
 
 
-                } else {
-                    fileManager.writeToFile(fileManager.getErrorReportList().toString());
-
                 }
 
             }
@@ -133,11 +130,11 @@ public class FileInputParser {
         }
 
         if (!validateMissingIds(puzzlePieceList, missingElementsIDs)) {
-            fileManager.reportError("Puzzle of size " + getNumberOfElements(list, fileManager) + " is missing the following IDs:" + missingElementsIDs);
+            errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list,errorsManager ) + " is missing the following IDs:" + missingElementsIDs);
 
         }
 
-        return convertPuzzleArray(puzzlePieceList);
+        return puzzlePieceList;
     }
 
 
@@ -181,9 +178,9 @@ public class FileInputParser {
      * @param line line to inspect
      * @return true/false
      */
-    static boolean idInRange(List<String> list, String line, FileManager fileManager) {
+    static boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
 
-        int numberOfElements = getNumberOfElements(list, fileManager);
+        int numberOfElements = getNumberOfElements(list,errorsManager);
         int puzzlePieceID = getLinePuzzlePieceID(line);
         if (puzzlePieceID <= numberOfElements) {
             return true;
@@ -228,8 +225,8 @@ public class FileInputParser {
      * @return String
      */
 
-    static String getFileRange(List<String> list, FileManager fileManager) {
-        int numberOfElements = getNumberOfElements(list, fileManager);
+    static String getFileRange(List<String> list, ErrorsManager errorsManager) {
+        int numberOfElements = getNumberOfElements(list, errorsManager);
 
         if (numberOfElements == 1) return "1";
         if (numberOfElements == (-1)) return "N/A";

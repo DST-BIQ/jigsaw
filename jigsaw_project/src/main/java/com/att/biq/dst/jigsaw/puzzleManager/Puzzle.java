@@ -1,14 +1,10 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
+import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.fileUtils.FileInputParser;
-import com.att.biq.dst.jigsaw.fileUtils.FileManager;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.att.biq.dst.jigsaw.fileUtils.FileManager.readFromFile;
 
 
 public class Puzzle {
@@ -19,7 +15,8 @@ public class Puzzle {
 
 
 
-
+    private ErrorsManager errorsManager = new ErrorsManager();
+    private List<PuzzlePiece> puzzlePieces;
 
 
 
@@ -37,41 +34,27 @@ public class Puzzle {
 
     /**
      *
-     * @param filePath
-     * @param fileManager
+     * @param
      * @return
      */
-    public  ArrayList<PuzzlePiece> getPuzzle(String filePath, FileManager fileManager, PuzzlePieceValidators puzzlePieceValidators){
-        Path inputFilePath = Paths.get(filePath);
-        FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<PuzzlePiece> puzzle = (ArrayList<PuzzlePiece>) fileInputParser.produceArrayForPuzzle(readFromFile(inputFilePath), fileManager);
+    public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
-        if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, fileManager)){
-            for(String error: fileManager.getErrorReportList()){
-                fileManager.writeToFile(error);
-            }
-            throw new RuntimeException("Puzzle input is invalid");
+        FileInputParser fileInputParser = new FileInputParser();
+        ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager));
+
+        if (puzzle==null || !puzzlePieceValidators.validatePuzzle(puzzle, errorsManager)){
+
+            return null;
+
         }
+        puzzlePieces = puzzle;
         return puzzle;
     }
 
-    public  boolean checkGivenSolutionAndPuzzleFiles(String puzzleFilePath, String solutionFilePath){
-        FileManager fileManager = new FileManager();
-        ArrayList<PuzzlePiece> puzzlePieces = getPuzzle(puzzleFilePath,fileManager,new PuzzlePieceValidators());
-        return checkPuzzleSolution(puzzlePieces,generateSolutionFromFile(solutionFilePath, puzzlePieces));
-    }
-
-    private  PuzzleSolution generateSolutionFromFile(String solutionFilePath, List<PuzzlePiece> puzzlePieces) {
-        List<String> solutionFileData = readFromFile(Paths.get(solutionFilePath));
-        PuzzleSolution solution = new PuzzleSolution(solutionFileData.size(), solutionFileData.get(0).length());
-        //TODO - parse List<String> to List<Integer> and generate solution
-        return solution;
-    }
-
-    public  boolean checkPuzzleSolution(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution ){
-
-        if (verifySolutionSize(puzzle, solution)) return false;
-        for (PuzzlePiece puzzlePiece: puzzle){
+    public static boolean checkPuzzleSolution(Puzzle puzzle, PuzzleSolution solution ){
+        List<PuzzlePiece> pieces = puzzle.getPuzzlePieces();
+        if (verifySolutionSize(pieces, solution)) return false;
+        for (PuzzlePiece puzzlePiece: pieces){
             if (!solution.contains(puzzlePiece)){
                 return false;
             }
@@ -81,7 +64,7 @@ public class Puzzle {
         return true;
     }
 
-    private  boolean verifySolutionSize(ArrayList<PuzzlePiece> puzzle, PuzzleSolution solution) {
+    private static   boolean verifySolutionSize(List<PuzzlePiece> puzzle, PuzzleSolution solution) {
         if (puzzle.size()==(solution.getSize())){
             return true;
         }
@@ -184,4 +167,21 @@ public class Puzzle {
         return newPuzzlePiecesList;
     }
 
+    public ArrayList<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
+        ArrayList<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
+        for (int[] puzzlePiece : puzzleArray) {
+            PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
+            puzzlePiecesList.add(pp);
+        }
+        return puzzlePiecesList;
+    }
+
+
+    public ErrorsManager getErrorsManager() {
+        return errorsManager;
+    }
+
+    public List<PuzzlePiece> getPuzzlePieces() {
+        return puzzlePieces;
+    }
 }

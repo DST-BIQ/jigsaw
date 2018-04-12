@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.FileManager;
+import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class PuzzlePieceValidators {
     private int minLeftRigh;
 
 
-    public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, FileManager fileManager) {
+    public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, ErrorsManager errorsManager) {
 
       boolean TL=false;
       boolean TR=false;
@@ -58,23 +58,23 @@ public class PuzzlePieceValidators {
 
       }
       if (!validateStraightEdges(top,left,right,bottom,puzzlePieces.size())){
-         fileManager.writeToFile("Cannot solve puzzle: wrong number of straight edges");
+         errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
       }
       if (!TL){
-         fileManager. writeToFile("Cannot solve puzzle: missing corner element: TL");
+         errorsManager.addFatalErrorsList("Cannot solve puzzle: missing corner element: TL");
       }
       if (!TR){
-         fileManager.writeToFile("Cannot solve puzzle: missing corner element: TR");
+          errorsManager.addFatalErrorsList("Cannot solve puzzle: missing corner element: TR");
       }
       if (!BL){
-         fileManager.writeToFile("Cannot solve puzzle: missing corner element: BL");
+          errorsManager.addFatalErrorsList("Cannot solve puzzle: missing corner element: BL");
       }
       if (!BR){
-         fileManager.writeToFile("Cannot solve puzzle: missing corner element: BR");
+          errorsManager.addFatalErrorsList("Cannot solve puzzle: missing corner element: BR");
       }
 
       if (!validateZero(rightSum,topSum,leftSum,bottomSum)){
-         fileManager.writeToFile("Cannot solve puzzle: sum of edges is not zero");
+          errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
       }
 
 
