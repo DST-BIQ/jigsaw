@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.FileManager;
+import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import static junit.framework.TestCase.assertTrue;
 public class PuzzlePieceValidatorsTest {
     List<PuzzlePiece> puzzlePieces;
     PuzzlePieceValidators ppv;
-    FileManager fm = new FileManager("src/resources/output/report_");
+
 
 
 
@@ -31,7 +31,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertTrue(ppv.validatePuzzle(puzzlePieces, fm));
+        assertTrue(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
 
@@ -68,7 +68,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -122,7 +122,7 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p4);
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class PuzzlePieceValidatorsTest {
 
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
     @Test
@@ -170,7 +170,7 @@ public class PuzzlePieceValidatorsTest {
 
 
 
-        assertFalse(ppv.validatePuzzle(puzzlePieces, fm));
+        assertFalse(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
 
 
