@@ -4,6 +4,7 @@ import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import static java.nio.file.Files.readAllLines;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileInputParserTest {
@@ -91,9 +93,9 @@ public class FileInputParserTest {
     }
 
     @Test
-    public void firstLineParseError() {
+    public void firstLineParseError() throws IOException {
         Path path = Paths.get(basePath + "testFileValidFormat.txt");
-        List<String> list = FileManager.readFromFile(path);
+        List<String> list = readAllLines(path);
         assertEquals(FileInputParser.getNumberOfElements(list, new ErrorsManager()), 4);
     }
 

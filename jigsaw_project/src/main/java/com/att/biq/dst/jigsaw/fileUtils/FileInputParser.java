@@ -131,7 +131,7 @@ public class FileInputParser {
 
         if (!validateMissingIds(puzzlePieceList, missingElementsIDs)) {
             errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list,errorsManager ) + " is missing the following IDs:" + missingElementsIDs);
-
+            return null;
         }
 
         return puzzlePieceList;
