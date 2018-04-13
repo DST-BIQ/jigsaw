@@ -10,11 +10,6 @@ import java.util.List;
 public class Puzzle {
 
 
-
-//
-
-
-
     private ErrorsManager errorsManager = new ErrorsManager();
     private List<PuzzlePiece> puzzlePieces;
 

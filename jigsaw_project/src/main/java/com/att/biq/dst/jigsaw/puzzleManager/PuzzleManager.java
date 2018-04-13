@@ -54,7 +54,7 @@ public class PuzzleManager {
 
 
 
-    public void loadPuzzle() {
+    public void loadPuzzle() throws IOException {
         puzzlePieces = puzzle.getPuzzle(readFromFile(Paths.get(inputFilePath)),  puzzlePieceValidators);
         if (puzzlePieces==null){
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
@@ -62,7 +62,7 @@ public class PuzzleManager {
 
     }
 
-    public void playPuzzle() {
+    public void playPuzzle() throws IOException {
         solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
@@ -110,7 +110,7 @@ public class PuzzleManager {
      * @param dataList
      * @param reportMethod
      */
-    private void reportData(ArrayList<String> dataList, String reportMethod) {
+    private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
 
         for ( String dataLine : dataList ) {
             switch (reportMethod) {
@@ -161,22 +161,23 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data) {
-
-
-        try (FileWriter fw = new FileWriter(outputFilePath +"output_"+getTimeStamp()+".txt", true);
-             BufferedWriter bw = new BufferedWriter(fw)) {
-            bw.write(data);
-            bw.newLine();
+    private void writeToFile(String data) throws IOException {
+        FileWriter fw;
+        BufferedWriter bw=null;
+        try{
+             fw = new FileWriter(outputFilePath +"output_"+getTimeStamp()+".txt", true);
+             bw = new BufferedWriter(fw);
+             bw.write(data);
+             bw.newLine();
         } catch (IOException e) {
-//TODO
-            System.out.println("you have any error accessing your file:  " + e.getMessage());
-
+            throw new RuntimeException("Error writing to file");
         }
-
+        finally {
+            if (bw!=null){bw.close();}
+        }
     }
 
-    private void reportErrors(String message) {
+    private void reportErrors(String message) throws IOException {
         if (puzzle.getErrorsManager().hasFatalErrors()){
             reportData(puzzle.getErrorsManager().getFatalErrorsList(),"file");
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
