@@ -28,7 +28,8 @@ public class SystemTest {
 
     @ParameterizedTest(name = "System Test for puzzles")
     @ValueSource(strings = {
- "./src/main/resources/input/AdvancedPuzzleTests/Input/test1.in",
+ "./src/main/resources/input/AdvancedPuzzleTests/Input/test1.in"
+            ,
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test2.in",
              "./src/main/resources/input/AdvancedPuzzleTests/Input/test9.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test11.in",
@@ -38,7 +39,8 @@ public class SystemTest {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test14.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test15.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test16.in",
-            "./src/main/resources/input/AdvancedPuzzleTests/Input/test17.in"})
+            "./src/main/resources/input/AdvancedPuzzleTests/Input/test17.in"
+    })
 
     public void AbleToLoadPuzzle(String filePath) throws IOException {
         preparation(filePath);
@@ -54,11 +56,13 @@ public class SystemTest {
     @ValueSource(strings = {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test3.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test4.in",
-            "./src/main/resources/input/AdvancedPuzzleTests/Input/test5.in",
+            "./src/main/resources/input/AdvancedPuzzleTests/Input/test5.in"
+            ,
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test6.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test7.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test8.in",
-            "./src/main/resources/input/AdvancedPuzzleTests/Input/test18.in"})
+            "./src/main/resources/input/AdvancedPuzzleTests/Input/test18.in"
+ })
 
     public void notAbleToLoadPuzzle(String filePath) throws IOException {
 
@@ -69,7 +73,7 @@ public class SystemTest {
     );
 
         try {
-            assertEquals(FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")));
+            assertEquals( FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")),FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
         } catch (IOException e) {
             e.printStackTrace();
         }
