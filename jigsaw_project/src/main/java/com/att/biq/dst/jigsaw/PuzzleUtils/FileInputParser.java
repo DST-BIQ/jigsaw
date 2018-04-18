@@ -86,7 +86,7 @@ public class FileInputParser {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
-//        ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+
 
 // TODO move to sseperate method
         for ( String line : list ) {
@@ -261,13 +261,7 @@ public class FileInputParser {
      * @return String
      */
 
-    static String getFileRange(List<String> list, ErrorsManager errorsManager) {
-        int numberOfElements = getNumberOfElements(list, errorsManager);
 
-        if (numberOfElements == 1) return "1";
-        if (numberOfElements == (-1)) return "N/A";
-        return "1-" + numberOfElements;
-    }
 
     /**
      * get line puzzle piece ID

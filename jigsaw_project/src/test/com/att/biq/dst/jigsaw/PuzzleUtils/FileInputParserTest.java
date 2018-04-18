@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FileInputParserTest {
 
-    static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
+    String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
 
     FileInputParser fip = new FileInputParser();
 
@@ -32,7 +32,7 @@ public class FileInputParserTest {
 
 
     @Test
-    public void convertPuzzleArrayPossitive() {
+    public void convertPuzzleArrayPositive() {
         List<int[]> list = new ArrayList<>();
         list.add(new int[]{1, 0, 1, 0, -1});
         list.add(new int[]{2, 1, 0, 0, 1});
@@ -40,11 +40,8 @@ public class FileInputParserTest {
         List<PuzzlePiece> puzzlePieces = new ArrayList<>();
         puzzlePieces.add(new PuzzlePiece(1, 0, 1, 0, -1));
         puzzlePieces.add(new PuzzlePiece(2, 1, 0, 0, 1));
-
-        assertTrue(puzzlePieces.get(0).equals(FileInputParser.convertPuzzleArray(list).get(0)));
-        assertTrue(puzzlePieces.get(1).equals(FileInputParser.convertPuzzleArray(list).get(1)));
-
-
+        assertEquals(puzzlePieces.get(0), fip.convertPuzzleArray(list).get(0));
+        assertEquals(puzzlePieces.get(1), fip.convertPuzzleArray(list).get(1));
     }
 
     @Test
@@ -116,14 +113,14 @@ public class FileInputParserTest {
     @Test
     public void lineIsEmptyNegative() {
 
-          assertFalse(fip.isLineEmpty("34, 1, 0,-1 ,9"));
+        assertFalse(fip.isLineEmpty("34, 1, 0,-1 ,9"));
 
 
     }
 
     @Test
     public void lineIsEmpty() {
-       assertTrue(fip.isLineEmpty(""));
+        assertTrue(fip.isLineEmpty(""));
 
     }
 
@@ -168,8 +165,6 @@ public class FileInputParserTest {
         list.add("109  1  0 -1  1 1");
 
 
-
-
     }
 
     // *************************   Verify getLinePuzzlePieceID
@@ -202,30 +197,6 @@ public class FileInputParserTest {
     public void getValidPuzzlePieceWithSpaces() {
 
         assertEquals("0 -1 1 1", fip.getPuzzlePieceData("5  0 -1  1 1"));
-    }
-
-    // *************************   Verify getFileRange
-    @Test
-    public void getFileRangeValid() {
-        List<String> list = new ArrayList<>();
-        list.add("NumElements=100");
-        assertEquals("1-100", fip.getFileRange(list, new ErrorsManager()));
-    }
-
-
-    @Test
-    public void getFileRangeOneRange() {
-        List<String> list = new ArrayList<>();
-        list.add("NumElements=1");
-        assertEquals("1", fip.getFileRange(list, new ErrorsManager()));
-    }
-
-
-    @Test
-    public void getFileRangeNonValid() {
-        List<String> list = new ArrayList<>();
-        list.add("NumElements=t");
-        assertEquals("N/A", fip.getFileRange(list, new ErrorsManager()));
     }
 
     // *************************   Verify isLineBeginswithDash
@@ -360,17 +331,6 @@ public class FileInputParserTest {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
