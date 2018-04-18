@@ -2,15 +2,14 @@ package com.att.biq.dst.jigsaw.MainPlayer;
 
 import com.att.biq.dst.jigsaw.puzzleManager.PuzzleManager;
 
+import java.io.IOException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-                PuzzleManager puzzleManager = new PuzzleManager("C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\AdvancedPuzzleTests\\input\\test6.in","c:\\temp\\test12343"+"_"+System.currentTimeMillis()+".txt");
-
+                PuzzleManager puzzleManager = new PuzzleManager(args[0],args[1]);
                 puzzleManager.loadPuzzle();
                 puzzleManager.playPuzzle();
 
             }
-
-
 }

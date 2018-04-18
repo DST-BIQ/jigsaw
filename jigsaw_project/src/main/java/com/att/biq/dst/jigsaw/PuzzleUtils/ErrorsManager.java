@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.fileUtils;
+package com.att.biq.dst.jigsaw.PuzzleUtils;
 
 import java.util.ArrayList;
 

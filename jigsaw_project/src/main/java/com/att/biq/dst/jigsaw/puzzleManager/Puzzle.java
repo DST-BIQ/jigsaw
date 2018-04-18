@@ -1,18 +1,13 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.fileUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.fileUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Puzzle {
-
-
-
-//
-
 
 
     private ErrorsManager errorsManager = new ErrorsManager();
@@ -28,7 +23,6 @@ public class Puzzle {
             if (possibleSolution!=null && possibleSolution.isValid())
             {return possibleSolution;}
         }
-
         return null;
     }
 
@@ -39,8 +33,7 @@ public class Puzzle {
      */
     public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
-        FileInputParser fileInputParser = new FileInputParser();
-        ArrayList<int[]> puzzleArray = fileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        ArrayList<int[]> puzzleArray = FileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray==null){ return null;}
 
         ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(puzzleArray);
@@ -115,16 +108,16 @@ public class Puzzle {
                 foundPieces = handleBetweenTopAndBottomRows(solution, puzzlePieces);
             }
             if (foundPieces!=null) {
-                PuzzleSolution possibleSolution = handleNonTopOrBottomSolution(solution, puzzlePieces, foundPieces);
+                PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
                 if (possibleSolution != null) return possibleSolution;
             }
-       return solution;
+       return null;
     }
 
     private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces;
         if (isOnFirstColumn(solution)){
-            foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+            foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
         }else if (isOnLastColumn(solution)){
             foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
         }else{
@@ -141,11 +134,7 @@ public class Puzzle {
         return puzzlePieces.size()==0 && solution.isValid();
     }
 
-    private PuzzleSolution handleNonTopOrBottomSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
-        PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
-        if (possibleSolution != null) return possibleSolution;
-        return null;
-    }
+
 
     private boolean isOnLastRow(PuzzleSolution solution) {
         return solution.getCurRow() == solution.getRows()-1;
@@ -195,12 +184,11 @@ public class Puzzle {
     private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         for (PuzzlePiece piece : foundPieces) {
             PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
-            if (possibleSolution != null) {
+            if (possibleSolution != null && possibleSolution.isValid()) {
                 return possibleSolution;
             }
         }
         return null;
-
     }
 
     private  PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){

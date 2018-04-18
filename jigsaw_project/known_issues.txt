@@ -1,0 +1,12 @@
+DST Team Jigsaw project known issues:
+
+****** First submission - 13.4.2018 *************
+
+1. Missing system tests - will be added on next version
+2. Validations printing should be improved to suite spec examples (will be validated in system tests)
+3. Should create additional validations tests
+4. Missing tests for checkSolutionUtility (in Puzzle class)
+5. Missing method level documentation - will be added on next version
+6. Added improvement of error handling - separating between fatal and non fatal errors - fatal errors, if any - will be printed before non-fatal errors
+ 
+*************************************************
