@@ -168,7 +168,7 @@ public class PuzzleManager {
         FileWriter fw;
         BufferedWriter bw=null;
         try{
-             fw = new FileWriter(outputFilePath +"output_"+getTimeStamp()+".txt", true);
+             fw = new FileWriter(outputFilePath , true);
              bw = new BufferedWriter(fw);
              bw.write(data);
              bw.newLine();
