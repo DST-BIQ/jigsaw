@@ -1,6 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -84,7 +85,7 @@ public class PuzzleManager {
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
         PuzzlePiece[][] finalSolution = solution.getSolution();
         for ( int i = 0; i < finalSolution.length; i++ ) {
-            reportList.add(convertPuzzlePiecesToString(finalSolution[i]));
+            reportList.add(convertPuzzlePiecesToString(finalSolution[i]).trim());
         }
 
     }
@@ -94,8 +95,10 @@ public class PuzzleManager {
 
         StringBuilder builder = new StringBuilder();
         for ( PuzzlePiece piece : puzzlePieces ) {
-            builder.append(piece.toString());
+             builder.append(piece.toString());
         }
+
+
         return builder.toString();
     }
 
@@ -183,4 +186,14 @@ public class PuzzleManager {
         }
     }
 
+
+    public void deleteFile(String filePath) {
+
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+
+
+    }
 }
