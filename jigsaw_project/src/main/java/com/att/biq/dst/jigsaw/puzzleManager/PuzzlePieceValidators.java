@@ -11,10 +11,10 @@ public class PuzzlePieceValidators {
     private int minLeftRigh;
 
     /**
-     *
-     * @param puzzlePieces
+     *validatePuzzle - return an answer if the puzzle pieces are valid
+     * @param puzzlePieces - array list of the puzzle pieces
      * @param errorsManager
-     * @return
+     * @return true/false
      */
     public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, ErrorsManager errorsManager) {
 
