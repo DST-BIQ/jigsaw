@@ -2,7 +2,6 @@ package com.att.biq.dst.jigsaw.PuzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -20,7 +19,6 @@ public class FileInputParserTest {
     static String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
 
     FileInputParser fip = new FileInputParser();
-//    FileManager fm = new FileManager();
 
 
     // *************************   Verify first line Tests
@@ -29,7 +27,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=4");
 
-        assertEquals(4, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(4, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -55,7 +53,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NElements=4");
 
-        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(-1, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
@@ -63,7 +61,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=");
 
-        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(-1, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -72,7 +70,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements=o");
 
-        assertEquals(-1, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(-1, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
@@ -80,7 +78,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("   NumElements=77");
 
-        assertEquals(77, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(77, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
 
@@ -89,21 +87,21 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("NumElements    =77");
 
-        assertEquals(77, FileInputParser.getNumberOfElements(list, new ErrorsManager()));
+        assertEquals(77, fip.getNumberOfElements(list, new ErrorsManager()));
     }
 
     @Test
     public void firstLineParseError() throws IOException {
         Path path = Paths.get(basePath + "testFileValidFormat.txt");
         List<String> list = readAllLines(path);
-        assertEquals(FileInputParser.getNumberOfElements(list, new ErrorsManager()), 4);
+        assertEquals(fip.getNumberOfElements(list, new ErrorsManager()), 4);
     }
 
     // *************************   Verify line contains only spaces
     @Test
     public void lineContainsOnlySpaces() {
         String line = " ";
-        assertTrue(FileInputParser.isLineContainsOnlySpaces(line));
+        assertTrue(fip.isLineContainsOnlySpaces(line));
 
     }
 
@@ -151,9 +149,9 @@ public class FileInputParserTest {
         list.add("101  1  0 -1  1 1");
         list.add("109  1  0 -1  1 1");
 
-        assertTrue(FileInputParser.idInRange(list, list.get(1), new ErrorsManager()));
-        assertTrue(FileInputParser.idInRange(list, list.get(2), new ErrorsManager()));
-        assertTrue(FileInputParser.idInRange(list, list.get(3), new ErrorsManager()));
+        assertTrue(fip.idInRange(list, list.get(1), new ErrorsManager()));
+        assertTrue(fip.idInRange(list, list.get(2), new ErrorsManager()));
+        assertTrue(fip.idInRange(list, list.get(3), new ErrorsManager()));
 
 
     }
@@ -203,7 +201,7 @@ public class FileInputParserTest {
     @Test
     public void getValidPuzzlePieceWithSpaces() {
 
-        assertEquals("0 -1 1 1", FileInputParser.getPuzzlePieceData("5  0 -1  1 1"));
+        assertEquals("0 -1 1 1", fip.getPuzzlePieceData("5  0 -1  1 1"));
     }
 
     // *************************   Verify getFileRange
@@ -211,7 +209,7 @@ public class FileInputParserTest {
     public void getFileRangeValid() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=100");
-        assertEquals("1-100", FileInputParser.getFileRange(list, new ErrorsManager()));
+        assertEquals("1-100", fip.getFileRange(list, new ErrorsManager()));
     }
 
 
@@ -219,7 +217,7 @@ public class FileInputParserTest {
     public void getFileRangeOneRange() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=1");
-        assertEquals("1", FileInputParser.getFileRange(list, new ErrorsManager()));
+        assertEquals("1", fip.getFileRange(list, new ErrorsManager()));
     }
 
 
@@ -227,7 +225,7 @@ public class FileInputParserTest {
     public void getFileRangeNonValid() {
         List<String> list = new ArrayList<>();
         list.add("NumElements=t");
-        assertEquals("N/A", FileInputParser.getFileRange(list, new ErrorsManager()));
+        assertEquals("N/A", fip.getFileRange(list, new ErrorsManager()));
     }
 
     // *************************   Verify isLineBeginswithDash
@@ -236,28 +234,28 @@ public class FileInputParserTest {
     @Test
     public void lineBeginsWithDash() {
 
-        assertTrue(FileInputParser.isLineBeginswithDash("#NumElements=t"));
+        assertTrue(fip.isLineBeginswithDash("#NumElements=t"));
 
-        assertTrue(FileInputParser.isLineBeginswithDash("#5  0 -1  1 1"));
+        assertTrue(fip.isLineBeginswithDash("#5  0 -1  1 1"));
     }
 
     @Test
     public void lineBeginsWithDash_ignoreSpaces() {
 
-        assertTrue(FileInputParser.isLineBeginswithDash("   #NumElements=t"));
+        assertTrue(fip.isLineBeginswithDash("   #NumElements=t"));
     }
 
 
     @Test
     public void lineBeginsWithNoDash() {
 
-        assertFalse(FileInputParser.isLineBeginswithDash("NumElements=t"));
+        assertFalse(fip.isLineBeginswithDash("NumElements=t"));
     }
 
     @Test
     public void lineBeginsWithNoDashWithSpaces() {
 
-        assertFalse(FileInputParser.isLineBeginswithDash("  NumElements=t"));
+        assertFalse(fip.isLineBeginswithDash("  NumElements=t"));
     }
 
     // *************************   Verify listMissingElementInInputFile
@@ -272,7 +270,7 @@ public class FileInputParserTest {
         SortedSet<Integer> expected = new TreeSet<>();
         expected.add(3);
         expected.add(5);
-        assertEquals(expected, FileInputParser.listMissingElementInInputFile(pieceArray, numberOfElements));
+        assertEquals(expected, fip.listMissingElementInInputFile(pieceArray, numberOfElements));
 
     }
 
@@ -285,7 +283,7 @@ public class FileInputParserTest {
 
         SortedSet<Integer> expected = new TreeSet<>();
 
-        assertEquals(expected, FileInputParser.listMissingElementInInputFile(pieceArray, numberOfElements));
+        assertEquals(expected, fip.listMissingElementInInputFile(pieceArray, numberOfElements));
 
     }
 
@@ -300,7 +298,7 @@ public class FileInputParserTest {
         expected.add(2);
         expected.add(3);
         expected.add(4);
-        assertEquals(expected, FileInputParser.listMissingElementInInputFile(pieceArray, numberOfElements));
+        assertEquals(expected, fip.listMissingElementInInputFile(pieceArray, numberOfElements));
 
     }
 
@@ -312,7 +310,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 -1");
 
-        assertFalse(FileInputParser.isWrongElementFormat(list.get(0)));
+        assertFalse(fip.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -324,7 +322,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 2 0 0 -1");
 
-        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
+        assertTrue(fip.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -335,7 +333,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 99");
 
-        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
+        assertTrue(fip.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -347,7 +345,7 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0 0 a");
 
-        assertTrue(FileInputParser.isWrongElementFormat(list.get(0)));
+        assertTrue(fip.isWrongElementFormat(list.get(0)));
 
 
     }
@@ -358,81 +356,21 @@ public class FileInputParserTest {
         List<String> list = new ArrayList<>();
         list.add("2 1 0   0 -1");
 
-        assertFalse(FileInputParser.isWrongElementFormat(list.get(0)));
+        assertFalse(fip.isWrongElementFormat(list.get(0)));
 
 
     }
 
 
-    // Produce Array For puzzle test
 
 
-    @Test
-    public void oneLineWithWrongID() {
-
-        List<String> list = new ArrayList<>();
-        list.add("NumElements=4");
-        list.add("2 1 0 0 -1");
-        list.add("3 1 0 0 -1");
-        list.add("4 1 0 0 -1");
-        list.add("77 1 0 0 -1");
-
-        ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
-        puzzlePieceList.add(new PuzzlePiece(2, 1, 0, 0, -1));
-        puzzlePieceList.add(new PuzzlePiece(3, 1, 0, 0, -1));
-        puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
-
-        ArrayList<int[]> actual =  FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
-
-        assertNull(actual);
-
-    }
-
-    @Test
-    public void oneLineOnlySpaces() {
-
-        List<String> list = new ArrayList<>();
-        list.add("NumElements=4");
-        list.add("4 1 0 0 -1");
-        list.add("    ");
-
-        ArrayList<PuzzlePiece> puzzlePieceList = new ArrayList<>();
-        puzzlePieceList.add(new PuzzlePiece(4, 1, 0, 0, -1));
-
-        ArrayList<int[]> actual =  FileInputParser.produceArrayForPuzzle(list, new ErrorsManager());
-
-        assertNull(actual);
-    }
-
-    @Test
-    public void positiveTestParserValidateIds() {
-        List<int[]> inputPuzzlePiecesList = new ArrayList<>();
-        inputPuzzlePiecesList.add(new int[]{1});
-        inputPuzzlePiecesList.add(new int[]{2});
-        inputPuzzlePiecesList.add(new int[]{3});
-        inputPuzzlePiecesList.add(new int[]{4});
-        Assertions.assertTrue(FileInputParser.validateMissingIds(inputPuzzlePiecesList, new ArrayList<>()), "ID validation passed unexpectedly");
-    }
 
 
-    @Test
-    public void testParserValidateIdsWithMissingId() {
-        List<int[]> inputPuzzlePiecesList = new ArrayList<>();
-        inputPuzzlePiecesList.add(new int[]{1});
-        inputPuzzlePiecesList.add(new int[]{2});
-        inputPuzzlePiecesList.add(new int[]{4});
-        Assertions.assertFalse(FileInputParser.validateMissingIds(inputPuzzlePiecesList, new ArrayList<>()), "ID validation failed unexpectedly");
-    }
 
-    @Test
-    public void testParserValidateIdsWithUnOrderedIds() {
-        List<int[]> inputPuzzlePiecesList = new ArrayList<>();
-        inputPuzzlePiecesList.add(new int[]{1});
-        inputPuzzlePiecesList.add(new int[]{3});
-        inputPuzzlePiecesList.add(new int[]{2});
-        inputPuzzlePiecesList.add(new int[]{4});
-        Assertions.assertTrue(FileInputParser.validateMissingIds(inputPuzzlePiecesList, new ArrayList<>()), "ID validation failed unexpectedly");
-    }
+
+
+
+
 
 
 }

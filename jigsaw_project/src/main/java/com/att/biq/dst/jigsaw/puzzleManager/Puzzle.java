@@ -31,9 +31,9 @@ public class Puzzle {
      * @param
      * @return
      */
-    public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
+    public  ArrayList<PuzzlePiece> getPuzzle(FileInputParser fim,List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
-        ArrayList<int[]> puzzleArray = FileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray==null){ return null;}
 
         ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(puzzleArray);

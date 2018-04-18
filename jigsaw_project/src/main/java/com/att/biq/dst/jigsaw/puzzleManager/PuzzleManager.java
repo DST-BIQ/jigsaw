@@ -1,5 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
+import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -31,6 +33,9 @@ public class PuzzleManager {
     private Path path;
     ArrayList<PuzzlePiece> puzzlePieces;
     List<int[]> solutionStructures;
+    private FileInputParser fileInputParser;
+    private ArrayList<Integer> piecesID; // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList;
 
     /////////////////////////////////////////   class constructors
 
@@ -46,7 +51,7 @@ public class PuzzleManager {
         reportList = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-
+        fileInputParser = new FileInputParser(piecesID,puzzlePieceList);
     }
 
 
@@ -56,7 +61,7 @@ public class PuzzleManager {
 
 
     public void loadPuzzle() throws IOException {
-        puzzlePieces = puzzle.getPuzzle(readFromFile(Paths.get(inputFilePath)),  puzzlePieceValidators);
+        puzzlePieces = puzzle.getPuzzle(fileInputParser,readFromFile(Paths.get(inputFilePath)),  puzzlePieceValidators);
         if (puzzlePieces==null){
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
