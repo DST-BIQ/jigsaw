@@ -96,9 +96,9 @@ public class PuzzleManager {
      * @param solution
      */
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
-        PuzzlePiece[][] finalSolution = solution.getSolution();
-        for ( int i = 0; i < finalSolution.length; i++ ) {
-            reportList.add(convertPuzzlePiecesToString(finalSolution[i]).trim());
+        PuzzlePiece[][] winnerSolution = solution.getSolution();
+        for ( int i = 0; i < winnerSolution.length; i++ ) {
+            reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
         }
 
     }
