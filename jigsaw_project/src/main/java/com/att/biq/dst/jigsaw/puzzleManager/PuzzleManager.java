@@ -30,12 +30,10 @@ public class PuzzleManager {
     private String inputFilePath; // input file path
     private String outputFilePath; // output filepath
     private ArrayList<String> reportList; // all reports to file will be written to this list
-    private Path path;
-    ArrayList<PuzzlePiece> puzzlePieces;
-    List<int[]> solutionStructures;
+        List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
-    private ArrayList<Integer> piecesID; // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList;
+    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
     /////////////////////////////////////////   class constructors
 
@@ -49,38 +47,45 @@ public class PuzzleManager {
         puzzlePieceValidators = new PuzzlePieceValidators();
         puzzle = new Puzzle();
         reportList = new ArrayList<>();
-        puzzlePieces = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-        fileInputParser = new FileInputParser(piecesID,puzzlePieceList);
+        fileInputParser = new FileInputParser(piecesID, puzzlePieceList);
     }
 
 
     /////////////////////////////////////////   class methods
 
 
-
-
+    /**
+     * producing puzzle pieces array from file
+     *
+     * @throws IOException
+     */
     public void loadPuzzle() throws IOException {
-        puzzlePieces = puzzle.getPuzzle(fileInputParser,readFromFile(Paths.get(inputFilePath)),  puzzlePieceValidators);
-        if (puzzlePieces==null){
+        puzzle.getPuzzle(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
+        if (puzzle.getPuzzlePieces() == null) {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
 
     }
 
+    /**
+     * generate possible puzzle solution
+     * report to file: generated solution / fatal errors
+     *
+     * @throws IOException
+     */
     public void playPuzzle() throws IOException {
-        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzlePieces.size());
+        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution(puzzlePieces, solutionStructures);
-
+        solution = puzzle.calculatePuzzleSolution(puzzle.getPuzzlePieces(), solutionStructures);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
-        }else if(puzzle.getErrorsManager().hasFatalErrors()){
+        } else if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportErrors("A FATAL Error has occurred, cannot solve Puzzle");
         }
     }
@@ -98,12 +103,17 @@ public class PuzzleManager {
 
     }
 
-
+    /**
+     * convert pieces array to String, in order to report it to the output file
+     *
+     * @param puzzlePieces - array containint solution's puzzle pieces.
+     * @return
+     */
     private String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {
 
         StringBuilder builder = new StringBuilder();
         for ( PuzzlePiece piece : puzzlePieces ) {
-             builder.append(piece.toString());
+            builder.append(piece.toString());
         }
 
 
@@ -152,7 +162,7 @@ public class PuzzleManager {
             return readAllLines(path);
 
         } catch (IOException | NullPointerException ex) {
-        //TODO handle exceptions
+            //TODO handle exceptions
             System.out.println(ex.getMessage()); //handle an exception here
 
 
@@ -171,30 +181,43 @@ public class PuzzleManager {
 
     private void writeToFile(String data) throws IOException {
         FileWriter fw;
-        BufferedWriter bw=null;
-        try{
-             fw = new FileWriter(outputFilePath , true);
-             bw = new BufferedWriter(fw);
-             bw.write(data);
-             bw.newLine();
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(outputFilePath, true);
+            bw = new BufferedWriter(fw);
+            bw.write(data);
+            bw.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        }
-        finally {
-            if (bw!=null){bw.close();}
+        } finally {
+            if (bw != null) {
+                bw.close();
+            }
         }
     }
 
+
+    /**
+     * send errors to reportData method.
+     *
+     * @param message
+     * @throws IOException
+     */
     private void reportErrors(String message) throws IOException {
-        if (puzzle.getErrorsManager().hasFatalErrors()){
-            reportData(puzzle.getErrorsManager().getFatalErrorsList(),"file");
-            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
+        if (puzzle.getErrorsManager().hasFatalErrors()) {
+            reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
+            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
             throw new RuntimeException(message);
-        }else if (puzzle.getErrorsManager().hasNonFatalErrors()){
-            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(),"file");
+        } else if (puzzle.getErrorsManager().hasNonFatalErrors()) {
+            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
     }
 
+    /**
+     * generated timestamp, if wish to generate string with dedicated timestamp
+     *
+     * @return
+     */
     public static String getTimeStamp() {
         DateFormat df = new SimpleDateFormat("dd-MM-yy HH.mm.ss");
         Calendar cal = Calendar.getInstance();
@@ -203,6 +226,11 @@ public class PuzzleManager {
     }
 
 
+    /**
+     * delete file is exists.
+     *
+     * @param filePath file to delete.
+     */
     public void deleteFile(String filePath) {
 
         File file = new File(filePath);
