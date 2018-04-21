@@ -10,11 +10,15 @@ public class PuzzlePieceValidators {
     private int minTopButtom;
     private int minLeftRigh;
 
-    /**
+    /**Validate that all PuzzlePiece list are valid and can have solution
      *
      * @param puzzlePieces
+     * The puzzlePieces list to valid
      * @param errorsManager
+     *
+     *
      * @return
+     * return true if all validations are valid
      */
     public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, ErrorsManager errorsManager) {
 
@@ -100,6 +104,15 @@ public class PuzzlePieceValidators {
 
    }
 
+    /** Validate that the minimum of left and right edges multile the minumum of top
+     *  and bottom is equal or bigger to puzzle length
+     * @param top
+     * @param left
+     * @param right
+     * @param bottom
+     * @param puzzeleLength
+     * @return true if valid
+     */
    private  boolean validateStraightEdges(int top, int left, int right, int bottom , int puzzeleLength) {
         minLeftRigh = Math.min(left,right);
         minTopButtom = Math.min(top,bottom);
