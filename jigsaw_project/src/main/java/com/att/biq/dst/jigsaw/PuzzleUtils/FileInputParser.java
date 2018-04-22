@@ -11,12 +11,27 @@ import java.util.TreeSet;
 public class FileInputParser {
 
     private static int numberOfElements;
+    private ArrayList<Integer> piecesID; // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList;
+
+
+    public FileInputParser(ArrayList<Integer> piecesID,ArrayList<int[]> puzzlePieceList){
+
+        this.piecesID  = new ArrayList<>();
+        this.puzzlePieceList = new ArrayList<>();
+
+    }
+
+    public FileInputParser(){
+
+    }
+
 
     /**
      * get number of elements by reading the first line in the file.
      * if there is an error on the first line, return -1, and report to file.
      *
-     * @param list
+     * @param list of lines in the file
      * @return int containing number of elements
      */
     public static int getNumberOfElements(List<String> list, ErrorsManager errorsManager) {
@@ -24,7 +39,6 @@ public class FileInputParser {
         String firstLine = list.get(0).trim();
         String[] firstLineArr = firstLine.split("\\s*=\\s*");
         try {
-//            tempStr[1] = tempStr[1].replace(" ", "");
             if ((firstLineArr[0].equals("NumElements")) && (firstLineArr.length == 2)) {
                 try {
                     numberOfElements = Integer.valueOf(firstLineArr[1]);
@@ -68,11 +82,12 @@ public class FileInputParser {
      * @return list of puzzle pieces
      */
 //TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
-    public static ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
+    public  ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
-        ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+
+
 // TODO move to sseperate method
         for ( String line : list ) {
             int countErrors = 0;
@@ -94,14 +109,13 @@ public class FileInputParser {
                 if (!idInRange(list, line, errorsManager)) {
                     countErrors += 1;
                     wrongElementIDs.add(String.valueOf(getElementID(line)));
-                    errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list, errorsManager) + " cannot have the following IDs:" + wrongElementIDs);
+
+                    errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list, errorsManager) + " cannot have the following IDs: " + getCsvFromStringArray(wrongElementIDs));
                 }
 
                 if (isWrongElementFormat(line)) {
                     countErrors += 1;
                     errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
-
-
                 }
 
 //            Puzzle ID <id> has wrong data: <complete line from file including ID>
@@ -129,12 +143,34 @@ public class FileInputParser {
             indexLines = +1;
         }
 
-        if (!validateMissingIds(puzzlePieceList, missingElementsIDs)) {
-            errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list,errorsManager ) + " is missing the following IDs:" + missingElementsIDs);
+        if (!validateMissingIds(puzzlePieceList,missingElementsIDs)) {
+            errorsManager.addFatalErrorsList("Missing puzzle element(s) with the following IDs: " + getCsvFromIntArray(missingElementsIDs));
             return null;
         }
 
         return puzzlePieceList;
+    }
+
+    /**
+     * in order to adjust to spec specifications, returning array list as CSV string
+     *
+     * @param listToConvert of integers
+     * @return String
+     */
+    private static String getCsvFromIntArray(List<Integer> listToConvert) {
+        String formattedList = "";
+        for ( int currentValue : listToConvert ) {
+            formattedList += String.valueOf(currentValue) + ", ";
+        }
+        return formattedList.trim().substring(0, formattedList.length() - 2);
+    }
+
+    private static String getCsvFromStringArray(List<String> listToConvert) {
+        String formattedList = "";
+        for ( String currentValue : listToConvert ) {
+            formattedList += String.valueOf(currentValue) + ", ";
+        }
+        return formattedList.trim().substring(0, formattedList.length() - 2);
     }
 
 
@@ -180,7 +216,7 @@ public class FileInputParser {
      */
     static boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
 
-        int numberOfElements = getNumberOfElements(list,errorsManager);
+        int numberOfElements = getNumberOfElements(list, errorsManager);
         int puzzlePieceID = getLinePuzzlePieceID(line);
         if (puzzlePieceID <= numberOfElements) {
             return true;
@@ -225,13 +261,7 @@ public class FileInputParser {
      * @return String
      */
 
-    static String getFileRange(List<String> list, ErrorsManager errorsManager) {
-        int numberOfElements = getNumberOfElements(list, errorsManager);
 
-        if (numberOfElements == 1) return "1";
-        if (numberOfElements == (-1)) return "N/A";
-        return "1-" + numberOfElements;
-    }
 
     /**
      * get line puzzle piece ID
@@ -319,33 +349,45 @@ public class FileInputParser {
             }
 
         }
+
+
         return false;
     }
 
     /**
-     * valids list of missing IDs
+     * validate list of missing IDs
      *
-     * @param text
      * @param missingIds missing IDs list
      * @return true/false
      */
-    public static boolean validateMissingIds(List<int[]> text, List<Integer> missingIds) {
+    public boolean validateMissingIds(ArrayList<int[]> piecesListFromFile,List<Integer> missingIds) {
 
-        List<Integer> ids = new ArrayList<>();
-
-
-        for ( int i = 0; i < text.size(); i++ ) {
-            ids.add(text.get(i)[0]);
-        }
+//        List<Integer> ids = getIDslistFromInputFile(puzzlePiecesFromFile);
+        piecesID = getIDslistFromInputFile(piecesListFromFile);
         boolean result = true;
         for ( int j = 1; j <= numberOfElements; j++ ) {
-            if (!ids.contains(j)) {
+            if (!piecesID.contains(j)) {
                 missingIds.add(j);
                 result = false;
             }
         }
 
         return result;
+    }
+
+    /**
+     * returns a list containing the ID numbers of the pieces from file (for validaiton)
+     *
+     * @param puzzlePieceList
+     * @return
+     */
+    private ArrayList<Integer> getIDslistFromInputFile(ArrayList<int[]> puzzlePieceList ) {
+
+
+        for ( int i = 0; i < puzzlePieceList.size(); i++ ) {
+            piecesID.add(puzzlePieceList.get(i)[0]);
+        }
+        return piecesID;
     }
 
 

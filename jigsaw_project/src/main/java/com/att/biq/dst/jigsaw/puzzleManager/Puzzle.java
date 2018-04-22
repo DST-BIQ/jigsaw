@@ -10,16 +10,16 @@ import java.util.List;
 public class Puzzle {
 
 
-
-//
-
-
-
     private ErrorsManager errorsManager = new ErrorsManager();
     private List<PuzzlePiece> puzzlePieces;
 
 
-
+    /**
+     * calculates puzzle solution
+     * @param puzzlePieces - list of available puzzle pieces
+     * @param puzzleStructures - available structures of puzzle
+     * @return possible puzzle solution if found. else returns null.
+     */
     PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
 
         for(int[] structure:puzzleStructures){
@@ -32,13 +32,14 @@ public class Puzzle {
     }
 
     /**
-     *
-     * @param
-     * @return
+     * creates available list of puzzlePieces
+     * @param puzzleContent - list of strings, represent the valid file input lines
+     * @param puzzlePieceValidators - object that it's purpose to validate the puzzle piece
+     * @return Array list of PuzzlePieces
      */
-    public  ArrayList<PuzzlePiece> getPuzzle(List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
+    public  ArrayList<PuzzlePiece> getPuzzle(FileInputParser fim,List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators){
 
-        ArrayList<int[]> puzzleArray = FileInputParser.produceArrayForPuzzle(puzzleContent, errorsManager);
+        ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray==null){ return null;}
 
         ArrayList<PuzzlePiece> puzzle = convertPuzzleArray(puzzleArray);
@@ -52,6 +53,12 @@ public class Puzzle {
         return puzzle;
     }
 
+    /**
+     * checks is the puzzle solution created is valid
+     * @param puzzle - tested puzzle
+     * @param solution - tested solution
+     * @return valid/not valid
+     */
     public static boolean checkPuzzleSolution(Puzzle puzzle, PuzzleSolution solution ){
         List<PuzzlePiece> pieces = puzzle.getPuzzlePieces();
         if (verifySolutionSize(pieces, solution)) return false;
@@ -65,6 +72,13 @@ public class Puzzle {
         return true;
     }
 
+    /**
+     * Verify if puzzle size equal to solution size
+     * checks is the puzzle solution created is valid
+     * @param puzzle - tested puzzle
+     * @param solution - tested solution
+     * @return true/false
+     */
     private static   boolean verifySolutionSize(List<PuzzlePiece> puzzle, PuzzleSolution solution) {
         if (puzzle.size()==(solution.getSize())){
             return true;
@@ -72,7 +86,12 @@ public class Puzzle {
         return false;
     }
 
-
+    /**
+     * gets available structures for a possible solution
+     * @param puzzlePieceValidator - validators object
+     * @param puzzleSize - number of pieces on puzzle
+     * @return available solutions list (e.g: 1,6 ; 6,1 ; 2;3)
+     */
     public List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
         List<int[]> structureOptions = new ArrayList<>();
         for (int rows=1; rows<=puzzleSize;rows++){
@@ -88,6 +107,17 @@ public class Puzzle {
         return structureOptions;
     }
 
+
+    /**
+     *  get list of matched pieces from teh puzzle array, by condition defined on piece location.
+     *  left/right/top/buttom - if need specific value put it (e.g. top = 1, if does not matter, put 2 as condition value);
+     * @param left - left side condition
+     * @param top - top side condition
+     * @param right - right side condition
+     * @param bottom - bottom side condition
+     * @param puzzlePieceArray - list of all puzzle pieces.
+     * @return list of matched puzzle pieces.
+     */
     private  List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray ){
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         for (PuzzlePiece piece : puzzlePieceArray){
@@ -101,6 +131,12 @@ public class Puzzle {
         return matchedPieces;
     }
 
+    /**
+     *  this method tried to find possible solution. if found returns is, else return null
+     * @param solution - current solution
+     * @param puzzlePieces - current array pieces
+     * @return possible solution if found.
+     */
     private  PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
         if (foundSolution(solution, puzzlePieces)) {return solution;}
         else if (noMorePiecesAndNoValidSolution(puzzlePieces)){return null;}
@@ -119,6 +155,12 @@ public class Puzzle {
        return null;
     }
 
+    /**
+     * get available pieces for top and bottom pieces
+     * @param solution - current solution
+     * @param puzzlePieces - current array pieces
+     * @return list of matched pieces
+     */
     private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces;
         if (isOnFirstColumn(solution)){
@@ -145,6 +187,12 @@ public class Puzzle {
         return solution.getCurRow() == solution.getRows()-1;
     }
 
+    /**
+     * get available pieces for bottom row
+     * @param solution - current solution
+     * @param puzzlePieces - current array pieces
+     * @return list of matched pieces
+     */
     private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces =null;
         if (isOnFirstColumn(solution)) {
@@ -158,7 +206,12 @@ public class Puzzle {
     }
 
 
-
+    /**
+     * get available pieces for first row
+     * @param solution - current solution
+     * @param puzzlePieces - current array pieces
+     * @return list of matched pieces
+     */
     private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
@@ -169,6 +222,8 @@ public class Puzzle {
         }
         return foundPieces;
     }
+
+
 
     private boolean isOnLastColumn(PuzzleSolution solution) {
         return solution.getCurCol() == solution.getColumns()-1;
@@ -186,6 +241,13 @@ public class Puzzle {
         return solution.getCurRow() == 0;
     }
 
+    /**
+     * if found solution returns it
+     * @param solution
+     * @param puzzlePieces
+     * @param foundPieces
+     * @return possible solution found
+     */
     private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         for (PuzzlePiece piece : foundPieces) {
             PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
@@ -196,6 +258,13 @@ public class Puzzle {
         return null;
     }
 
+
+    /**
+     * for recursion needs - clone current solution
+     * @param curSolution - current solution
+     * @param enteredPiece piece to add to solution
+     * @return new solution
+     */
     private  PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){
         PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(),curSolution.getColumns());
         newSolution.setSolution(curSolution.getSolution());
@@ -206,6 +275,12 @@ public class Puzzle {
         return newSolution;
     }
 
+    /**
+     * for recursion needs - clone puzzle pieces list
+     * @param puzzlePieces - current puzzle pieceslist
+     * @param removedPiece piece to dismiss from the list
+     * @return new list of puzzlePieces without the removed piece
+     */
     private  List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
         List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
         for (PuzzlePiece piece: puzzlePieces){
@@ -216,6 +291,12 @@ public class Puzzle {
         return newPuzzlePiecesList;
     }
 
+
+    /**
+     * convert puzzle array from list of integers to list of puzzlePieces
+     * @param puzzleArray - puzzle pieces as int
+     * @return
+     */
     public ArrayList<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
         ArrayList<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
         for (int[] puzzlePiece : puzzleArray) {

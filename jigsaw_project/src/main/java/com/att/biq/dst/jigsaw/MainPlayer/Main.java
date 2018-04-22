@@ -2,10 +2,12 @@ package com.att.biq.dst.jigsaw.MainPlayer;
 
 import com.att.biq.dst.jigsaw.puzzleManager.PuzzleManager;
 
-public class Main {
-    public static void main(String[] args) {
+import java.io.IOException;
 
-                PuzzleManager puzzleManager = new PuzzleManager("./src/main/resources/input/AdvancedPuzzleTests/Input/test15.in","./src/main/resources/output/");
+public class Main {
+    public static void main(String[] args) throws IOException {
+
+                PuzzleManager puzzleManager = new PuzzleManager(args[0],args[1]);
                 puzzleManager.loadPuzzle();
                 puzzleManager.playPuzzle();
 

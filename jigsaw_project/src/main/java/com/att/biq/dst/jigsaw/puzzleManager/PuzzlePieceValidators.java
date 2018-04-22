@@ -11,8 +11,8 @@ public class PuzzlePieceValidators {
     private int minLeftRigh;
 
     /**Validate that all PuzzlePiece list are valid and can have solution
-     *
-     * @param puzzlePieces
+     *validatePuzzle - return an answer if the puzzle pieces are valid
+     * @param puzzlePieces - array list of the puzzle pieces
      * The puzzlePieces list to valid
      * @param errorsManager
      *
