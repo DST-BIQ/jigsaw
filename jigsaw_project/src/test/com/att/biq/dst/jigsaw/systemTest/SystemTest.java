@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.systemTest;
 
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzleManager;
+import com.att.biq.dst.jigsaw.puzzle.PuzzleManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

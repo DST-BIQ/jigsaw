@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.PuzzleUtils;
 
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
+import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,15 +81,18 @@ public class FileInputParser {
      * @param list list of lines from file
      * @return list of puzzle pieces
      */
-//TODO STIIL NOT SURE HOW TO Report an Error (direct;y to file or aggreate in an array
+
     public  ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
 
 
-// TODO move to sseperate method
+// TODO consider move to sseperate method
         for ( String line : list ) {
+            line = trimRedundantSpacesFromLine(line);
+            String[] splittedLine = line.split(" ");
+
             int countErrors = 0;
             if (!line.contains("Num"))  // ignore first line
             {
@@ -108,12 +111,18 @@ public class FileInputParser {
 
                 if (!idInRange(list, line, errorsManager)) {
                     countErrors += 1;
-                    wrongElementIDs.add(String.valueOf(getElementID(line)));
+                    wrongElementIDs.add(String.valueOf(getLinePuzzlePieceID(line)));
 
                     errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list, errorsManager) + " cannot have the following IDs: " + getCsvFromStringArray(wrongElementIDs));
                 }
 
-                if (isWrongElementFormat(line)) {
+
+                if (line.split(" ").length!=5){
+                    countErrors += 1;
+                    errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
+                }
+
+                if (isWrongElementFormat(splittedLine)) {
                     countErrors += 1;
                     errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
                 }
@@ -124,13 +133,10 @@ public class FileInputParser {
                 if (countErrors == 0) {
 
                     int[] puzzlePieceArray = new int[5]; // create new array in list size - max number of lines
-                    //parse line to prepare to enter to array
-                    String temp = trimRedundantSpacesFromLine(line);
-                    String[] tempLine = temp.split(" ");
 
                     for ( int i = 0; i <= 4; i++ ) {
 
-                        puzzlePieceArray[i] = Integer.valueOf(tempLine[i]);
+                        puzzlePieceArray[i] = Integer.valueOf(splittedLine[i]);
                     }
 
                     puzzlePieceList.add(puzzlePieceArray);
@@ -226,19 +232,7 @@ public class FileInputParser {
 
     }
 
-    /**
-     * Return rhe ID as int to create a number
-     *
-     * @param line from file
-     * @return true/false
-     */
-    private static int getElementID(String line) {
 
-
-        return getLinePuzzlePieceID(line);
-
-
-    }
 
     /**
      * does this line contains only spaces
@@ -329,22 +323,17 @@ public class FileInputParser {
 
 
     /**
-     * if the line has more than 5 parts (ID + 4 edges) or if the edges are not 1,0,-1 return wront element
+     * if the edges are not 1,0,-1 return wrong element
      *
      * @param line from file
      * @return true/false
      */
-    public static boolean isWrongElementFormat(String line) {
-        line = trimRedundantSpacesFromLine(line);
-        String[] tempLine = line.split(" ");
+    public  boolean isWrongElementFormat(String[] line) {
 
-        if (tempLine.length != 5) {
-            return true;
-        }
 
         for ( int i = 1; i <= 4; i++ ) {
 
-            if (!(tempLine[i].equals("1") || tempLine[i].equals("-1") || tempLine[i].equals("0"))) {
+            if (!(line[i].equals("1") || line[i].equals("-1") || line[i].equals("0"))) {
                 return true;
             }
 
@@ -362,7 +351,7 @@ public class FileInputParser {
      */
     public boolean validateMissingIds(ArrayList<int[]> piecesListFromFile,List<Integer> missingIds) {
 
-//        List<Integer> ids = getIDslistFromInputFile(puzzlePiecesFromFile);
+
         piecesID = getIDslistFromInputFile(piecesListFromFile);
         boolean result = true;
         for ( int j = 1; j <= numberOfElements; j++ ) {

@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.PuzzleUtils;
 
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzlePiece;
+import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -278,10 +278,9 @@ public class FileInputParserTest {
     @Test
     public void isWrongElementFormatNotWrong() {
 
-        List<String> list = new ArrayList<>();
-        list.add("2 1 0 0 -1");
 
-        assertFalse(fip.isWrongElementFormat(list.get(0)));
+        String[] line = {"2","1","0","0","-1"};
+        assertFalse(fip.isWrongElementFormat(line));
 
 
     }
@@ -290,10 +289,10 @@ public class FileInputParserTest {
     @Test
     public void isWrongElementFormat() {
 
-        List<String> list = new ArrayList<>();
-        list.add("2 2 0 0 -1");
 
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
+        String[] line = {"2","2","0","0","-1"};
+
+        assertTrue(fip.isWrongElementFormat(line));
 
 
     }
@@ -301,10 +300,8 @@ public class FileInputParserTest {
     @Test
     public void isWrongElementFormat1() {
 
-        List<String> list = new ArrayList<>();
-        list.add("2 1 0 0 99");
-
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
+        String[] line = {"2","1","0","0","99"};
+        assertTrue(fip.isWrongElementFormat(line));
 
 
     }
@@ -313,24 +310,14 @@ public class FileInputParserTest {
     @Test
     public void isWrongElementFormatNotNumber() {
 
-        List<String> list = new ArrayList<>();
-        list.add("2 1 0 0 a");
 
-        assertTrue(fip.isWrongElementFormat(list.get(0)));
-
-
-    }
-
-    @Test
-    public void isWrongElementFormatIgnoreSpaces() {
-
-        List<String> list = new ArrayList<>();
-        list.add("2 1 0   0 -1");
-
-        assertFalse(fip.isWrongElementFormat(list.get(0)));
+        String[] line = {"2","1","0","0","a"};
+        assertTrue(fip.isWrongElementFormat(line));
 
 
     }
+
+
 
 
 }

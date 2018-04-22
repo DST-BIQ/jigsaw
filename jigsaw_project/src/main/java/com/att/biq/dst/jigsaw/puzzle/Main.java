@@ -1,6 +1,4 @@
-package com.att.biq.dst.jigsaw.MainPlayer;
-
-import com.att.biq.dst.jigsaw.puzzleManager.PuzzleManager;
+package com.att.biq.dst.jigsaw.puzzle;
 
 import java.io.IOException;
 

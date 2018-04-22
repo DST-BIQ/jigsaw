@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.puzzleManager;
+package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
 
