@@ -74,7 +74,7 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle() throws IOException {
+    public void playPuzzle() throws IOException, InterruptedException {
         solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
@@ -129,17 +129,30 @@ public class PuzzleManager {
      * @param reportMethod
      */
     private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
+        FileWriter fw;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(outputFilePath + "output_" + getTimeStamp() + ".txt", true);
+            bw = new BufferedWriter(fw);
 
         for ( String dataLine : dataList ) {
             switch (reportMethod) {
                 case "file":
-                    writeToFile(dataLine);
+                    writeToFile(dataLine, bw);
                     break;
 
                 default:
                     System.out.println("no type selected sorry");
             }
 
+        }
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to file");
+        }
+        finally {
+            if (bw != null) {
+                bw.close();
+            }
         }
 
     }
@@ -179,20 +192,13 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data) throws IOException {
-        FileWriter fw;
-        BufferedWriter bw = null;
+    private void writeToFile(String data,BufferedWriter bw ) throws IOException {
+
         try {
-            fw = new FileWriter(outputFilePath, true);
-            bw = new BufferedWriter(fw);
             bw.write(data);
             bw.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        } finally {
-            if (bw != null) {
-                bw.close();
-            }
         }
     }
 
