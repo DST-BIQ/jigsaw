@@ -2,6 +2,7 @@ package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.PuzzleUtils.PuzzleSolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class Puzzle {
 
     private ErrorsManager errorsManager = new ErrorsManager();
     private List<PuzzlePiece> puzzlePieces;
+    private boolean isSolved = false;
+    private PuzzleSolution solution = null;
 
 
     /**
@@ -20,15 +23,24 @@ public class Puzzle {
      * @param puzzleStructures - available structures of puzzle
      * @return possible puzzle solution if found. else returns null.
      */
-    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
+    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) throws InterruptedException {
 
-        for(int[] structure:puzzleStructures){
-            PuzzleSolution solution = new PuzzleSolution(structure[0],structure[1]);
-            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
-            if (possibleSolution!=null && possibleSolution.isValid())
-            {return possibleSolution;}
+        for(int[] structure:puzzleStructures) {
+            PuzzleSolution solution = new PuzzleSolution(structure[0], structure[1]);
+//            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
+            PuzzleSolver solver = new PuzzleSolver(this, solution);
+            Thread puzzleSolverThread = new Thread(solver);
+            puzzleSolverThread.start();
         }
-        return null;
+        Thread.sleep(5000);
+        if (solution!=null){
+
+            return solution;
+
+        }else {
+
+            return null;
+        }
     }
 
     /**
@@ -137,8 +149,9 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return possible solution if found.
      */
-    private  PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
+    public   PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
         if (foundSolution(solution, puzzlePieces)) {return solution;}
+        if (isSolved){return null;}
         else if (noMorePiecesAndNoValidSolution(puzzlePieces)){return null;}
             List<PuzzlePiece> foundPieces =null;
             if (isOnFirstRow(solution)) {
@@ -313,5 +326,21 @@ public class Puzzle {
 
     public List<PuzzlePiece> getPuzzlePieces() {
         return puzzlePieces;
+    }
+
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public PuzzleSolution getSolution() {
+        return solution;
+    }
+
+    public void setSolved(boolean solved) {
+        isSolved = solved;
+    }
+
+    public void setSolution(PuzzleSolution solution) {
+        this.solution = solution;
     }
 }
