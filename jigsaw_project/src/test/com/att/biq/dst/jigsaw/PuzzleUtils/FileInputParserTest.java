@@ -109,31 +109,7 @@ public class FileInputParserTest {
 
     }
 
-    // *************************   Verify line is empty
-    @Test
-    public void lineIsEmptyNegative() {
-
-        assertFalse(fip.isLineEmpty("34, 1, 0,-1 ,9"));
-
-
-    }
-
-    @Test
-    public void lineIsEmpty() {
-        assertTrue(fip.isLineEmpty(""));
-
-    }
-
-
-    @Test
-    public void lineIsEmptyOneSpace() {
-
-        assertFalse(fip.isLineEmpty(" "));
-
-    }
-
-
-    // *************************   Verify line idInRange
+      // *************************   Verify line idInRange
 
 
     @Test

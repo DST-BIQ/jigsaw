@@ -48,7 +48,7 @@ public class PuzzleManager {
         puzzle = new Puzzle();
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-        fileInputParser = new FileInputParser(piecesID, puzzlePieceList);
+        fileInputParser = new FileInputParser();
     }
 
 
