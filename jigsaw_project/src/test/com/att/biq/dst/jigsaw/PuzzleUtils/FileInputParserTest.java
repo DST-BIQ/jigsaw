@@ -1,7 +1,8 @@
 package com.att.biq.dst.jigsaw.PuzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
-import org.junit.Test;
+//import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
