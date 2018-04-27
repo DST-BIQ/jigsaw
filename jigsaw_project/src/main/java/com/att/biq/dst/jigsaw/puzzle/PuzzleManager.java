@@ -81,7 +81,7 @@ public class PuzzleManager {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution(puzzle.getPuzzlePieces(), solutionStructures, threadsManager);
+        solution = puzzle.calculatePuzzleSolution( solutionStructures, threadsManager);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
