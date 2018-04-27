@@ -1,5 +1,6 @@
 package com.att.biq.dst.jigsaw.systemTest;
 
+import com.att.biq.dst.jigsaw.PuzzleUtils.ThreadsManager;
 import com.att.biq.dst.jigsaw.puzzle.PuzzleManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -100,7 +101,7 @@ public class SystemTest {
         PuzzleManager puzzleManager = new PuzzleManager(filePath, outputFilePath);
 
         puzzleManager.loadPuzzle();
-        puzzleManager.playPuzzle();
+        puzzleManager.playPuzzle(new ThreadsManager(2));
 
     }
 
