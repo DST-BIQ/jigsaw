@@ -31,10 +31,10 @@ public class PuzzleManager {
     private String inputFilePath; // input file path
     private String outputFilePath; // output filepath
     private ArrayList<String> reportList; // all reports to file will be written to this list
-        List<int[]> solutionStructures;
+    private List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
-    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+//    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+//    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
     /////////////////////////////////////////   class constructors
 
@@ -49,7 +49,7 @@ public class PuzzleManager {
         puzzle = new Puzzle();
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-        fileInputParser = new FileInputParser(piecesID, puzzlePieceList);
+        fileInputParser = new FileInputParser();
     }
 
 
@@ -76,7 +76,7 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException {
-        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
+        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators);
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
@@ -132,25 +132,31 @@ public class PuzzleManager {
     private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
         FileWriter fw;
         BufferedWriter bw = null;
+
         try {
-            fw = new FileWriter(outputFilePath + "output_" + getTimeStamp() + ".txt", true);
-            bw = new BufferedWriter(fw);
 
-        for ( String dataLine : dataList ) {
-            switch (reportMethod) {
-                case "file":
-                    writeToFile(dataLine, bw);
-                    break;
+            if (isDirectory(outputFilePath)) {
+                outputFilePath = outputFilePath + "output_" + getTimeStamp() + ".txt";
 
-                default:
-                    System.out.println("no type selected sorry");
             }
 
-        }
+            fw = new FileWriter(outputFilePath, true);
+            bw = new BufferedWriter(fw);
+
+            for ( String dataLine : dataList ) {
+                switch (reportMethod) {
+                    case "file":
+                        writeToFile(dataLine, bw);
+                        break;
+
+                    default:
+                        System.out.println("no type selected sorry");
+                }
+
+            }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        }
-        finally {
+        } finally {
             if (bw != null) {
                 bw.close();
             }
@@ -193,7 +199,7 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data,BufferedWriter bw ) throws IOException {
+    private void writeToFile(String data, BufferedWriter bw) throws IOException {
 
         try {
             bw.write(data);
@@ -245,6 +251,17 @@ public class PuzzleManager {
             file.delete();
         }
 
+
+    }
+
+
+    public boolean isDirectory(String filePath) {
+        File file = new File(filePath);
+
+        if (file.isDirectory()) {
+            return true;
+        }
+        return false;
 
     }
 }

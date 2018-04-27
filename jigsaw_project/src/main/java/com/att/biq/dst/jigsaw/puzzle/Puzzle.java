@@ -17,12 +17,12 @@ public class Puzzle {
 
     /**
      * calculates puzzle solution
-     * @param puzzlePieces - list of available puzzle pieces
+     * @
      * @param puzzleStructures - available structures of puzzle
      * @return possible puzzle solution if found. else returns null.
      */
     //TODO - move calculation to PuzzleSolver
-    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures, ThreadsManager threadsManager) throws InterruptedException {
+    PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager) throws InterruptedException {
         int counter=0;
         List<Runnable> solvers = new ArrayList<>();
         for(int[] structure:puzzleStructures) {
@@ -105,12 +105,14 @@ public class Puzzle {
     /**
      * gets available structures for a possible solution
      * @param puzzlePieceValidator - validators object
-     * @param puzzleSize - number of pieces on puzzle
+     *
      * @return available solutions list (e.g: 1,6 ; 6,1 ; 2;3)
      */
     //TODO - move to PuzzleSolver
-    public List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
+    public List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator){
         List<int[]> structureOptions = new ArrayList<>();
+        int puzzleSize = getPuzzlePieces().size();
+
         for (int rows=1; rows<=puzzleSize;rows++){
             int columns;
             if (puzzleSize%rows==0){
