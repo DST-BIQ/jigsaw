@@ -3,19 +3,17 @@ package com.att.biq.dst.jigsaw.puzzle;
 import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
 import com.att.biq.dst.jigsaw.PuzzleUtils.PuzzleSolver;
+import com.att.biq.dst.jigsaw.PuzzleUtils.ThreadsManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Puzzle {
-
-
-    private ErrorsManager errorsManager = new ErrorsManager();
+    private ErrorsManager errorsManager = new ErrorsManager();//TODO - move to PuzzleSolver
     private List<PuzzlePiece> puzzlePieces;
-    private boolean isSolved = false;
-    private PuzzleSolution solution = null;
-
+    private boolean isSolved = false;//TODO - move to PuzzleSolver or maybe remove
+    private PuzzleSolution solution = null;//TODO - move to PuzzleSolver
 
     /**
      * calculates puzzle solution
@@ -23,18 +21,22 @@ public class Puzzle {
      * @param puzzleStructures - available structures of puzzle
      * @return possible puzzle solution if found. else returns null.
      */
-    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) throws InterruptedException {
-
+    //TODO - move calculation to PuzzleSolver
+    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures, ThreadsManager threadsManager) throws InterruptedException {
+        int counter=0;
+        List<Runnable> solvers = new ArrayList<>();
         for(int[] structure:puzzleStructures) {
             PuzzleSolution solution = new PuzzleSolution(structure[0], structure[1]);
-//            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
             PuzzleSolver solver = new PuzzleSolver(this, solution);
-            Thread puzzleSolverThread = new Thread(solver);
-            puzzleSolverThread.start();
+            solvers.add(solver);
+            threadsManager.getThreadPoolExecutor().execute(solver);
         }
-        Thread.sleep(5000);
+        while (solution==null && counter<200){//TODO - find another exit criteria
+            Thread.sleep(10);
+            counter++;
+        }
         if (solution!=null){
-
+            threadsManager.getThreadPoolExecutor().shutdown();
             return solution;
 
         }else {
@@ -71,6 +73,7 @@ public class Puzzle {
      * @param solution - tested solution
      * @return valid/not valid
      */
+    //TODO - move to PuzzleSolver
     public static boolean checkPuzzleSolution(Puzzle puzzle, PuzzleSolution solution ){
         List<PuzzlePiece> pieces = puzzle.getPuzzlePieces();
         if (verifySolutionSize(pieces, solution)) return false;
@@ -91,6 +94,7 @@ public class Puzzle {
      * @param solution - tested solution
      * @return true/false
      */
+    //TODO - move to PuzzleSolver
     private static   boolean verifySolutionSize(List<PuzzlePiece> puzzle, PuzzleSolution solution) {
         if (puzzle.size()==(solution.getSize())){
             return true;
@@ -104,6 +108,7 @@ public class Puzzle {
      * @param puzzleSize - number of pieces on puzzle
      * @return available solutions list (e.g: 1,6 ; 6,1 ; 2;3)
      */
+    //TODO - move to PuzzleSolver
     public List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
         List<int[]> structureOptions = new ArrayList<>();
         for (int rows=1; rows<=puzzleSize;rows++){
@@ -130,6 +135,7 @@ public class Puzzle {
      * @param puzzlePieceArray - list of all puzzle pieces.
      * @return list of matched puzzle pieces.
      */
+    //TODO - move to PuzzleSolver
     private  List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray ){
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         for (PuzzlePiece piece : puzzlePieceArray){
@@ -149,7 +155,8 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return possible solution if found.
      */
-    public   PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
+    //TODO - move to PuzzleSolver
+    public PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces){
         if (foundSolution(solution, puzzlePieces)) {return solution;}
         if (isSolved){return null;}
         else if (noMorePiecesAndNoValidSolution(puzzlePieces)){return null;}
@@ -174,6 +181,7 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return list of matched pieces
      */
+    //TODO - move to PuzzleSolver
     private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces;
         if (isOnFirstColumn(solution)){
@@ -185,17 +193,17 @@ public class Puzzle {
         }
         return foundPieces;
     }
-
+    //TODO - move to PuzzleSolver
     private boolean noMorePiecesAndNoValidSolution(List<PuzzlePiece> puzzlePieces) {
         return puzzlePieces.size()==0;
     }
-
+    //TODO - move to PuzzleSolver
     private boolean foundSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         return puzzlePieces.size()==0 && solution.isValid();
     }
 
 
-
+    //TODO - move to PuzzleSolver
     private boolean isOnLastRow(PuzzleSolution solution) {
         return solution.getCurRow() == solution.getRows()-1;
     }
@@ -206,6 +214,7 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return list of matched pieces
      */
+    //TODO - move to PuzzleSolver
     private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces =null;
         if (isOnFirstColumn(solution)) {
@@ -225,6 +234,7 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return list of matched pieces
      */
+    //TODO - move to PuzzleSolver
     private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
@@ -237,19 +247,19 @@ public class Puzzle {
     }
 
 
-
+    //TODO - move to PuzzleSolver
     private boolean isOnLastColumn(PuzzleSolution solution) {
         return solution.getCurCol() == solution.getColumns()-1;
     }
-
+    //TODO - move to PuzzleSolver
     private boolean isBetweenFirstAndLastColumns(PuzzleSolution solution) {
         return solution.getCurCol() < solution.getColumns()-1;
     }
-
+    //TODO - move to PuzzleSolver
     private boolean isOnFirstColumn(PuzzleSolution solution) {
         return solution.getCurCol() == 0;
     }
-
+    //TODO - move to PuzzleSolver
     private boolean isOnFirstRow(PuzzleSolution solution) {
         return solution.getCurRow() == 0;
     }
@@ -261,6 +271,7 @@ public class Puzzle {
      * @param foundPieces
      * @return possible solution found
      */
+    //TODO - move to PuzzleSolver
     private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         for (PuzzlePiece piece : foundPieces) {
             PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
@@ -278,6 +289,7 @@ public class Puzzle {
      * @param enteredPiece piece to add to solution
      * @return new solution
      */
+    //TODO - move to PuzzleSolver
     private  PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){
         PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(),curSolution.getColumns());
         newSolution.setSolution(curSolution.getSolution());
@@ -294,6 +306,7 @@ public class Puzzle {
      * @param removedPiece piece to dismiss from the list
      * @return new list of puzzlePieces without the removed piece
      */
+    //TODO - move to PuzzleSolver
     private  List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
         List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
         for (PuzzlePiece piece: puzzlePieces){
@@ -319,7 +332,7 @@ public class Puzzle {
         return puzzlePiecesList;
     }
 
-
+    //TODO - move to PuzzleSolver
     public ErrorsManager getErrorsManager() {
         return errorsManager;
     }
@@ -327,19 +340,19 @@ public class Puzzle {
     public List<PuzzlePiece> getPuzzlePieces() {
         return puzzlePieces;
     }
-
+    //TODO - move to PuzzleSolver or maybe even remove
     public boolean isSolved() {
         return isSolved;
     }
-
+    //TODO - move to PuzzleSolver
     public PuzzleSolution getSolution() {
         return solution;
     }
-
+    //TODO - move to PuzzleSolver or maybe remove
     public void setSolved(boolean solved) {
         isSolved = solved;
     }
-
+    //TODO - move to PuzzleSolver or maybe remove
     public void setSolution(PuzzleSolution solution) {
         this.solution = solution;
     }

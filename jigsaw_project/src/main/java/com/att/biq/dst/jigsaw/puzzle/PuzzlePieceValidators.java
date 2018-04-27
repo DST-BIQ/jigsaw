@@ -44,7 +44,7 @@ public class PuzzlePieceValidators {
           if (!BL && piece.isBottomLeft()){
               BL=true;
           }
-          if (!BR && piece.isBottomright()){
+          if (!BR && piece.isBottomRight()){
               BR=true;
           }
 

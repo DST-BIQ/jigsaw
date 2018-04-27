@@ -1,6 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.PuzzleUtils.ThreadsManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -74,13 +75,13 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle() throws IOException, InterruptedException {
+    public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException {
         solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution(puzzle.getPuzzlePieces(), solutionStructures);
+        solution = puzzle.calculatePuzzleSolution(puzzle.getPuzzlePieces(), solutionStructures, threadsManager);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);

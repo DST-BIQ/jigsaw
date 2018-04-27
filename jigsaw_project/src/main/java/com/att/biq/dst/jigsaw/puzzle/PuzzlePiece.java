@@ -10,7 +10,7 @@ public class PuzzlePiece {
     private int sumEdges;
 
     public PuzzlePiece(int id,int left, int top, int right, int bottom){
-        this.id=id;
+        this.id = id;
         this.top = top;
         this.bottom = bottom;
         this.left = left;
@@ -19,15 +19,15 @@ public class PuzzlePiece {
     }
 
     public boolean isTopLeft() {
-        return (top==0&&left==0);
+        return (top == 0 && left == 0);
     }
 
     public boolean isTopRight() {
-        return (top==0&&right==0);
+        return (top == 0 && right == 0);
     }
 
-    public boolean isBottomright() {
-        return (bottom==0&&right==0);
+    public boolean isBottomRight() {
+        return (bottom == 0 && right == 0);
     }
 
     public boolean isBottomLeft() {
