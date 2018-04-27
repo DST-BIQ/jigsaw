@@ -3,13 +3,14 @@ package com.att.biq.dst.jigsaw.PuzzleIndexing;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 
 /**
- * This class represents the rotated piece - holds the refernce to the piece + rotation angle needed
+ * This class represents the rotated piece - holds the reference to the piece + rotation angle needed
  *
  */
 public class RotatedPiece {
 
     PuzzlePiece puzzlePiece;
     int rotationAngle;
+
 
     public RotatedPiece(PuzzlePiece puzzlePiece, RotationAngle rotationAngle) {
         this.puzzlePiece = puzzlePiece;
@@ -27,6 +28,17 @@ public class RotatedPiece {
     }
 
 
+
+public int[] getEdgesValue(){
+
+        int[] edgesArray = new int[4];
+        edgesArray[0]=puzzlePiece.getLeft();
+        edgesArray[1]=puzzlePiece.getTop();
+        edgesArray[2]=puzzlePiece.getRight();
+        edgesArray[3]=puzzlePiece.getBottom();
+
+        return edgesArray;
+}
 
 
 }

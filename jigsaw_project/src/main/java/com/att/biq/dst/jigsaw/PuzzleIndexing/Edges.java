@@ -4,10 +4,10 @@ package com.att.biq.dst.jigsaw.PuzzleIndexing;
  * enum holds the edges value
  */
 public enum Edges {
-    LEFT,
-    UP,
-    RIGHT,
-    BOTTOM;
+    _LEFT,
+    _UP,
+    _RIGHT,
+    _BOTTOM
 
 
 }

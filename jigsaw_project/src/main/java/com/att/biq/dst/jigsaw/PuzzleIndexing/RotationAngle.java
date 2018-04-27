@@ -5,10 +5,10 @@ package com.att.biq.dst.jigsaw.PuzzleIndexing;
  * Enum holds the rotation angles values
  */
 public enum RotationAngle {
-    ZERO(0),
-    Ninety(90),
-    ONEHUNDRED_EIGHTY(180),
-    TWOHUMNDRED_SEVENTY(270)
+    _ZERO(0),
+    _NINETY(90),
+    _ONEHUNDRED_EIGHTY(180),
+    _TWOHUMNDRED_SEVENTY(270)
     ;
 
     private int value;
