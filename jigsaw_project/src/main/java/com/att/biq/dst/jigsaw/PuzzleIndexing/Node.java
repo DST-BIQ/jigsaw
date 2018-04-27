@@ -1,7 +1,10 @@
 package com.att.biq.dst.jigsaw.PuzzleIndexing;
 
 import java.util.ArrayList;
+import java.util.List;
 
+
+//TODO node containing list of chile nodes (next level children)
 public class Node {
     /**
      * Node containing the list of rotated pieces (null if not on lowest level)
@@ -14,7 +17,7 @@ private    ArrayList<RotatedPiece> rotatedPieceList;
     private Edges treeLevel;
     private int nodeValue;
     private Node next;
-
+    private List<Node> children; // list of children of this node. for 0,1,-1
 
     //
 

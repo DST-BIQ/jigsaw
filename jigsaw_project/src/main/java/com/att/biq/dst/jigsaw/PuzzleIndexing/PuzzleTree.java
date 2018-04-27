@@ -3,28 +3,32 @@ package com.att.biq.dst.jigsaw.PuzzleIndexing;
 import java.util.Iterator;
 
 /**
- * question - can we generate the whole tree structure and after rotating the tree and implementing the rotated pieced
+ * TODO question - can we generate the whole tree structure and after rotating the tree and implementing the rotated pieced
  */
 
 public class PuzzleTree implements Iterable<Node> {
+
 
     private Node node;
 
 
 
-    public void addNodeToTree(Edges treeLevel, int nodeValue) {
+
+// prepare the tree structure, it's does not change (always 4 levels of 1,0,1)
+
+
+    public void addNodesToTree(Edges treeLevel, int nodeValue) {
         Node newNode = new Node(treeLevel, nodeValue);
         if (node == null) {
             node = newNode;
         } else {
             Node current = node;
-            while (current.getNext() != null) {
-                current.getNext();
-            }
-            current.setNext(newNode);
         }
 
-    }
+        node.setNext(newNode);
+        }
+
+
 
 
 

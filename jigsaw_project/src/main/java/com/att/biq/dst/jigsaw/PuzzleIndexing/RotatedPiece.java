@@ -12,9 +12,9 @@ public class RotatedPiece {
     int rotationAngle;
 
 
-    public RotatedPiece(PuzzlePiece puzzlePiece, RotationAngle rotationAngle) {
+    public RotatedPiece(PuzzlePiece puzzlePiece, int rotationAngle) {
         this.puzzlePiece = puzzlePiece;
-        this.rotationAngle = rotationAngle.getValue();
+        this.rotationAngle = rotationAngle;
     }
 
 
