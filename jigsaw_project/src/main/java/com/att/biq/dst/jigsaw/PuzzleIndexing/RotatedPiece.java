@@ -29,16 +29,7 @@ public class RotatedPiece {
 
 
 
-public int[] getEdgesValue(){
 
-        int[] edgesArray = new int[4];
-        edgesArray[0]=puzzlePiece.getLeft();
-        edgesArray[1]=puzzlePiece.getTop();
-        edgesArray[2]=puzzlePiece.getRight();
-        edgesArray[3]=puzzlePiece.getBottom();
-
-        return edgesArray;
-}
 
 
 }
