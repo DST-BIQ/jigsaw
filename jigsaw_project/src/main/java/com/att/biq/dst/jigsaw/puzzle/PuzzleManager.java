@@ -1,6 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.PuzzleUtils.PuzzleSolver;
 import com.att.biq.dst.jigsaw.PuzzleUtils.ThreadsManager;
 
 import java.io.BufferedWriter;
@@ -33,6 +35,9 @@ public class PuzzleManager {
     private ArrayList<String> reportList; // all reports to file will be written to this list
     private List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
+    private ErrorsManager errorsManager;
+    private PuzzleSolver puzzleSolver;
+
 //    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
 //    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
@@ -46,10 +51,12 @@ public class PuzzleManager {
         this.inputFilePath = inputFilePath;
         this.outputFilePath = outputFilePath;
         puzzlePieceValidators = new PuzzlePieceValidators();
-        puzzle = new Puzzle();
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
         fileInputParser = new FileInputParser();
+        this.errorsManager = new ErrorsManager();
+        puzzle = new Puzzle(errorsManager);
+
     }
 
 
@@ -66,7 +73,6 @@ public class PuzzleManager {
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
-
     }
 
     /**
@@ -76,12 +82,12 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException {
-        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators);
+        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution( solutionStructures, threadsManager);
+        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
