@@ -12,6 +12,7 @@ public class Puzzle {
 
     private ErrorsManager errorsManager = new ErrorsManager();
     private List<PuzzlePiece> puzzlePieces;
+    private boolean rotate=true;
 
 
     /**
@@ -109,7 +110,7 @@ public class Puzzle {
             int columns;
             if (puzzleSize % rows == 0) {
                 columns = puzzleSize / rows;
-                if (columns <= puzzlePieceValidator.getMinTopBottom() && rows <= puzzlePieceValidator.getMinLeftRigh()) {
+                if (columns + rows <= getStraightEdgesSum()) {
                     structureOptions.add(new int[]{rows, columns});
                 }
             }
@@ -160,7 +161,7 @@ public class Puzzle {
      * @param puzzlePieces - current array pieces
      * @return possible solution if found.
      */
-    private PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+    public PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         if (foundSolution(solution, puzzlePieces)) {
             return solution;
         } else if (noMorePiecesAndNoValidSolution(puzzlePieces)) {
@@ -329,23 +330,46 @@ public class Puzzle {
      * @return
      */
     public List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
-        ArrayList<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
+        puzzlePieces = new ArrayList<>();
         for (int[] puzzlePiece : puzzleArray) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
-            puzzlePiecesList.add(pp);
-        }
-        for (PuzzlePiece piece : puzzlePiecesList) {
-            if ((piece.getBottom() == piece.getTop()) && (piece.getLeft() == piece.getRight()) && (piece.getRight() != piece.getTop())) {
-                puzzlePiecesList.add(piece.rotate(1,90));
-            } else if ((piece.getBottom() != piece.getTop()) || (piece.getLeft() != piece.getRight())) {
-                puzzlePiecesList.add(piece.rotate(1,90));
-                puzzlePiecesList.add(piece.rotate(2,180));
-                puzzlePiecesList.add(piece.rotate(3,270));
+            puzzlePieces.add(pp);
+            if (rotate) {
+                rotatePiece(pp);
             }
         }
-        return puzzlePiecesList;
+        return puzzlePieces;
     }
 
+    private void rotatePiece(PuzzlePiece pp) {
+        if ((pp.getBottom() == pp.getTop()) && (pp.getLeft() == pp.getRight()) && (pp.getRight() != pp.getTop())) {
+            puzzlePieces.add(pp.rotate(1,90));
+        } else if ((pp.getBottom() != pp.getTop()) || (pp.getLeft() != pp.getRight())) {
+            puzzlePieces.add(pp.rotate(1,90));
+            puzzlePieces.add(pp.rotate(2,180));
+            puzzlePieces.add(pp.rotate(3,270));
+        }
+    }
+
+    public int getStraightEdgesSum () {
+        int total = 0;
+        for (PuzzlePiece pp:puzzlePieces) {
+            if (pp.getTop()==0 ){
+                total++;
+            }
+            if (pp.getLeft()==0){
+                total++;
+            }
+            if (pp.getRight()==0){
+                total++;
+            }
+            if (pp.getBottom()==0){
+                total++;
+            }
+
+        }
+        return total;
+    }
 
     public ErrorsManager getErrorsManager() {
         return errorsManager;

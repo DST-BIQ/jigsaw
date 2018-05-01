@@ -1,24 +1,29 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzle.Puzzle;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePieceValidators;
-//import org.junit.Test;
+
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+import static org.junit.jupiter.api.Assertions.*;
+
+//import org.junit.Test;
 //import static junit.framework.TestCase.assertFalse;
 //import static junit.framework.TestCase.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class PuzzlePieceValidatorsTest {
     List<PuzzlePiece> puzzlePieces;
     PuzzlePieceValidators ppv;
     ArrayList<int[]> puzzleArray;
+    Puzzle puzzle;
 
 
 
@@ -28,16 +33,26 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void validatePuzzleRotate(){
+        puzzle = new Puzzle();
         puzzleArray = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         int[] pa1 = new int[] {1,0,-1,0,1};
         puzzleArray.add(pa1);
-        PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
+        PuzzlePiece p1 = new PuzzlePiece(1,0,-1,0,1);
         puzzlePieces.add(p1);
+        puzzlePieces.add(new PuzzlePiece(1,1,0,-1,0));
+        puzzlePieces.add(new PuzzlePiece(1,0,1,0,-1));
+        puzzlePieces.add(new PuzzlePiece(1,-1,0,1,0));
+       // puzzle.convertPuzzleArray(puzzleArray);
+        assertArrayEquals(puzzlePieces,puzzle.convertPuzzleArray(puzzleArray));
+       // assertTrue(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
+    }
 
+    private void assertArrayEquals(List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> puzzlePieces1) {
+        for (int i=0;i<puzzlePieces.size();i++) {
+            assertEquals(puzzlePieces.get(i),puzzlePieces1.get(i));
 
-
-        assertTrue(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
+        }
     }
 
     @Test
