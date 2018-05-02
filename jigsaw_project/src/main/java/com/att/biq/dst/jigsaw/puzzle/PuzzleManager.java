@@ -1,6 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import org.apache.commons.cli.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,11 +17,13 @@ import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
 
+/**
+ * @author dorit,tal
+ * Puzzle manager should handle the puzzle creation process. Including, reading from file, error handling, finind solution and reporting
+ */
+
 public class PuzzleManager {
 
-    /**
-     * Puzzle manager should handle the puzzle creation process. Including, reading from file, error handling, finind solution and reporting
-     */
 
     /////////////////////////////////////////   Class members
 
@@ -30,10 +33,13 @@ public class PuzzleManager {
     private String inputFilePath; // input file path
     private String outputFilePath; // output filepath
     private ArrayList<String> reportList; // all reports to file will be written to this list
-        List<int[]> solutionStructures;
+    List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
     private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
     private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+    private Options options = new Options();
+    private boolean rotate;
+    private int threadNumber;
 
     /////////////////////////////////////////   class constructors
 
@@ -240,4 +246,92 @@ public class PuzzleManager {
 
 
     }
+
+    /**
+     * select run options using the apache common CLI
+     * Using a boolean option
+     * <p>
+     * A boolean option is represented on a command line by the presence of the option, i.e. if the option is found then the option value is true, otherwise the value is false.
+     */
+
+
+    public void handleCommandLineOptions(String[] args) {
+        setOptions();
+        getRotationStatus(args);
+        getThreadNumberFromCommandLine(args);
+
+        // todo print usage in case of failure
+    }
+
+    /**
+     * Set the options we support on the puzzle project
+     */
+    private void setOptions() {
+
+
+        options.addOption(new Option(GlobalParameters.OPTION_INPUTFILE, true, "input file location")); //TODO mandatory
+        options.addOption(new Option(GlobalParameters.OPTION_OUTPUTFILE, true, "output file location")); // todo mandatory
+        options.addOption(new Option(GlobalParameters.OPTION_ROTATE, "rotation is enabled"));
+        options.addOption(new Option(GlobalParameters.OPTION_THREADS, true, "number of threads. if 0 - no threads."));
+
+
+    }
+
+    /**
+     * get the rotation status (use later for select if we use rotation oe not)
+     *
+     * @param args - arguments sent from command line
+     * @return true/false
+     */
+
+    private boolean getRotationStatus(String[] args) {
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            //TODO exception
+            e.printStackTrace();
+        }
+        if (cmd.hasOption(GlobalParameters.OPTION_ROTATE)) {
+            rotate = true;
+        } else {
+            rotate = false;
+        }
+
+        return rotate;
+    }
+
+
+
+    public boolean isRotate() {
+        return rotate;
+    }
+
+
+    private int getThreadNumberFromCommandLine(String [] args){
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = null;
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            //TODO exception
+            e.printStackTrace();
+        }
+        if (cmd.hasOption(GlobalParameters.OPTION_THREADS)) {
+            threadNumber = Integer.valueOf((cmd.getOptionValue(GlobalParameters.OPTION_THREADS)));
+
+        } else {
+            threadNumber=4;
+        }
+
+        return threadNumber;
+    }
+
+
+    public int getThreadNumber(){
+        return threadNumber;
+    }
+
 }
