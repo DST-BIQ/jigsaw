@@ -8,6 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//TODO implement pieceShape in all solution areas
+
+/**
+ * The puzzle class calculates the puzzle solution.
+ */
 
 public class Puzzle {
 
@@ -123,7 +128,7 @@ public class Puzzle {
 
 
     /**
-     * get list of matched pieces from teh puzzle array, by condition defined on piece location.
+     * get list of matched pieces from the puzzle array, by condition defined on piece location.
      * left/right/top/buttom - if need specific value put it (e.g. top = 1, if does not matter, put 2 as condition value);
      *
      * @param left             - left side condition
@@ -136,26 +141,38 @@ public class Puzzle {
 
     // TODO return rotated pieces
     // TODO refer to get pieces from tree
-    private List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray) {
+    List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray) {
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
-        for ( PuzzlePiece piece : puzzlePieceArray ) {
-            boolean isValidPiece = true;
-            if (left != 2 && left != piece.getLeft()) {
-                isValidPiece = false;
+        PieceShape ps = new PieceShape(left, top, right, bottom);
+        //rotate on tree map, get the matched
+        for ( Map.Entry<PieceShape, ArrayList<PuzzlePiece>> treeEntry : treeMap.entrySet() ) {
+
+            if (treeEntry.getKey().equals(ps)) {
+                matchedPieces.addAll(treeEntry.getValue());
             }
-            if (top != 2 && top != piece.getTop()) {
-                isValidPiece = false;
-            }
-            if (right != 2 && right != piece.getRight()) {
-                isValidPiece = false;
-            }
-            if (bottom != 2 && bottom != piece.getBottom()) {
-                isValidPiece = false;
-            }
-            if (isValidPiece) {
-                matchedPieces.add(piece);
-            }
+
+
         }
+
+
+//        for ( PuzzlePiece piece : puzzlePieceArray ) {
+//            boolean isValidPiece = true;
+//            if (left != 2 && left != piece.getLeft()) {
+//                isValidPiece = false;
+//            }
+//            if (top != 2 && top != piece.getTop()) {
+//                isValidPiece = false;
+//            }
+//            if (right != 2 && right != piece.getRight()) {
+//                isValidPiece = false;
+//            }
+//            if (bottom != 2 && bottom != piece.getBottom()) {
+//                isValidPiece = false;
+//            }
+//            if (isValidPiece) {
+//                matchedPieces.add(piece);
+//            }
+//        }
         return matchedPieces;
     }
 
@@ -353,6 +370,11 @@ public class Puzzle {
     }
 
 
+    /**
+     * creates tree structure + related puzzle pieces that match each criteria
+     *
+     * @param puzzlePieces - list of current puzzle pieces
+     */
     public void addNodesToTreeStructure(List<PuzzlePiece> puzzlePieces) {
 
 
@@ -369,15 +391,15 @@ public class Puzzle {
 
                 treeMap.get(puzzlePiece.getEdgesFromPiece()).add(puzzlePiece);
 
-//                treeMap.put(puzzlePiece.getEdgesFromPiece(), puzzlePieceArray);
-
             }
         }
 
 
     }
 
-    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap(){
+
+    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap() {
         return this.treeMap;
     }
+
 }
