@@ -1,5 +1,12 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+
+/**
+ * @author dorit rieur
+ * this class represents the shape structure of the puzzle piece
+ * relevant values = 0,1,-1
+ * if 2 = means do not count this value on comparison
+ */
 public class PieceShape {
 
 
@@ -14,19 +21,27 @@ public class PieceShape {
 
     }
 
-
-    @Override
+     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PieceShape other = (PieceShape) o;
 
-        return edges[0]==other.edges[0] &&edges[1]==other.edges[1]&&edges[2]==other.edges[2]&&edges[3]==other.edges[3];
+        return (
+                  ((edges[0]==other.edges[0])||(edges[0]==2)||other.edges[0]==2))
+                &&((edges[1]==other.edges[1])||(edges[1]==2||other.edges[1]==2))
+                &&((edges[2]==other.edges[2])||(edges[2]==2||other.edges[2]==2))
+                &&((edges[3]==other.edges[3])||(edges[3]==2||other.edges[3]==2));
     }
 
     @Override
     public int hashCode() {
         return edges[0] * 54 + edges[1] * 21 + edges[2] * 3 + edges[3];
+    }
+
+    @Override
+    public String toString(){
+        return edges[0]+","+edges[1]+","+edges[2]+","+edges[3];
     }
 
 
