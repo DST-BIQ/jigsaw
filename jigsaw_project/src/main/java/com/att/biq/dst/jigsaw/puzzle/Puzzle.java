@@ -139,8 +139,7 @@ public class Puzzle {
      * @return list of matched puzzle pieces.
      */
 
-    // TODO return rotated pieces
-    // TODO refer to get pieces from tree
+
     List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray) {
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         PieceShape ps = new PieceShape(left, top, right, bottom);
@@ -154,25 +153,6 @@ public class Puzzle {
 
         }
 
-
-//        for ( PuzzlePiece piece : puzzlePieceArray ) {
-//            boolean isValidPiece = true;
-//            if (left != 2 && left != piece.getLeft()) {
-//                isValidPiece = false;
-//            }
-//            if (top != 2 && top != piece.getTop()) {
-//                isValidPiece = false;
-//            }
-//            if (right != 2 && right != piece.getRight()) {
-//                isValidPiece = false;
-//            }
-//            if (bottom != 2 && bottom != piece.getBottom()) {
-//                isValidPiece = false;
-//            }
-//            if (isValidPiece) {
-//                matchedPieces.add(piece);
-//            }
-//        }
         return matchedPieces;
     }
 
