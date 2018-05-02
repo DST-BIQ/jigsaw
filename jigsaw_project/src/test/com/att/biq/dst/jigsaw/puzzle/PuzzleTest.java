@@ -111,4 +111,80 @@ class PuzzleTest {
 
     }
 
+
+    @Test
+    public void getMatchListIsNotEmpty(){
+        Puzzle puzzle = new Puzzle();
+        List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        puzzlePieceList.add(new PuzzlePiece(4, 1,1,-1,-1));
+        puzzlePieceList.add(new PuzzlePiece(5, 1,1,-1,-1));
+        puzzle.addNodesToTreeStructure(puzzlePieceList);
+        PieceShape ps = new PieceShape(1,1,-1,-1);
+        List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(1,1,-1,-1,puzzlePieceList);
+        assertTrue(!listOfMatchedPieces.isEmpty());
+
+    }
+
+
+
+    @Test
+    public void getMatchListOnePieceFromOnePieceShape(){
+        Puzzle puzzle = new Puzzle();
+        List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 1,1,-1,-1);
+        puzzlePieceList.add(puzzlePiece);
+        puzzle.addNodesToTreeStructure(puzzlePieceList);
+        List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(1,1,-1,-1,puzzlePieceList);
+        assertTrue(listOfMatchedPieces.get(0).equals(puzzlePiece));
+
+    }
+
+    @Test
+    public void getMatchListJokerCondition(){
+        Puzzle puzzle = new Puzzle();
+        List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 1,1,-1,-1);
+        puzzlePieceList.add(puzzlePiece);
+        puzzle.addNodesToTreeStructure(puzzlePieceList);
+        List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(2,1,-1,-1,puzzlePieceList);
+        assertTrue(listOfMatchedPieces.get(0).equals(puzzlePiece));
+
+
+    }
+
+    @Test
+    public void getMatchOneListWithTwoPieces(){
+        Puzzle puzzle = new Puzzle();
+        List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 1,1,-1,-1);
+        PuzzlePiece puzzlePiece1 =  new PuzzlePiece(5, 1,1,-1,-1);
+        puzzlePieceList.add(puzzlePiece); puzzlePieceList.add(puzzlePiece1);
+        puzzle.addNodesToTreeStructure(puzzlePieceList);
+
+        List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(1,1,-1,-1,puzzlePieceList);
+        assertEquals(2,listOfMatchedPieces.size());
+        assertTrue(listOfMatchedPieces.contains(puzzlePiece));
+        assertTrue(listOfMatchedPieces.contains(puzzlePiece1));
+
+    }
+
+
+
+    @Test
+    public void getMatchTwoListsWithTwoPieces(){
+
+        Puzzle puzzle = new Puzzle();
+        List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
+        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 1,1,-1,-1);
+        PuzzlePiece puzzlePiece1 =  new PuzzlePiece(5, 1,2,-1,-1);
+        puzzlePieceList.add(puzzlePiece); puzzlePieceList.add(puzzlePiece1);
+        puzzle.addNodesToTreeStructure(puzzlePieceList);
+
+        List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(1,1,-1,-1,puzzlePieceList);
+        assertEquals(2,listOfMatchedPieces.size());
+        assertTrue(listOfMatchedPieces.contains(puzzlePiece));
+        assertTrue(listOfMatchedPieces.contains(puzzlePiece1));
+
+    }
+
 }
