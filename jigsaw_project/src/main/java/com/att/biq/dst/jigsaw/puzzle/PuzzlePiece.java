@@ -78,6 +78,19 @@ public class PuzzlePiece {
         return sumEdges;
     }
 
+
+    public PieceShape getEdgesFromPiece(){
+
+        int[] edges = new int[4];
+        edges[0]=getLeft();
+        edges[1]=getTop();
+        edges[2]=getRight();
+        edges[3]=getBottom();
+
+        return new PieceShape(edges[0],edges[1],edges[2],edges[3]);
+
+    }
+
     @Override
     public boolean equals(Object other){
         if(!(other instanceof PuzzlePiece)) {
