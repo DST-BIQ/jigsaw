@@ -12,43 +12,43 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class PuzzleManagerTest {
 
-    @Test
-
-    public void getRorationFromArguments() {
-        PuzzleManager puzzleManager = new PuzzleManager();
-
-        String[] args = {"-" + GlobalParameters.OPTION_ROTATE};
-        puzzleManager.handleCommandLineOptions(args);
-        assertTrue(puzzleManager.isRotate());
-        assertEquals(puzzleManager.getThreadNumber(),4);
-
-    }
-
-
-
-    @Test
-
-    public void ThreadsArguments() {
-        PuzzleManager puzzleManager = new PuzzleManager();
-
-        String[] args = {"-" + GlobalParameters.OPTION_THREADS+"=5"};
-        puzzleManager.handleCommandLineOptions(args);
-
-        assertEquals(puzzleManager.getThreadNumber(),5);
-
-    }
-
-
-    @Test
-    public void getInputFile(){
-
-    }
-
-    @Test
-    public void getOutputFile(){
-
-    }
-
-
-    //TODO add parameterized test for combinations
+//    @Test
+//
+//    public void getRorationFromArguments() {
+//        PuzzleManager puzzleManager = new PuzzleManager();
+//
+//        String[] args = {"-" + GlobalParameters.OPTION_ROTATE};
+//        puzzleManager.handleCommandLineOptions(args);
+//        assertTrue(puzzleManager.isRotate());
+//        assertEquals(puzzleManager.getThreadNumber(),4);
+//
+//    }
+//
+//
+//
+//    @Test
+//
+//    public void ThreadsArguments() {
+//        PuzzleManager puzzleManager = new PuzzleManager();
+//
+//        String[] args = {"-" + GlobalParameters.OPTION_THREADS+"=5"};
+//        puzzleManager.handleCommandLineOptions(args);
+//
+//        assertEquals(puzzleManager.getThreadNumber(),5);
+//
+//    }
+//
+//
+//    @Test
+//    public void getInputFile(){
+//
+//    }
+//
+//    @Test
+//    public void getOutputFile(){
+//
+//    }
+//
+//
+//    //TODO add parameterized test for combinations
 }
