@@ -4,13 +4,10 @@ import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzle.Puzzle;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePieceValidators;
-
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +30,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void validatePuzzleRotate(){
-        puzzle = new Puzzle();
+        puzzle = new Puzzle(new ErrorsManager());
         puzzleArray = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         int[] pa1 = new int[] {1,0,-1,0,1};

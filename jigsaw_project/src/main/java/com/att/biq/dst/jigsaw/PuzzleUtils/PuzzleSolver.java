@@ -26,7 +26,7 @@ public class PuzzleSolver implements Runnable {
         solution = solve(solution,puzzle.getPuzzlePieces());
         if (solution!=null && solution.isValid()){
             setSolution(solution);
-            puzzle.setSolved(true);
+            puzzle.setSolved();
         }
     }
 

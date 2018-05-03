@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class SystemTest {
 
-    String outputFilePath = "";
+    String outputFilePath ="";
     File outputFile;
     String expectedOutputFilePath;
     String expectedFilesLocations = "./src/main/resources/input/AdvancedPuzzleTests/Output/";
@@ -93,7 +93,7 @@ public class SystemTest {
         takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3);
         // if ourput exists - delete
 
-        outputFilePath = "./src/main/resources/output" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".txt";
+        outputFilePath = "./src/main/resources/output/" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".txt";
         puzzleManager.deleteFile(outputFilePath);
         expectedOutputFilePath = expectedFilesLocations + "test" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".out";
 

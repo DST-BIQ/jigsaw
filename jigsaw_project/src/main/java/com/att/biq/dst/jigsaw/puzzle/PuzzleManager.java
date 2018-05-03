@@ -169,7 +169,6 @@ public class PuzzleManager {
         }
         }
 
-    }
 
     /**
      * Files handling section
