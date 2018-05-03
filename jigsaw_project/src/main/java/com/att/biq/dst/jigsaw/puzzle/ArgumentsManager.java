@@ -1,5 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+import com.att.biq.dst.jigsaw.Parameters.GlobalParameters;
 import org.apache.commons.cli.*;
 
 /**
@@ -24,34 +25,44 @@ public class ArgumentsManager {
      */
 
 
-    public void handleCommandLineOptions(String[] args) {
-        setOptions(args);
-        getRotationStatus();
-        getThreadNumberFromCommandLine();
-        getInputFilePathFromCommandLine();
-        getOutputFilePathFileFromCommandLine();
+    public  void handleCommandLineOptions(String[] args) {
+
+            setOptions(args);
+
+        System.out.println(getInputFilePathFromCommandLine());
+        System.out.println(getOutputFilePathFileFromCommandLine());
+                getInputFilePathFromCommandLine();
+                getOutputFilePathFileFromCommandLine();
+                getRotationStatus();
+                getThreadNumberFromCommandLine();
+            }
+
+
+
+
 
         // todo print usage in case of failure
-    }
 
     /**
      * Set the options we support on the puzzle project
      */
     void setOptions(String[] args) {
+HelpFormatter helpFormatter = new HelpFormatter();
 
-
-        options.addOption(new Option(GlobalParameters.OPTION_INPUTFILE, true, "input file location")); //TODO mandatory
-        options.addOption(new Option(GlobalParameters.OPTION_OUTPUTFILE, true, "output file location")); // todo mandatory
-        options.addOption(new Option(GlobalParameters.OPTION_ROTATE, "rotation is enabled"));
-        options.addOption(new Option(GlobalParameters.OPTION_THREADS, true, "number of threads. if 0 - no threads."));
+        options.addOption(new Option(GlobalParameters.OPTION_ROTATE,false, GlobalParameters.OPTION_ROTATE_DESC));
+        options.addOption(new Option(GlobalParameters.OPTION_THREADS, true, GlobalParameters.OPTION_THREADS_DESC));
+        options.addRequiredOption(GlobalParameters.OPTION_INPUTFILE, GlobalParameters.OPTION_INPUTFILE_DESC,true, GlobalParameters.OPTION_INPUTFILE_DESC);
+        options.addRequiredOption(GlobalParameters.OPTION_OUTPUTFILE, GlobalParameters.OPTION_OUTPUTFILE_DESC,true, GlobalParameters.OPTION_OUTPUTFILE_DESC);
 
         CommandLineParser parser = new DefaultParser();
 
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            //TODO exception
-            e.printStackTrace();
+            System.out.println(e.getMessage());
+            helpFormatter.printHelp("DST Puzzle game", options);
+            System.exit(1); //TODO throw exception
+
         }
 
     }
@@ -72,8 +83,6 @@ public class ArgumentsManager {
 
 
     }
-
-
 
 
     /**
@@ -102,6 +111,7 @@ public class ArgumentsManager {
 
         } else {
             //TODO SHOW USAGE + UNIT TEST
+            // TODO throw runtime exception with message
             System.exit(0);
         }
 

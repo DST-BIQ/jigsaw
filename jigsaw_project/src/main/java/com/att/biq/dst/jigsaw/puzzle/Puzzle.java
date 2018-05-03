@@ -135,15 +135,18 @@ public class Puzzle {
      * @param top              - top side condition
      * @param right            - right side condition
      * @param bottom           - bottom side condition
-     * @param puzzlePieceArray - list of all puzzle pieces.
+//     * @param puzzlePieceArray - list of all puzzle pieces.
      * @return list of matched puzzle pieces.
      */
 
 
-    List<PuzzlePiece> getMatch(int left, int top, int right, int bottom, List<PuzzlePiece> puzzlePieceArray) {
+    List<PuzzlePiece> getMatch(int left, int top, int right, int bottom) {
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         PieceShape ps = new PieceShape(left, top, right, bottom);
         //rotate on tree map, get the matched
+        //TODO filter in use
+        //TODO get all shapes and take the first that is not in use
+
         for ( Map.Entry<PieceShape, ArrayList<PuzzlePiece>> treeEntry : treeMap.entrySet() ) {
 
             if (treeEntry.getKey().equals(ps)) {
@@ -194,11 +197,11 @@ public class Puzzle {
     private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces;
         if (isOnFirstColumn(solution)) {
-            foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
+            foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 2);
         } else if (isOnLastColumn(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 0, 2, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 0, 2);
         } else {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 2, 2, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 2, 2);
         }
         return foundPieces;
     }
@@ -226,11 +229,11 @@ public class Puzzle {
     private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
         List<PuzzlePiece> foundPieces = null;
         if (isOnFirstColumn(solution)) {
-            foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+            foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 0);
         } else if (isBetweenFirstAndLastColumns(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 2, 0, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 2, 0);
         } else if (isOnLastColumn(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 0, 0, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0 - solution.getAbovePiece().getBottom(), 0, 0);
         }
         return foundPieces;
     }
@@ -245,11 +248,11 @@ public class Puzzle {
      */
     private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
         if (isOnFirstColumn(solution)) {
-            foundPieces = getMatch(0, 0, 2, 2, puzzlePieces);
+            foundPieces = getMatch(0, 0, 2, 2);
         } else if (isBetweenFirstAndLastColumns(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2);
         } else if (isOnLastColumn(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2, puzzlePieces);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2);
         }
         return foundPieces;
     }

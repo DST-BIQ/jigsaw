@@ -1,7 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
-import org.apache.commons.cli.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -47,9 +46,15 @@ public class PuzzleManager {
 
     }
 
-    public PuzzleManager(String inputFilePath, String outputFilePath) {
-        this.inputFilePath = inputFilePath;
-        this.outputFilePath = outputFilePath;
+
+    public PuzzleManager( String [] args) {
+
+        argumentsManager.handleCommandLineOptions(args);
+
+        this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
+        this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
+        this.rotate = argumentsManager.getRotationStatus();
+        this.threadNumber = argumentsManager.getThreadNumberFromCommandLine();
         puzzlePieceValidators = new PuzzlePieceValidators();
         puzzle = new Puzzle();
         reportList = new ArrayList<>();
@@ -67,10 +72,14 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void loadPuzzle() throws IOException {
+
+
         puzzle.getPuzzle(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
+
+        puzzle.addNodesToTreeStructure(puzzle.getPuzzlePieces());
 
     }
 
@@ -246,126 +255,27 @@ public class PuzzleManager {
 
 
     }
-//
-//    /**
-//     * select run options using the apache common CLI
-//     * Using a boolean option
-//     * <p>
-//     * A boolean option is represented on a command line by the presence of the option, i.e. if the option is found then the option value is true, otherwise the value is false.
-//     */
-//
-//
-//    public void handleCommandLineOptions(String[] args) {
-//        setOptions(args);
-//        getRotationStatus();
-//        getThreadNumberFromCommandLine();
-//        getInputFilePathFromCommandLine();
-//        getOutputFilePathFileFromCommandLine();
-//
-//        // todo print usage in case of failure
-//    }
-//
-//    /**
-//     * Set the options we support on the puzzle project
-//     */
-//    private void setOptions(String[] args) {
-//
-//
-//        options.addOption(new Option(GlobalParameters.OPTION_INPUTFILE, true, "input file location")); //TODO mandatory
-//        options.addOption(new Option(GlobalParameters.OPTION_OUTPUTFILE, true, "output file location")); // todo mandatory
-//        options.addOption(new Option(GlobalParameters.OPTION_ROTATE, "rotation is enabled"));
-//        options.addOption(new Option(GlobalParameters.OPTION_THREADS, true, "number of threads. if 0 - no threads."));
-//
-//        CommandLineParser parser = new DefaultParser();
-//
-//        try {
-//            cmd = parser.parse(options, args);
-//        } catch (ParseException e) {
-//            //TODO exception
-//            e.printStackTrace();
-//        }
-//
-//    }
-//
-//    /**
-//     * get the rotation status (use later for select if we use rotation oe not)
-//     *
-//     * @return true/false
-//     */
-//
-//    private boolean getRotationStatus() {
-//
-//        if (cmd.hasOption(GlobalParameters.OPTION_ROTATE)) {
-//            rotate = true;
-//        } else {
-//            rotate = false;
-//        }
-//
-//        return rotate;
-//    }
-//
-//
+
+
+    /**
+     *
+     * @return
+     */
+
     public boolean isRotate() {
-        return argumentsManager.getRotationStatus();
-    }
-//
-//
-//    /**
-//     * gets thread number from command line. if not exists, set threadNumber to 4
-//     *
-//     * @param
-//     * @return number of threads to use
-//     */
-//    private int getThreadNumberFromCommandLine() {
-//
-//
-//        if (cmd.hasOption(GlobalParameters.OPTION_THREADS)) {
-//            threadNumber = Integer.valueOf((cmd.getOptionValue(GlobalParameters.OPTION_THREADS)));
-//
-//        } else {
-//            threadNumber = 4;
-//        }
-//
-//        return threadNumber;
-//    }
-//
-//
-    public int getThreadNumber() {
-        return argumentsManager.getThreadNumberFromCommandLine();
+        return rotate;
     }
 
-//    private String getInputFilePathFromCommandLine() {
-//
-//        if (cmd.hasOption(GlobalParameters.OPTION_INPUTFILE)) {
-//            inputFilePath = cmd.getOptionValue(GlobalParameters.OPTION_INPUTFILE);
-//
-//        } else {
-//            //TODO SHOW USAGE + UNIT TEST
-//            System.exit(0);
-//        }
-//
-//        return inputFilePath;
-//    }
-//
-//
-//    private String getOutputFilePathFileFromCommandLine() {
-//
-//        if (cmd.hasOption(GlobalParameters.OPTION_OUTPUTFILE)) {
-//            outputFilePath = cmd.getOptionValue(GlobalParameters.OPTION_OUTPUTFILE);
-//
-//        } else {
-//            //TODO SHOW USAGE + UNIT TEST
-//            System.exit(0);
-//        }
-//
-//        return outputFilePath;
-//    }
-//
+    public int getThreadNumber() {
+        return threadNumber;
+    }
+
+
     public String getInputFilePath() {
-        return argumentsManager.getInputFilePathFromCommandLine();
+        return inputFilePath;
     }
 
     public String getOutputFilePath() {
-        return argumentsManager.getOutputFilePathFileFromCommandLine();
+        return outputFilePath;
     }
 }
