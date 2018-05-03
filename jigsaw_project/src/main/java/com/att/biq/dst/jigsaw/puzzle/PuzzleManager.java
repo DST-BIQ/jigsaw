@@ -167,6 +167,7 @@ public class PuzzleManager {
                 bw.close();
             }
         }
+        }
 
     }
 

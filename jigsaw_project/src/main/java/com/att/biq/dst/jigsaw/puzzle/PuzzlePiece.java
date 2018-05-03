@@ -8,6 +8,8 @@ public class PuzzlePiece {
     private int right;
     private int left;
     private int sumEdges;
+    private int rotation=0;
+
 
     public PuzzlePiece(int id,int left, int top, int right, int bottom){
         this.id = id;
@@ -16,6 +18,28 @@ public class PuzzlePiece {
         this.left = left;
         this.right = right;
         this.sumEdges = top+bottom+left+right;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+
+    public PuzzlePiece rotate(int num, int rotation) {
+        PuzzlePiece puzzlePiece = new PuzzlePiece(getId(),left,top,right,bottom);
+        int temp=0;
+        for (int i=0 ;i<num ;i++) {
+            temp = puzzlePiece.top;
+            puzzlePiece.top = puzzlePiece.left;
+            puzzlePiece.left = puzzlePiece.bottom;
+            puzzlePiece.bottom = puzzlePiece.right;
+            puzzlePiece.right = temp;
+        }
+        setRotation(rotation);
+        return puzzlePiece;
     }
 
     public boolean isTopLeft() {
@@ -84,7 +108,7 @@ public class PuzzlePiece {
             return false;
         }
         PuzzlePiece o = (PuzzlePiece) other;
-        return (o.id==id && o.top==top && o.right==right && o.left==left && o.bottom==bottom);
+        return (o.id==id && o.rotation==rotation);
     }
 
     //TODO - implement toString
