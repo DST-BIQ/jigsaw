@@ -7,6 +7,7 @@ import com.att.biq.dst.jigsaw.puzzle.PuzzleSolution;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PuzzleSolver implements Runnable {
 
@@ -47,10 +48,7 @@ public class PuzzleSolver implements Runnable {
             solvers.add(solver);
             threadsManager.getThreadPoolExecutor().execute(solver);
         }
-        while (!puzzle.isSolved() && counter<200){//TODO - find another exit criteria
-            Thread.sleep(10);
-            counter++;
-        }
+        threadsManager.getThreadPoolExecutor().awaitTermination(10, TimeUnit.SECONDS);
         if (puzzle.isSolved()){
             threadsManager.getThreadPoolExecutor().shutdown();
             if (solver!=null) {
