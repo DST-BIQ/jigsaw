@@ -1,6 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.parameters.ArgumentsManager;
+import com.att.biq.dst.jigsaw.puzzleUtils.FileInputParser;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -95,7 +96,7 @@ public class PuzzleManager {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution(puzzle.getPuzzlePieces(), solutionStructures);
+        solution = puzzle.calculatePuzzleSolution( solutionStructures);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
@@ -121,7 +122,7 @@ public class PuzzleManager {
     /**
      * convert pieces array to String, in order to report it to the output file
      *
-     * @param puzzlePieces - array containint solution's puzzle pieces.
+     * @param puzzlePieces - array containing solution's puzzle pieces.
      * @return
      */
     private String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {

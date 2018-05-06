@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.PuzzleUtils;
+package com.att.biq.dst.jigsaw.puzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 

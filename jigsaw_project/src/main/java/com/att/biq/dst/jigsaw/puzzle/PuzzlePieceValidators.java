@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
 
 import java.util.List;
 

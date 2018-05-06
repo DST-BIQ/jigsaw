@@ -1,7 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzleUtils.FileInputParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,15 +26,15 @@ public class Puzzle {
     /**
      * calculates puzzle solution
      *
-     * @param puzzlePieces     - list of available puzzle pieces
+     *
      * @param puzzleStructures - available structures of puzzle
      * @return possible puzzle solution if found. else returns null.
      */
-    PuzzleSolution calculatePuzzleSolution(List<PuzzlePiece> puzzlePieces, List<int[]> puzzleStructures) {
+    PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures) {
 
         for ( int[] structure : puzzleStructures ) {
             PuzzleSolution solution = new PuzzleSolution(structure[0], structure[1]);
-            PuzzleSolution possibleSolution = solve(solution, puzzlePieces);
+            PuzzleSolution possibleSolution = solve(solution);
             if (possibleSolution != null && possibleSolution.isValid()) {
                 return possibleSolution;
             }
@@ -131,11 +131,11 @@ public class Puzzle {
      * get list of matched pieces from the puzzle array, by condition defined on piece location.
      * left/right/top/buttom - if need specific value put it (e.g. top = 1, if does not matter, put 2 as condition value);
      *
-     * @param left             - left side condition
-     * @param top              - top side condition
-     * @param right            - right side condition
-     * @param bottom           - bottom side condition
-//     * @param puzzlePieceArray - list of all puzzle pieces.
+     * @param left   - left side condition
+     * @param top    - top side condition
+     * @param right  - right side condition
+     * @param bottom - bottom side condition
+     *               //     * @param puzzlePieceArray - list of all puzzle pieces.
      * @return list of matched puzzle pieces.
      */
 
@@ -143,14 +143,18 @@ public class Puzzle {
     List<PuzzlePiece> getMatch(int left, int top, int right, int bottom) {
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         PieceShape ps = new PieceShape(left, top, right, bottom);
-        //rotate on tree map, get the matched
-        //TODO filter in use
-        //TODO get all shapes and take the first that is not in use
-
         for ( Map.Entry<PieceShape, ArrayList<PuzzlePiece>> treeEntry : treeMap.entrySet() ) {
 
             if (treeEntry.getKey().equals(ps)) {
-                matchedPieces.addAll(treeEntry.getValue());
+
+                for ( PuzzlePiece puzzlePiece : treeEntry.getValue() ) { // rotate on this node and take the first that is not "INUSE"
+
+                    if (puzzlePiece.isInUse()) {
+                        continue;
+                    }
+                    else {matchedPieces.add(puzzlePiece);}
+                }
+
             }
 
 
@@ -163,25 +167,26 @@ public class Puzzle {
      * this method tried to find possible solution. if found returns is, else return null
      *
      * @param solution     - current solution
-     * @param puzzlePieces - current array pieces
+     *
      * @return possible solution if found.
      */
-    private PuzzleSolution solve(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
-        if (foundSolution(solution, puzzlePieces)) {
+    private PuzzleSolution solve(PuzzleSolution solution) {
+
+        if (foundSolution(solution)) {
             return solution;
-        } else if (noMorePiecesAndNoValidSolution(puzzlePieces)) {
+        } else if (noMorePiecesAndNoValidSolution()) {
             return null;
         }
         List<PuzzlePiece> foundPieces = null;
         if (isOnFirstRow(solution)) {
-            foundPieces = handleFirstRowSolution(solution, puzzlePieces, foundPieces);
+            foundPieces = handleFirstRowSolution(solution, foundPieces);
         } else if (isOnLastRow(solution)) {
-            foundPieces = handleBottomRowSolution(solution, puzzlePieces);
+            foundPieces = handleBottomRowSolution(solution);
         } else {
-            foundPieces = handleBetweenTopAndBottomRows(solution, puzzlePieces);
+            foundPieces = handleBetweenTopAndBottomRows(solution);
         }
         if (foundPieces != null) {
-            PuzzleSolution possibleSolution = findSolution(solution, puzzlePieces, foundPieces);
+            PuzzleSolution possibleSolution = findSolution(solution,  foundPieces);
             if (possibleSolution != null) return possibleSolution;
         }
         return null;
@@ -191,10 +196,10 @@ public class Puzzle {
      * get available pieces for top and bottom pieces
      *
      * @param solution     - current solution
-     * @param puzzlePieces - current array pieces
+     *
      * @return list of matched pieces
      */
-    private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+    private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution) {
         List<PuzzlePiece> foundPieces;
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 2);
@@ -206,14 +211,23 @@ public class Puzzle {
         return foundPieces;
     }
 
-    private boolean noMorePiecesAndNoValidSolution(List<PuzzlePiece> puzzlePieces) {
-        return puzzlePieces.size() == 0;
+    private boolean noMorePiecesAndNoValidSolution() {
+        return isAllPuzzlePiecesInUse();
     }
 
-    private boolean foundSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
-        return puzzlePieces.size() == 0 && solution.isValid();
+    private boolean foundSolution(PuzzleSolution solution) {
+        return  solution.isValid() && isAllPuzzlePiecesInUse();
     }
 
+
+    private boolean isAllPuzzlePiecesInUse(){
+        for (PuzzlePiece puzzlePiece: puzzlePieces){
+            if (!puzzlePiece.isInUse()) {
+                return false;
+            }
+        }
+        return true ;
+    }
 
     private boolean isOnLastRow(PuzzleSolution solution) {
         return solution.getCurRow() == solution.getRows() - 1;
@@ -223,10 +237,10 @@ public class Puzzle {
      * get available pieces for bottom row
      *
      * @param solution     - current solution
-     * @param puzzlePieces - current array pieces
+     *
      * @return list of matched pieces
      */
-    private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces) {
+    private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution) {
         List<PuzzlePiece> foundPieces = null;
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0 - solution.getAbovePiece().getBottom(), 2, 0);
@@ -243,10 +257,10 @@ public class Puzzle {
      * get available pieces for first row
      *
      * @param solution     - current solution
-     * @param puzzlePieces - current array pieces
+     *
      * @return list of matched pieces
      */
-    private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
+    private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> foundPieces) {
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0, 2, 2);
         } else if (isBetweenFirstAndLastColumns(solution)) {
@@ -278,54 +292,59 @@ public class Puzzle {
      * if found solution returns it
      *
      * @param solution
-     * @param puzzlePieces
+     *
      * @param foundPieces
      * @return possible solution found
      */
-    private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
+    private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> foundPieces) {
         for ( PuzzlePiece piece : foundPieces ) {
-            PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
+            solution.insertPiece(piece);
+            piece.setInUse(true);
+            PuzzleSolution possibleSolution = solve(solution);
             if (possibleSolution != null && possibleSolution.isValid()) {
                 return possibleSolution;
+            }else {
+                solution.removePiece();
+                piece.setInUse(false);
             }
         }
         return null;
     }
 
-
-    /**
-     * for recursion needs - clone current solution
-     *
-     * @param curSolution  - current solution
-     * @param enteredPiece piece to add to solution
-     * @return new solution
-     */
-    private PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece) {
-        PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(), curSolution.getColumns());
-        newSolution.setSolution(curSolution.getSolution());
-        newSolution.setCurRow(curSolution.getCurRow());
-        newSolution.setCurCol(curSolution.getCurCol());
-        newSolution.insertPiece(enteredPiece);
-
-        return newSolution;
-    }
-
-    /**
-     * for recursion needs - clone puzzle pieces list
-     *
-     * @param puzzlePieces - current puzzle pieceslist
-     * @param removedPiece piece to dismiss from the list
-     * @return new list of puzzlePieces without the removed piece
-     */
-    private List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece) {
-        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
-        for ( PuzzlePiece piece : puzzlePieces ) {
-            if (!piece.equals(removedPiece)) {
-                newPuzzlePiecesList.add(piece);
-            }
-        }
-        return newPuzzlePiecesList;
-    }
+//
+//    /**
+//     * for recursion needs - clone current solution
+//     *
+//     * @param curSolution  - current solution
+//     * @param enteredPiece piece to add to solution
+//     * @return new solution
+//     */
+//    private PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece) {
+//        PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(), curSolution.getColumns());
+//        newSolution.setSolution(curSolution.getSolution());
+//        newSolution.setCurRow(curSolution.getCurRow());
+//        newSolution.setCurCol(curSolution.getCurCol());
+//        newSolution.insertPiece(enteredPiece);
+//
+//        return newSolution;
+//    }
+//
+//    /**
+//     * for recursion needs - clone puzzle pieces list
+//     *
+//     * @param puzzlePieces - current puzzle pieceslist
+//     * @param removedPiece piece to dismiss from the list
+//     * @return new list of puzzlePieces without the removed piece
+//     */
+//    private List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece) {
+//        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
+//        for ( PuzzlePiece piece : puzzlePieces ) {
+//            if (!piece.equals(removedPiece)) {
+//                newPuzzlePiecesList.add(piece);
+//            }
+//        }
+//        return newPuzzlePiecesList;
+//    }
 
 
     /**

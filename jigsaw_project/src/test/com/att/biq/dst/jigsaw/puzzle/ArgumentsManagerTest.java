@@ -1,9 +1,13 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.Parameters.GlobalParameters;
+import com.att.biq.dst.jigsaw.parameters.ArgumentsManager;
+import com.att.biq.dst.jigsaw.parameters.GlobalParameters;
 import org.junit.jupiter.api.Test;
 
+import java.text.ParseException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -16,20 +20,26 @@ class ArgumentsManagerTest {
     @Test
 
     public void getArguments() {
-        String[] args = {GlobalParameters.OPTION_THREADS + " 5",GlobalParameters.OPTION_ROTATE,GlobalParameters.OPTION_INPUTFILE + " c:\\temp\\1.tzt",GlobalParameters.OPTION_OUTPUTFILE + " c:\\temp\\rr.ttx"};
-//        String[] args = {"-" + GlobalParameters.OPTION_ROTATE};
+        String[] args = {"-"+GlobalParameters.OPTION_THREADS , "5",
+                "-"+GlobalParameters.OPTION_INPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in",
+                "-"+GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test2.in",
+                "-"+GlobalParameters.OPTION_ROTATE};
+
         argumentsManager.setOptions(args);
         assertTrue(argumentsManager.getRotationStatus());
         assertEquals(argumentsManager.getThreadNumberFromCommandLine(), 5);
-        assertEquals(argumentsManager.getInputFilePathFromCommandLine(), "c:\\temp\\1.tzt");
-        assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "c:\\temp\\rr.ttx");
+        assertEquals(argumentsManager.getInputFilePathFromCommandLine(), "./src/main/resources/input/SimplePuzzleTests/input/test1.in");
+        assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "./src/main/resources/input/SimplePuzzleTests/input/test2.in");
     }
 
 
     @Test
 
     public void ThreadsArguments() {
-        String[] args = {"-" + GlobalParameters.OPTION_THREADS + "=5"};
+        String[] args = {"-" + GlobalParameters.OPTION_INPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in",
+                "-" + GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in",
+                "-" + GlobalParameters.OPTION_THREADS , "5" };
+//        String[] args = {"-" + GlobalParameters.OPTION_THREADS + "=5"};
         argumentsManager.setOptions(args);
         assertEquals(argumentsManager.getThreadNumberFromCommandLine(), 5);
     }
@@ -37,21 +47,41 @@ class ArgumentsManagerTest {
 
     @Test
     public void getInputFile() {
-        //TODO under resources
-        String[] args = {"-" + GlobalParameters.OPTION_INPUTFILE + "=c:\\temp\\1.tzt"};
+
+        String[] args = {"-" + GlobalParameters.OPTION_INPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in",
+                "-" + GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in"};
+
+
         argumentsManager.setOptions(args);
-        assertEquals(argumentsManager.getInputFilePathFromCommandLine(), "c:\\temp\\1.tzt");
+        assertEquals(argumentsManager.getInputFilePathFromCommandLine(), "./src/main/resources/input/SimplePuzzleTests/input/test1.in");
     }
 
     @Test
     public void getOutputFile() {
-        String[] args = {"-" + GlobalParameters.OPTION_OUTPUTFILE + "=c:\\temp\\rr.ttx"};
+        String[] args = {"-" + GlobalParameters.OPTION_INPUTFILE ,"./src/main/resources/input/SimplePuzzleTests/input/test1.in",
+                "-" + GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/ForTestOutput/myfile.txt"};
         argumentsManager.setOptions(args);
-        assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "c:\\temp\\rr.ttx");
+        assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "./src/main/resources/ForTestOutput/myfile.txt");
     }
 
+//TODO
 
-    //TODO add parameterized test for combinations
+@Test
+    public void noMandatoryParameter(){
+
+    String[] args = {
+            "-" + GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/ForTestOutput/myfile.txt"};
+
+    Throwable exception = assertThrows(ParseException.class,() -> {
+        argumentsManager.setOptions(args);
+            }
+    );
+
+//    assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "./src/main/resources/ForTestOutput/myfile.txt");
+
+
+//    ParseException
+}
     //TODO print usage
     //TODO no mandatory parameters on command line
 

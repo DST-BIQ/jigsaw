@@ -40,7 +40,7 @@ public class ArgumentsManager {
     /**
      * Set the options we support on the puzzle project
      */
-    void setOptions(String[] args) {
+   public void setOptions(String[] args) {
 HelpFormatter helpFormatter = new HelpFormatter();
 
         options.addOption(new Option(GlobalParameters.OPTION_ROTATE,false, GlobalParameters.OPTION_ROTATE_DESC));

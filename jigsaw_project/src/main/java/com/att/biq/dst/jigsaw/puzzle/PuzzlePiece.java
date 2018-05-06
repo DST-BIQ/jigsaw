@@ -8,6 +8,8 @@ public class PuzzlePiece {
     private int right;
     private int left;
     private int sumEdges;
+    private boolean inUse;
+
 
     public PuzzlePiece(int id,int left, int top, int right, int bottom){
         this.id=id;
@@ -16,6 +18,7 @@ public class PuzzlePiece {
         this.left = left;
         this.right = right;
         this.sumEdges = top+bottom+left+right;
+        this.inUse=false;
     }
 
     public boolean isTopLeft() {
@@ -104,5 +107,13 @@ public class PuzzlePiece {
     @Override
     public String toString() {
        return  ( id +" ");
+    }
+
+    public boolean isInUse() {
+        return inUse;
+    }
+
+    public void setInUse(boolean inUse) {
+        this.inUse = inUse;
     }
 }

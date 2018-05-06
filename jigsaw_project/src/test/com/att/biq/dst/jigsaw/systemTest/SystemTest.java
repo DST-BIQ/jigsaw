@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.systemTest;
 
-import com.att.biq.dst.jigsaw.puzzle.ArgumentsManager;
+import com.att.biq.dst.jigsaw.parameters.ArgumentsManager;
 import com.att.biq.dst.jigsaw.puzzle.PuzzleManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -70,7 +70,7 @@ public class SystemTest {
 
     public void notAbleToLoadPuzzle(String filePath) throws IOException {
 
-//        preparation(filePath);
+
         Throwable exception = assertThrows(RuntimeException.class,() -> {
             preparation(filePath);
         }
