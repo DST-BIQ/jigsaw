@@ -23,8 +23,6 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        //TODO handle main with parameters from command line
-
 
                 PuzzleManager puzzleManager = new PuzzleManager(args);
                 puzzleManager.loadPuzzle();

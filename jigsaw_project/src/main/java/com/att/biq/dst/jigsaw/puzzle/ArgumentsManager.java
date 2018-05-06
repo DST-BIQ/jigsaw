@@ -38,11 +38,6 @@ public class ArgumentsManager {
             }
 
 
-
-
-
-        // todo print usage in case of failure
-
     /**
      * Set the options we support on the puzzle project
      */
@@ -110,7 +105,6 @@ HelpFormatter helpFormatter = new HelpFormatter();
             return cmd.getOptionValue(GlobalParameters.OPTION_INPUTFILE);
 
         } else {
-            //TODO SHOW USAGE + UNIT TEST
             // TODO throw runtime exception with message
             System.exit(0);
         }
@@ -125,7 +119,7 @@ HelpFormatter helpFormatter = new HelpFormatter();
             return cmd.getOptionValue(GlobalParameters.OPTION_OUTPUTFILE);
 
         } else {
-            //TODO SHOW USAGE + UNIT TEST
+            //TODO throw exception
             System.exit(0);
         }
 

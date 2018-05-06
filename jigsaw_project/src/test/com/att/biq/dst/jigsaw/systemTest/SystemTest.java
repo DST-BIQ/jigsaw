@@ -1,5 +1,6 @@
 package com.att.biq.dst.jigsaw.systemTest;
 
+import com.att.biq.dst.jigsaw.puzzle.ArgumentsManager;
 import com.att.biq.dst.jigsaw.puzzle.PuzzleManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,11 +19,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class SystemTest {
 
+
+
     String outputFilePath = "";
     File outputFile;
     String expectedOutputFilePath;
     String expectedFilesLocations = "./src/main/resources/input/AdvancedPuzzleTests/Output/";
     PuzzleManager puzzleManager = new PuzzleManager();
+    ArgumentsManager argumentsManager = new ArgumentsManager();
 
 
 
@@ -66,7 +70,7 @@ public class SystemTest {
 
     public void notAbleToLoadPuzzle(String filePath) throws IOException {
 
-
+//        preparation(filePath);
         Throwable exception = assertThrows(RuntimeException.class,() -> {
             preparation(filePath);
         }
@@ -90,14 +94,23 @@ public class SystemTest {
 
         String[] takeStringForFilePath = filePath.split("Input/test");
         takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3);
-        // if ourput exists - delete
 
-        outputFilePath = "C:\\temp\\puzzleOutput\\puzzleTest" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".txt";
+        outputFilePath = "./src/main/resources/ForTestOutput/" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".txt";
         puzzleManager.deleteFile(outputFilePath);
         expectedOutputFilePath = expectedFilesLocations + "test" + takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3) + ".out";
 
         outputFile = new File(outputFilePath);
-        PuzzleManager puzzleManager = new PuzzleManager(filePath, outputFilePath);
+        String[] args =new String[4];
+        args[0] = "-outputFilePath";
+        args[1] = outputFilePath;
+        args[2] = "-inputFilePath";
+        args[3] = filePath;
+//        args[2] = "numThreads 4";
+//        args[3] = "hasRotate";
+
+
+
+        PuzzleManager puzzleManager = new PuzzleManager(args);
 
         puzzleManager.loadPuzzle();
         puzzleManager.playPuzzle();
