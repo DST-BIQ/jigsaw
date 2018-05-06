@@ -1,6 +1,5 @@
-package com.att.biq.dst.jigsaw.puzzle;
+package com.att.biq.dst.jigsaw.parameters;
 
-import com.att.biq.dst.jigsaw.Parameters.GlobalParameters;
 import org.apache.commons.cli.*;
 
 /**
