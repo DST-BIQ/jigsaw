@@ -59,9 +59,10 @@ public class PuzzlePieceValidators {
       for ( PuzzlePiece piece : puzzlePieces ) {
 
 
-              if (piece.getLeft() == 0 || piece.getBottom()==0 || piece.getRight()==0 || piece.getTop()==0) {
-                  totalEdges++;
-              }
+              if (piece.getLeft() == 0){totalEdges++;}
+              if (piece.getBottom()==0) {totalEdges++;}
+              if (piece.getRight()==0){totalEdges++;}
+              if (piece.getTop()==0) {totalEdges++;}
               if ((piece.getTop()==0 || piece.getBottom()==0)&& (piece.getRight()==0 || piece.getLeft()==0)) {
                   totalCorners++;
               }
@@ -110,10 +111,12 @@ public class PuzzlePieceValidators {
      * @return true if valid
      */
    private  boolean validateStraightEdges(int totalEdges,  int puzzeleLength) {
-
-        int value = (int) (Math.sqrt(puzzeleLength)*4 +2);
-        return (value<=totalEdges);
-
+        if (puzzeleLength>1) {
+            int value =  (((int)(Math.sqrt(puzzeleLength)) / 1) * 4 + 2);
+            return (value <= totalEdges);
+        }else{
+            return(totalEdges==4);
+        }
    }
 
 }
