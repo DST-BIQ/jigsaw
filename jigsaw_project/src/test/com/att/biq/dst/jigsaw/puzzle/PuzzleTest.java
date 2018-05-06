@@ -157,7 +157,7 @@ class PuzzleTest {
     public void getMatchListJokerConditionMiddleLines(){
         Puzzle puzzle = new Puzzle();
         List<PuzzlePiece> puzzlePieceList = new ArrayList<>();
-        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 1,1,-1,-1);
+        PuzzlePiece puzzlePiece =  new PuzzlePiece(4, 0,0,-1,-1);
         puzzlePieceList.add(puzzlePiece);
         puzzle.addNodesToTreeStructure(puzzlePieceList);
         List<PuzzlePiece> listOfMatchedPieces =  puzzle.getMatch(0,0,2,2);

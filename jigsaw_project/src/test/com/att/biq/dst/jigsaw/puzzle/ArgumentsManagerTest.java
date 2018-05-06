@@ -64,25 +64,8 @@ class ArgumentsManagerTest {
         assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "./src/main/resources/ForTestOutput/myfile.txt");
     }
 
-//TODO
-
-@Test
-    public void noMandatoryParameter(){
-
-    String[] args = {
-            "-" + GlobalParameters.OPTION_OUTPUTFILE ,"./src/main/resources/ForTestOutput/myfile.txt"};
-
-    Throwable exception = assertThrows(ParseException.class,() -> {
-        argumentsManager.setOptions(args);
-            }
-    );
-
-//    assertEquals(argumentsManager.getOutputFilePathFileFromCommandLine(), "./src/main/resources/ForTestOutput/myfile.txt");
 
 
-//    ParseException
-}
-    //TODO print usage
-    //TODO no mandatory parameters on command line
+
 
 }

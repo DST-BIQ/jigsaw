@@ -104,11 +104,11 @@ HelpFormatter helpFormatter = new HelpFormatter();
             return cmd.getOptionValue(GlobalParameters.OPTION_INPUTFILE);
 
         } else {
-            // TODO throw runtime exception with message
-            System.exit(0);
+            throw new RuntimeException("You are missing an import file,");
+
         }
 
-        return null;
+//        return null;
     }
 
 
@@ -118,11 +118,10 @@ HelpFormatter helpFormatter = new HelpFormatter();
             return cmd.getOptionValue(GlobalParameters.OPTION_OUTPUTFILE);
 
         } else {
-            //TODO throw exception
-            System.exit(0);
+            throw new RuntimeException("You are missing an output file,");
         }
 
-        return null;
+
     }
 
 

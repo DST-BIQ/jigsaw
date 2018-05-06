@@ -3,6 +3,10 @@ package com.att.biq.dst.jigsaw.parameters;
 /**
  * author = dorit
  * this class created to support environmental parameters on the puzzle project
+ *
+ * should support any additional parameters we wish to add (if and when ...)
+ *
+ *
  */
 public class GlobalParameters {
 

@@ -7,7 +7,12 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-//TODO javadoc desc
+/**
+ * The road to success is always under construction.
+ *
+ * this document is dealing with parsing the input file, that will be later used for puzzle processing.
+ */
+
 public class FileInputParser {
 
     private static int numberOfElements;
@@ -88,7 +93,7 @@ public class FileInputParser {
         List<Integer> missingElementsIDs = new ArrayList<>();
 
 
-// TODO consider move to sseperate method
+// TODO consider move to separate method
         for ( String line : list ) {
             line = trimRedundantSpacesFromLine(line);
             String[] splittedLine = line.split(" ");
@@ -381,7 +386,6 @@ public class FileInputParser {
 
 
     protected static String trimRedundantSpacesFromLine(String line) {
-// todo replace with regex
         String after = line.trim().replaceAll(" +", " ");
         return after;
     }
