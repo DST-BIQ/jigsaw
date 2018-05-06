@@ -226,7 +226,6 @@ public class PuzzleManager {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
-            throw new RuntimeException(message);
         } else if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
