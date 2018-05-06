@@ -90,13 +90,13 @@ public class PuzzleSolver implements Runnable {
      * @return available solutions list (e.g: 1,6 ; 6,1 ; 2;3)
      */
 
-    public List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
+    public static List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
         List<int[]> structureOptions = new ArrayList<>();
         for (int rows=1; rows<=puzzleSize;rows++){
             int columns;
             if (puzzleSize%rows==0){
                 columns = puzzleSize/rows;
-                if ((columns + rows)*2 <= puzzle.getStraightEdgesSum()){
+                if ((columns + rows)*2 <= puzzlePieceValidator.getTotalEdges()){
                     structureOptions.add(new int[]{rows,columns});
                 }
             }

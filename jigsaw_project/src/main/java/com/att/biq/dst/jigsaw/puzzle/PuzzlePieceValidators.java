@@ -6,9 +6,41 @@ import java.util.List;
 
 public class PuzzlePieceValidators {
 
+    int topSum=0;
+    int totalEdges=0;
+    int leftSum=0;
+    int rightSum=0;
+    int totalZero=0;
+    int bottomSum=0;
+    int totalCorners=0;
 
-    private int minTopButtom;
-    private int minLeftRigh;
+    public int getTopSum() {
+        return topSum;
+    }
+
+    public int getTotalEdges() {
+        return totalEdges;
+    }
+
+    public int getLeftSum() {
+        return leftSum;
+    }
+
+    public int getRightSum() {
+        return rightSum;
+    }
+
+    public int getTotalZero() {
+        return totalZero;
+    }
+
+    public int getBottomSum() {
+        return bottomSum;
+    }
+
+    public int getTotalCorners() {
+        return totalCorners;
+    }
 
     /**Validate that all PuzzlePiece list are valid and can have solution
      *validatePuzzle - return an answer if the puzzle pieces are valid
@@ -23,18 +55,9 @@ public class PuzzlePieceValidators {
     public  boolean validatePuzzle(List<PuzzlePiece> puzzlePieces, ErrorsManager errorsManager) {
 
 
-      int topEdges=0;
-      int topSum=0;
-      int totalEdges=0;
-      int leftSum=0;
-      int rightEdges=0;
-      int rightSum=0;
-      int bottomEdges=0;
-      int bottomSum=0;
-      int totalCorners=0;
+
       for ( PuzzlePiece piece : puzzlePieces ) {
 
-          if (piece.getRotation() == 0) {
 
               if (piece.getLeft() == 0 || piece.getBottom()==0 || piece.getRight()==0 || piece.getTop()==0) {
                   totalEdges++;
@@ -43,13 +66,9 @@ public class PuzzlePieceValidators {
                   totalCorners++;
               }
 
-              leftSum += piece.getLeft();
-              topSum += piece.getTop();
-              rightSum += piece.getRight();
-              bottomSum += piece.getBottom();
-
+              totalZero += piece.getLeft() + piece.getTop() + piece.getRight() + piece.getBottom();
           }
-      }
+
       if (!validateStraightEdges(totalEdges,puzzlePieces.size())){
          errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
       }
@@ -97,12 +116,4 @@ public class PuzzlePieceValidators {
 
    }
 
-
-    public int getMinTopBottom() {
-        return minTopButtom;
-    }
-
-    public int getMinLeftRigh() {
-        return minLeftRigh;
-    }
 }

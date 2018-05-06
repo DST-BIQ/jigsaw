@@ -39,6 +39,13 @@ public class Puzzle {
             return null;
 
         }
+        if (rotate) {
+            for (PuzzlePiece pp : puzzlePieces) {
+                rotatePiece(pp);
+            }
+        }
+
+
 
         return puzzlePieces;
     }
@@ -59,9 +66,7 @@ public class Puzzle {
         for (int[] puzzlePiece : puzzleArray) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
             puzzlePieces.add(pp);
-            if (rotate) {
-                rotatePiece(pp);
-            }
+
         }
         return puzzlePieces;
     }
