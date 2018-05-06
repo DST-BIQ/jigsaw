@@ -5,13 +5,14 @@ import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Puzzle {
     private ErrorsManager errorsManager;
     private List<PuzzlePiece> puzzlePieces;
     private boolean rotate=true;
-    private boolean isSolved = false;
+    private AtomicBoolean isSolved = new AtomicBoolean(false);
 
     public Puzzle(ErrorsManager errorsManager) {
         this.errorsManager = errorsManager;
@@ -40,12 +41,12 @@ public class Puzzle {
 
         }
         if (rotate) {
+            List<PuzzlePiece> rotatedPieces = new ArrayList<>();
             for (PuzzlePiece pp : puzzlePieces) {
-                rotatePiece(pp);
+                rotatePiece(pp, rotatedPieces);
             }
+            puzzlePieces.addAll(rotatedPieces);
         }
-
-
 
         return puzzlePieces;
     }
@@ -71,13 +72,13 @@ public class Puzzle {
         return puzzlePieces;
     }
 
-    private void rotatePiece(PuzzlePiece pp) {
+    private void rotatePiece(PuzzlePiece pp, List<PuzzlePiece> rotatedPieces) {
         if ((pp.getBottom() == pp.getTop()) && (pp.getLeft() == pp.getRight()) && (pp.getRight() != pp.getTop())) {
-            puzzlePieces.add(pp.rotate(1,90));
+            rotatedPieces.add(pp.rotate(1,90));
         } else if ((pp.getBottom() != pp.getTop()) || (pp.getLeft() != pp.getRight())) {
-            puzzlePieces.add(pp.rotate(1,90));
-            puzzlePieces.add(pp.rotate(2,180));
-            puzzlePieces.add(pp.rotate(3,270));
+            rotatedPieces.add(pp.rotate(1,90));
+            rotatedPieces.add(pp.rotate(2,180));
+            rotatedPieces.add(pp.rotate(3,270));
         }
     }
 
@@ -92,7 +93,7 @@ public class Puzzle {
     }
 
     public void setSolved() {
-        isSolved = true;
+        isSolved.set(true);
     }
 
     public ErrorsManager getErrorsManager() {
@@ -100,6 +101,6 @@ public class Puzzle {
     }
 
     public boolean isSolved() {
-        return isSolved;
+        return isSolved.get();
     }
 }
