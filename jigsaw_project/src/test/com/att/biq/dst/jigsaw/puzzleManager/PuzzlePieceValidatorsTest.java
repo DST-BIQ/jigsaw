@@ -64,7 +64,14 @@ public class PuzzlePieceValidatorsTest {
         puzzlePieces.add(p2);
         puzzlePieces.add(p3);
         puzzlePieces.add(p4);
-
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
+        puzzlePieces.add(p4);
 
         assertTrue(ppv.validatePuzzle(puzzlePieces, new ErrorsManager()));
     }
