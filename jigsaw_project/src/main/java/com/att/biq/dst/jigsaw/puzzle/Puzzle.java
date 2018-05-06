@@ -81,15 +81,6 @@ public class Puzzle {
         }
     }
 
-    public int getStraightEdgesSum () {
-        int totalStraightEdges = 0;
-        for (PuzzlePiece pp:puzzlePieces) {
-            if (pp.getTop()==0 || pp.getLeft()==0 || pp.getRight()==0 || pp.getBottom()==0){
-                totalStraightEdges++;
-            }
-        }
-        return totalStraightEdges;
-    }
 
     public void setSolved() {
         isSolved = true;

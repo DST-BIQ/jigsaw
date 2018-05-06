@@ -111,9 +111,13 @@ public class PuzzlePiece {
         return (o.id==id && o.rotation==rotation);
     }
 
-    //TODO - implement toString
+
     @Override
     public String toString() {
-       return  ( id +" ");
+        if (rotation != 0) {
+            return (id + " " + "[" + rotation + "]'");
+        } else {
+            return (id + " ");
+        }
     }
 }
