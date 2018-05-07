@@ -27,22 +27,48 @@ public class PuzzlePiece {
         return rotation;
     }
 
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
+    public void setRotation(int numTimesToRotate) {
+
+        int[] array=new int[4];
+        array[0]=0;array[1]=90;array[2]=180;array[3]=270;
+//        int currentLocation = decideCurrentLocation(this.rotation);
+        int newLocation=decideCurrentLocation(this.rotation);
+        for (int i=1;i<=numTimesToRotate;i++){
+            newLocation = (newLocation + 1) % 4;
+        }
+        this.rotation = array[newLocation];
+
+
     }
-//todo change rotate -
-    public void rotate(int num, int rotation) {
+
+    private int decideCurrentLocation(int rotation) {
+        switch (rotation){
+            case 0: return 0;
+
+            case 90: return 1;
+
+            case 180: return 2;
+
+            case 270: return 3;
+
+
+        }
+        return -1;
+    }
+
+    //todo change rotate -
+    public void rotate(int numTimesToRotate) {
 
 //        PuzzlePiece puzzlePiece = new PuzzlePiece(getId(),left,top,right,bottom);
         int temp;
-        for (int i=0 ;i<num ;i++) {
+        for (int i=0 ;i<numTimesToRotate ;i++) {
             temp = this.top;
             this.top = this.left;
             this.left = this.bottom;
             this.bottom = this.right;
             this.right = temp;
         }
-        setRotation(rotation);
+        setRotation(numTimesToRotate);
 
     }
 

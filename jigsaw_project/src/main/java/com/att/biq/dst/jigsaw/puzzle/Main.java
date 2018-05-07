@@ -1,7 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import java.io.IOException;
-
+// TODO handle wrong input file in produce array
 /**
  * author: dorit
  * main runner of the puzzle application
@@ -18,6 +18,7 @@ import java.io.IOException;
  * usage example on the main program arguments:
  * basic:                -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput
  * including rotation:   -hasRotate -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput
+ *
 
  */
 public class Main {

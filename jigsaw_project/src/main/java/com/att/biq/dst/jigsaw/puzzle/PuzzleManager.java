@@ -86,7 +86,7 @@ public class PuzzleManager {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
 
-        puzzle.addNodesToTreeStructure(puzzle.getPuzzlePieces());
+        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(),argumentsManager.getRotationStatus());
 
     }
 

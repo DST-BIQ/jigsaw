@@ -3,7 +3,6 @@ package com.att.biq.dst.jigsaw.puzzleUtils;
 import com.att.biq.dst.jigsaw.puzzle.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -13,12 +12,12 @@ public class PuzzleSolver implements Runnable {
     Puzzle puzzle;
     PuzzleSolution solution;
     private ErrorsManager errorsManager = new ErrorsManager();
-    private Map<PieceShape, ArrayList<PuzzlePiece>> treeMap;
+private List<PuzzlePiece> puzzlePieceArray;
 
     public PuzzleSolver( Puzzle puzzle, PuzzleSolution solution){
         this.puzzle=puzzle;
         this.solution = solution;
-//treeMap=
+    puzzlePieceArray = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
     }
 
 
@@ -139,16 +138,18 @@ public class PuzzleSolver implements Runnable {
     public List<PuzzlePiece> getMatch(int left, int top, int right, int bottom) {
         List<PuzzlePiece> matchedPieces = new ArrayList<>();
         PieceShape ps = new PieceShape(left, top, right, bottom);
-        for ( Map.Entry<PieceShape, ArrayList<PuzzlePiece>> treeEntry : treeMap.entrySet() ) {
+        for ( Map.Entry<PieceShape, ArrayList<PuzzlePieceIdentity>> treeEntry : puzzle.getTreeMap().entrySet()) {
 
             if (treeEntry.getKey().equals(ps)) {
 
-                for ( PuzzlePiece puzzlePiece : treeEntry.getValue() ) { // rotate on this node and take the first that is not "INUSE"
+                for ( PuzzlePieceIdentity ppi : treeEntry.getValue() ) { // rotate on this node and take the first that is not "INUSE"
 
-                    if (puzzlePiece.isInUse()) {
+                    getPuzzlePieceFromIdentityID(ppi);
+
+                    if (getPuzzlePieceFromIdentityID(ppi).isInUse()) {
                         continue;
                     }
-                    else {matchedPieces.add(puzzlePiece);}
+                    else {matchedPieces.add(getPuzzlePieceFromIdentityID(ppi));}
                 }
 
             }
@@ -158,6 +159,19 @@ public class PuzzleSolver implements Runnable {
 
         return matchedPieces;
     }
+
+    private PuzzlePiece getPuzzlePieceFromIdentityID(PuzzlePieceIdentity ppi) {
+
+        for (PuzzlePiece pp: puzzlePieceArray){
+
+            if (ppi.getPuzzlePieceID()==pp.getId()){
+                return pp;
+            }
+
+        }
+return null;
+    }
+
     /**
      *  this method tried to find possible solution. if found returns is, else return null
      * @param solution - current solution
@@ -361,7 +375,24 @@ public class PuzzleSolver implements Runnable {
 
 
 
-    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap() {
-        return this.treeMap;
+//    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap() {
+//        return this.treeMap;
+//    }
+
+    /**
+     * for recursion needs - clone puzzle pieces list
+     * @param puzzlePieces - current puzzle pieceslist
+     * @return new list of puzzlePieces without the removed piece
+     */
+
+    private  List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces){
+        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
+        for (PuzzlePiece piece: puzzlePieces){
+
+                newPuzzlePiecesList.add(piece);
+                   }
+        return newPuzzlePiecesList;
     }
+
+
 }

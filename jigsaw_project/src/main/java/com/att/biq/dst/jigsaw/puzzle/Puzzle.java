@@ -17,7 +17,7 @@ import java.util.Map;
 public class Puzzle {
     private ErrorsManager errorsManager;
     private List<PuzzlePiece> puzzlePieces;
-    private Map<PieceShape, ArrayList<PuzzlePiece>> treeMap = new HashMap();
+    private Map<PieceShape, ArrayList<PuzzlePieceIdentity>> treeMap = new HashMap();
 
     private boolean rotate=true;
     private boolean isSolved = false;
@@ -68,21 +68,22 @@ public class Puzzle {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
             puzzlePieces.add(pp);
             if (rotate) {
-                rotatePiece(pp);
+                //TODO here? or dismiss to somewhere else?
+//                rotatePiece(pp);
             }
         }
         return puzzlePieces;
     }
 
-    private void rotatePiece(PuzzlePiece pp) {
-        if ((pp.getBottom() == pp.getTop()) && (pp.getLeft() == pp.getRight()) && (pp.getRight() != pp.getTop())) {
-            puzzlePieces.add(pp.rotate(1,90));
-        } else if ((pp.getBottom() != pp.getTop()) || (pp.getLeft() != pp.getRight())) {
-            puzzlePieces.add(pp.rotate(1,90));
-            puzzlePieces.add(pp.rotate(2,180));
-            puzzlePieces.add(pp.rotate(3,270));
-        }
-    }
+//    private void rotatePiece(PuzzlePiece pp) {
+//        if ((pp.getBottom() == pp.getTop()) && (pp.getLeft() == pp.getRight()) && (pp.getRight() != pp.getTop())) {
+//            puzzlePieces.add(pp.rotate(1,90));
+//        } else if ((pp.getBottom() != pp.getTop()) || (pp.getLeft() != pp.getRight())) {
+//            puzzlePieces.add(pp.rotate(1,90));
+//            puzzlePieces.add(pp.rotate(2,180));
+//            puzzlePieces.add(pp.rotate(3,270));
+//        }
+//    }
 
     public int getStraightEdgesSum () {
         int totalStraightEdges = 0;
@@ -122,28 +123,58 @@ public class Puzzle {
      *
      * @param puzzlePieces - list of current puzzle pieces
      */
-    public void addNodesToTreeStructure(List<PuzzlePiece> puzzlePieces) {
-
-
-        ArrayList<PuzzlePiece> puzzlePieceArray;
-
+    public void indexingPuzzlePiecesToTree(List<PuzzlePiece> puzzlePieces, boolean isRotate) {
+        PuzzlePieceIdentity ppi;
 
         for ( PuzzlePiece puzzlePiece : puzzlePieces ) {
-
-            if (!treeMap.containsKey(puzzlePiece.getEdgesFromPiece())) {
-                puzzlePieceArray = new ArrayList<>();
-                puzzlePieceArray.add(puzzlePiece);
-                treeMap.put(puzzlePiece.getEdgesFromPiece(), puzzlePieceArray);
-            } else {
-
-                treeMap.get(puzzlePiece.getEdgesFromPiece()).add(puzzlePiece);
-
+            if (!isRotate) {
+                ppi = createIdentityToPiece(puzzlePiece);
+                putPuzzlePieceIdentityInTreeMap(ppi,puzzlePiece);
             }
+            else{
+                for (int i=1;i<=3;i++){
+                    puzzlePiece.rotate(1);
+                    ppi = createIdentityToPiece(puzzlePiece);
+                    putPuzzlePieceIdentityInTreeMap(ppi,puzzlePiece);
+                }
+            }
+
+
+//           PuzzlePieceIdentity ppi =  createIdentityToPiece(puzzlePiece);
+//
+//            if (!treeMap.containsKey(puzzlePiece.getEdgesFromPiece())) {
+//                puzzleIdentityArray = new ArrayList<>();
+//                puzzleIdentityArray.add(ppi);
+//                treeMap.put(puzzlePiece.getEdgesFromPiece(), ppi);
+//            } else {
+//
+//                treeMap.get(puzzlePiece.getEdgesFromPiece()).add(ppi);
+//
+//            }
         }
 
 
     }
-    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap() {
+
+    private void putPuzzlePieceIdentityInTreeMap(PuzzlePieceIdentity ppi, PuzzlePiece puzzlePiece ){
+
+        ArrayList<PuzzlePieceIdentity> puzzleIdentityArray;
+        if (!treeMap.containsKey(puzzlePiece.getEdgesFromPiece())) {
+            puzzleIdentityArray = new ArrayList<>();
+            puzzleIdentityArray.add(ppi);
+            treeMap.put(puzzlePiece.getEdgesFromPiece(),puzzleIdentityArray);
+        } else {
+
+            treeMap.get(puzzlePiece.getEdgesFromPiece()).add(ppi);
+
+        }
+    }
+
+    private PuzzlePieceIdentity createIdentityToPiece(PuzzlePiece puzzlePiece) {
+        return new PuzzlePieceIdentity(puzzlePiece.getId(),puzzlePiece.getRotation());
+    }
+
+    public Map<PieceShape, ArrayList<PuzzlePieceIdentity>> getTreeMap() {
         return this.treeMap;
     }
 
