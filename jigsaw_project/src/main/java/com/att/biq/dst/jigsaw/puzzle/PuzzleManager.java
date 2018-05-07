@@ -1,7 +1,10 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.parameters.ArgumentsManager;
+import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzleUtils.FileInputParser;
+import com.att.biq.dst.jigsaw.puzzleUtils.PuzzleSolver;
+import com.att.biq.dst.jigsaw.puzzleUtils.ThreadsManager;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -33,13 +36,16 @@ public class PuzzleManager {
     private String inputFilePath; // input file path
     private String outputFilePath; // output filepath
     private ArrayList<String> reportList; // all reports to file will be written to this list
-    List<int[]> solutionStructures;
+    private List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
-    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
     private ArgumentsManager argumentsManager = new ArgumentsManager();
     private boolean rotate;
     private int threadNumber;
+    private ErrorsManager errorsManager;
+    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+
+    ThreadsManager threadsManager;
 
     /////////////////////////////////////////   class constructors
 
@@ -51,16 +57,18 @@ public class PuzzleManager {
     public PuzzleManager( String [] args) {
 
         argumentsManager.handleCommandLineOptions(args);
-
         this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
         this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
         this.rotate = argumentsManager.getRotationStatus();
         this.threadNumber = argumentsManager.getThreadNumberFromCommandLine();
         puzzlePieceValidators = new PuzzlePieceValidators();
-        puzzle = new Puzzle();
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
-        fileInputParser = new FileInputParser(piecesID, puzzlePieceList);
+        fileInputParser = new FileInputParser();
+        this.errorsManager = new ErrorsManager();
+        puzzle = new Puzzle(errorsManager);
+        threadsManager = new ThreadsManager(this.threadNumber);
+
     }
 
 
@@ -73,8 +81,6 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void loadPuzzle() throws IOException {
-
-
         puzzle.getPuzzle(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
@@ -90,13 +96,14 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle() throws IOException {
-        solutionStructures = puzzle.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
+    public void playPuzzle() throws IOException, InterruptedException {
+        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
         }
-        solution = puzzle.calculatePuzzleSolution( solutionStructures);
+        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
+//        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
@@ -145,20 +152,39 @@ public class PuzzleManager {
      * @param reportMethod
      */
     private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
+        FileWriter fw;
+        BufferedWriter bw = null;
 
-        for ( String dataLine : dataList ) {
-            switch (reportMethod) {
-                case "file":
-                    writeToFile(dataLine);
-                    break;
+        try {
 
-                default:
-                    System.out.println("no type selected sorry");
+            if (isDirectory(outputFilePath)) {
+                outputFilePath = outputFilePath + "output_" + getTimeStamp() + ".txt";
+
             }
 
+            fw = new FileWriter(outputFilePath, true);
+            bw = new BufferedWriter(fw);
+
+            for ( String dataLine : dataList ) {
+                switch (reportMethod) {
+                    case "file":
+                        writeToFile(dataLine, bw);
+                        break;
+
+                    default:
+                        System.out.println("no type selected sorry");
+                }
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error writing to file");
+        } finally {
+            if (bw != null) {
+                bw.close();
+            }
+        }
         }
 
-    }
 
     /**
      * Files handling section
@@ -195,20 +221,13 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data) throws IOException {
-        FileWriter fw;
-        BufferedWriter bw = null;
+    private void writeToFile(String data, BufferedWriter bw) throws IOException {
+
         try {
-            fw = new FileWriter(outputFilePath, true);
-            bw = new BufferedWriter(fw);
             bw.write(data);
             bw.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        } finally {
-            if (bw != null) {
-                bw.close();
-            }
         }
     }
 
@@ -278,5 +297,16 @@ public class PuzzleManager {
 
     public String getOutputFilePath() {
         return outputFilePath;
+    }
+
+
+    public boolean isDirectory(String filePath) {
+        File file = new File(filePath);
+
+        if (file.isDirectory()) {
+            return true;
+        }
+        return false;
+
     }
 }

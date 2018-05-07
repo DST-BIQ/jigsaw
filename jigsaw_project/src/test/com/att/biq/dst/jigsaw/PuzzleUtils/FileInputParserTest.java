@@ -1,7 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
-import org.junit.Test;
+//import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FileInputParserTest {
 
-    String basePath = "C:\\BIQ\\jigsaw\\jigsaw\\jigsaw_project\\src\\main\\resources\\input\\";
+    String basePath = "./src/main/resources/input/";
 
     FileInputParser fip = new FileInputParser();
 
@@ -109,31 +110,7 @@ public class FileInputParserTest {
 
     }
 
-    // *************************   Verify line is empty
-    @Test
-    public void lineIsEmptyNegative() {
-
-        assertFalse(fip.isLineEmpty("34, 1, 0,-1 ,9"));
-
-
-    }
-
-    @Test
-    public void lineIsEmpty() {
-        assertTrue(fip.isLineEmpty(""));
-
-    }
-
-
-    @Test
-    public void lineIsEmptyOneSpace() {
-
-        assertFalse(fip.isLineEmpty(" "));
-
-    }
-
-
-    // *************************   Verify line idInRange
+      // *************************   Verify line idInRange
 
 
     @Test

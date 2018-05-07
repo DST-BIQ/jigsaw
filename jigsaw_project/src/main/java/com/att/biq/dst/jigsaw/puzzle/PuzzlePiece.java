@@ -10,9 +10,11 @@ public class PuzzlePiece {
     private int sumEdges;
     private boolean inUse;
 
+    private int rotation=0;
+
 
     public PuzzlePiece(int id,int left, int top, int right, int bottom){
-        this.id=id;
+        this.id = id;
         this.top = top;
         this.bottom = bottom;
         this.left = left;
@@ -21,16 +23,39 @@ public class PuzzlePiece {
         this.inUse=false;
     }
 
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
+    }
+//todo change rotate -
+    public void rotate(int num, int rotation) {
+
+//        PuzzlePiece puzzlePiece = new PuzzlePiece(getId(),left,top,right,bottom);
+        int temp;
+        for (int i=0 ;i<num ;i++) {
+            temp = this.top;
+            this.top = this.left;
+            this.left = this.bottom;
+            this.bottom = this.right;
+            this.right = temp;
+        }
+        setRotation(rotation);
+
+    }
+
     public boolean isTopLeft() {
-        return (top==0&&left==0);
+        return (top == 0 && left == 0);
     }
 
     public boolean isTopRight() {
-        return (top==0&&right==0);
+        return (top == 0 && right == 0);
     }
 
-    public boolean isBottomright() {
-        return (bottom==0&&right==0);
+    public boolean isBottomRight() {
+        return (bottom == 0 && right == 0);
     }
 
     public boolean isBottomLeft() {
@@ -100,7 +125,7 @@ public class PuzzlePiece {
             return false;
         }
         PuzzlePiece o = (PuzzlePiece) other;
-        return (o.id==id && o.top==top && o.right==right && o.left==left && o.bottom==bottom);
+        return (o.id==id && o.rotation==rotation);
     }
 
     //TODO - implement toString

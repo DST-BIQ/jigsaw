@@ -19,9 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class SystemTest {
 
-
-
-    String outputFilePath = "";
+    String outputFilePath ="";
     File outputFile;
     String expectedOutputFilePath;
     String expectedFilesLocations = "./src/main/resources/input/AdvancedPuzzleTests/Output/";
@@ -46,7 +44,7 @@ public class SystemTest {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test17.in"
     })
 
-    public void AbleToLoadPuzzle(String filePath) throws IOException {
+    public void AbleToLoadPuzzle(String filePath) throws IOException, InterruptedException {
         preparation(filePath);
 
         try {
@@ -89,7 +87,7 @@ public class SystemTest {
 
 
 
-    public void preparation(String filePath) throws IOException {
+    public void preparation(String filePath) throws IOException, InterruptedException {
 
 
         String[] takeStringForFilePath = filePath.split("Input/test");

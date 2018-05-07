@@ -16,16 +16,16 @@ import java.util.TreeSet;
 public class FileInputParser {
 
     private static int numberOfElements;
-    private ArrayList<Integer> piecesID; // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList;
+    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
 
-    public FileInputParser(ArrayList<Integer> piecesID,ArrayList<int[]> puzzlePieceList){
-
-        this.piecesID  = new ArrayList<>();
-        this.puzzlePieceList = new ArrayList<>();
-
-    }
+//    public FileInputParser(ArrayList<Integer> piecesID,ArrayList<int[]> puzzlePieceList){
+//
+//        this.piecesID  = new ArrayList<>();
+//        this.puzzlePieceList = new ArrayList<>();
+//
+//    }
 
     public FileInputParser(){
 
