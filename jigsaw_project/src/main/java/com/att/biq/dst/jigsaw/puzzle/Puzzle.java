@@ -33,7 +33,7 @@ public class Puzzle {
      * @param puzzlePieceValidators - object that it's purpose to validate the puzzle piece
      * @return Array list of PuzzlePieces
      */
-    public List<PuzzlePiece> getPuzzle(FileInputParser fim, List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators) {
+    public List<PuzzlePiece> getPuzzlePiecesArray(FileInputParser fim, List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators) {
 
         ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray == null) {
@@ -140,17 +140,11 @@ public class Puzzle {
             }
 
 
-//           PuzzlePieceIdentity ppi =  createIdentityToPiece(puzzlePiece);
-//
-//            if (!treeMap.containsKey(puzzlePiece.getEdgesFromPiece())) {
-//                puzzleIdentityArray = new ArrayList<>();
-//                puzzleIdentityArray.add(ppi);
-//                treeMap.put(puzzlePiece.getEdgesFromPiece(), ppi);
-//            } else {
-//
-//                treeMap.get(puzzlePiece.getEdgesFromPiece()).add(ppi);
-//
-//            }
+            // rotate to return to the original piece state.
+            for (int i=1;i<=3;i++){
+                puzzlePiece.rotate(1);
+             }
+
         }
 
 

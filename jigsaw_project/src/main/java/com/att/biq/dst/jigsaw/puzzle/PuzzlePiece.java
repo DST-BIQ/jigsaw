@@ -31,7 +31,7 @@ public class PuzzlePiece {
 
         int[] array=new int[4];
         array[0]=0;array[1]=90;array[2]=180;array[3]=270;
-//        int currentLocation = decideCurrentLocation(this.rotation);
+
         int newLocation=decideCurrentLocation(this.rotation);
         for (int i=1;i<=numTimesToRotate;i++){
             newLocation = (newLocation + 1) % 4;
@@ -56,10 +56,8 @@ public class PuzzlePiece {
         return -1;
     }
 
-    //todo change rotate -
     public void rotate(int numTimesToRotate) {
 
-//        PuzzlePiece puzzlePiece = new PuzzlePiece(getId(),left,top,right,bottom);
         int temp;
         for (int i=0 ;i<numTimesToRotate ;i++) {
             temp = this.top;

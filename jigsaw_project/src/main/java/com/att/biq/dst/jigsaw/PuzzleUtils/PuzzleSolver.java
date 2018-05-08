@@ -303,59 +303,6 @@ return null;
         return null;
     }
 
-//    /**
-//     * if found solution returns it
-//     * @param solution
-//     * @param puzzlePieces
-//     * @param foundPieces
-//     * @return possible solution found
-//     */
-
-//    private  PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> foundPieces) {
-//        for (PuzzlePiece piece : foundPieces) {
-//            PuzzleSolution possibleSolution = solve(cloneSolution(solution, piece), clonePuzzlePiecesList(puzzlePieces, piece));
-//            if (possibleSolution != null && possibleSolution.isValid()) {
-//                return possibleSolution;
-//            }
-//        }
-//        return null;
-//    }
-
-
-//    /**
-//     * for recursion needs - clone current solution
-//     * @param curSolution - current solution
-//     * @param enteredPiece piece to add to solution
-//     * @return new solution
-//     */
-//
-//    private  PuzzleSolution cloneSolution(PuzzleSolution curSolution, PuzzlePiece enteredPiece){
-//        PuzzleSolution newSolution = new PuzzleSolution(curSolution.getRows(),curSolution.getColumns());
-//        newSolution.setSolution(curSolution.getSolution());
-//        newSolution.setCurRow(curSolution.getCurRow());
-//        newSolution.setCurCol(curSolution.getCurCol());
-//        newSolution.insertPiece(enteredPiece);
-//
-//        return newSolution;
-//    }
-//
-//    /**
-//     * for recursion needs - clone puzzle pieces list
-//     * @param puzzlePieces - current puzzle pieceslist
-//     * @param removedPiece piece to dismiss from the list
-//     * @return new list of puzzlePieces without the removed piece
-//     */
-//
-//    private  List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces, PuzzlePiece removedPiece){
-//        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
-//        for (PuzzlePiece piece: puzzlePieces){
-//            if (!piece.equals(removedPiece)){
-//                newPuzzlePiecesList.add(piece);
-//            }
-//        }
-//        return newPuzzlePiecesList;
-//    }
-
     public ErrorsManager getErrorsManager() {
         return errorsManager;
     }
@@ -375,9 +322,6 @@ return null;
 
 
 
-//    public Map<PieceShape, ArrayList<PuzzlePiece>> getTreeMap() {
-//        return this.treeMap;
-//    }
 
     /**
      * for recursion needs - clone puzzle pieces list

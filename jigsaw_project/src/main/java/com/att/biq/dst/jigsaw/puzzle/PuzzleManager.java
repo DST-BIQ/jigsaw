@@ -81,7 +81,7 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void loadPuzzle() throws IOException {
-        puzzle.getPuzzle(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
+        puzzle.getPuzzlePiecesArray(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
         }
