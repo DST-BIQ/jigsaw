@@ -13,6 +13,15 @@ public class PuzzlePieceValidators {
     int totalZero=0;
     int bottomSum=0;
     int totalCorners=0;
+    int topLeftCorners;
+    int topRightCorners;
+    int bottomLeftCorners;
+    int bottomRightCorners;
+    boolean rotate;
+
+    public PuzzlePieceValidators(boolean rotate) {
+        this.rotate = rotate;
+    }
 
     public int getTopSum() {
         return topSum;
@@ -59,10 +68,35 @@ public class PuzzlePieceValidators {
         for ( PuzzlePiece piece : puzzlePieces ) {
 
 
-            if (piece.getLeft() == 0){totalEdges++;}
-            if (piece.getBottom()==0) {totalEdges++;}
-            if (piece.getRight()==0){totalEdges++;}
-            if (piece.getTop()==0) {totalEdges++;}
+            if (piece.getLeft() == 0){
+                totalEdges++;
+                leftSum++;
+                if (piece.getTop()==0){
+                    topLeftCorners++;
+                }
+                if(piece.getBottom()==0){
+                    bottomLeftCorners++;
+                }
+            }
+            if (piece.getBottom()==0) {
+                totalEdges++;
+                bottomSum++;
+
+            }
+            if (piece.getRight()==0){
+                totalEdges++;
+                rightSum++;
+                if (piece.getTop()==0){
+                    topRightCorners++;
+                }
+                if(piece.getBottom()==0){
+                    bottomRightCorners++;
+                }
+            }
+            if (piece.getTop()==0) {
+                totalEdges++;
+                topSum++;
+            }
             if ((piece.getTop()==0 || piece.getBottom()==0)&& (piece.getRight()==0 || piece.getLeft()==0)) {
                 totalCorners++;
             }
@@ -70,20 +104,23 @@ public class PuzzlePieceValidators {
             totalZero += piece.getLeft() + piece.getTop() + piece.getRight() + piece.getBottom();
         }
 
-        if (!validateStraightEdges(totalEdges,puzzlePieces.size())){
+        boolean straightEdgesValidationResult = validateStraightEdges(totalEdges, puzzlePieces.size());
+        if (!straightEdgesValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
         }
 
-        if (!validateZero(rightSum,topSum,leftSum,bottomSum)){
+        boolean sumEdgesZeroValidationResult = validateZero(rightSum, topSum, leftSum, bottomSum);
+        if (!sumEdgesZeroValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
         }
-        if (!validateCorners(totalCorners)){
+        boolean cornersValidationResult = validateCorners(totalCorners);
+        if (!cornersValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle missing corners");
         }
 
 
 
-        return (validateCorners(totalCorners)&&validateZero(rightSum,topSum,leftSum,bottomSum)&&validateStraightEdges(totalEdges,puzzlePieces.size()));
+        return (cornersValidationResult && sumEdgesZeroValidationResult && straightEdgesValidationResult);
     }
 
     /**
@@ -92,10 +129,11 @@ public class PuzzlePieceValidators {
      * @return
      */
     private  boolean validateCorners(int totalCorners) {
-
-        return (totalCorners>=4);
-
-
+        if (rotate) {
+            return (totalCorners >= 4);
+        }else{
+               return (topLeftCorners>=1 && topRightCorners>=1 && bottomRightCorners>=1 && bottomLeftCorners>=1);
+        }
     }
 
     private  boolean validateZero(int rightSum, int topSum , int leftSum, int bottomSum){
@@ -111,12 +149,16 @@ public class PuzzlePieceValidators {
      * @return true if valid
      */
     private  boolean validateStraightEdges(int totalEdges,  int puzzeleLength) {
-        if (puzzeleLength>1) {
-            int value =  (((int)(Math.sqrt(puzzeleLength)) / 1) * 4 + 2);
-            return (value <= totalEdges);
-        }else{
-            return(totalEdges==4);
-        }
+       if(rotate) {
+           if (puzzeleLength > 1) {
+               int value = (((int) (Math.sqrt(puzzeleLength)) / 1) * 4 + 2);
+               return (value <= totalEdges);
+           } else {
+               return (totalEdges == 4);
+           }
+       }else{
+           return (Math.min(topSum,bottomSum)*Math.min(leftSum,rightSum)>=puzzeleLength);
+       }
     }
 
 }

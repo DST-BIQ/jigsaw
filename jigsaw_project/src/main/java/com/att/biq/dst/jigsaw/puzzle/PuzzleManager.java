@@ -61,7 +61,7 @@ public class PuzzleManager {
         this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
         this.rotate = argumentsManager.getRotationStatus();
         this.threadNumber = argumentsManager.getThreadNumberFromCommandLine();
-        puzzlePieceValidators = new PuzzlePieceValidators();
+        puzzlePieceValidators = new PuzzlePieceValidators(rotate);
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
         fileInputParser = new FileInputParser();
