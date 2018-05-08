@@ -70,7 +70,7 @@ public class PuzzlePieceValidators {
 
             if (piece.getLeft() == 0){
                 totalEdges++;
-                leftSum++;
+                leftSum+= piece.getLeft();
                 if (piece.getTop()==0){
                     topLeftCorners++;
                 }
@@ -80,12 +80,12 @@ public class PuzzlePieceValidators {
             }
             if (piece.getBottom()==0) {
                 totalEdges++;
-                bottomSum++;
+                bottomSum=+ piece.getBottom();
 
             }
             if (piece.getRight()==0){
                 totalEdges++;
-                rightSum++;
+                rightSum=+ piece.getRight();
                 if (piece.getTop()==0){
                     topRightCorners++;
                 }
@@ -95,7 +95,7 @@ public class PuzzlePieceValidators {
             }
             if (piece.getTop()==0) {
                 totalEdges++;
-                topSum++;
+                topSum=+ piece.getTop();
             }
             if ((piece.getTop()==0 || piece.getBottom()==0)&& (piece.getRight()==0 || piece.getLeft()==0)) {
                 totalCorners++;
@@ -109,7 +109,7 @@ public class PuzzlePieceValidators {
             errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
         }
 
-        boolean sumEdgesZeroValidationResult = validateZero(rightSum, topSum, leftSum, bottomSum);
+        boolean sumEdgesZeroValidationResult = validateZero(rightSum, topSum, leftSum, bottomSum , totalZero);
         if (!sumEdgesZeroValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
         }
@@ -136,10 +136,12 @@ public class PuzzlePieceValidators {
         }
     }
 
-    private  boolean validateZero(int rightSum, int topSum , int leftSum, int bottomSum){
-
-        return (rightSum+leftSum==0&&topSum+bottomSum==0);
-
+    private  boolean validateZero(int rightSum, int topSum, int leftSum, int bottomSum, int totalZero){
+        if (rotate){
+          return (totalZero==0);
+        }else {
+            return (rightSum + leftSum == 0 && topSum + bottomSum == 0);
+        }
     }
 
     /** Validate that the minimum of left and right edges multile the minumum of top
