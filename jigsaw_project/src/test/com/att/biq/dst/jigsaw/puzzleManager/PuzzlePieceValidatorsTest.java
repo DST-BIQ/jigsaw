@@ -54,7 +54,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateAllPossitve(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,-1,1);
@@ -78,7 +78,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTLCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,-1,-1,1);
@@ -97,7 +97,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTRCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,1,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,-1,0,-1);
@@ -115,7 +115,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBRCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,0,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,0,0,-1);
@@ -133,7 +133,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBLCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,1,0,0,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,0,-1);
@@ -151,7 +151,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateEdgesNotZero(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,0,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,0,-1);
@@ -169,7 +169,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateWorngStraightEdges(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
@@ -193,7 +193,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateAllErrorsCombination(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,1,1,1,0);
