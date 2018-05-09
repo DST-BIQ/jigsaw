@@ -6,12 +6,12 @@ import java.util.List;
 
 public class PuzzlePieceValidators {
 
-    int topSum=0;
-    int totalEdges=0;
-    int leftSum=0;
-    int rightSum=0;
+    int topStraightSum =0;
+    int totalStraightEdges =0;
+    int leftStraightSum =0;
+    int rightStraightSum =0;
     int totalZero=0;
-    int bottomSum=0;
+    int bottomStraightSum =0;
     int totalCorners=0;
     int topLeftCorners;
     int topRightCorners;
@@ -23,28 +23,28 @@ public class PuzzlePieceValidators {
         this.rotate = rotate;
     }
 
-    public int getTopSum() {
-        return topSum;
+    public int getTopStraightSum() {
+        return topStraightSum;
     }
 
-    public int getTotalEdges() {
-        return totalEdges;
+    public int getTotalStraightEdges() {
+        return totalStraightEdges;
     }
 
-    public int getLeftSum() {
-        return leftSum;
+    public int getLeftStraightSum() {
+        return leftStraightSum;
     }
 
-    public int getRightSum() {
-        return rightSum;
+    public int getRightStraightSum() {
+        return rightStraightSum;
     }
 
     public int getTotalZero() {
         return totalZero;
     }
 
-    public int getBottomSum() {
-        return bottomSum;
+    public int getBottomStraightSum() {
+        return bottomStraightSum;
     }
 
     public int getTotalCorners() {
@@ -69,8 +69,8 @@ public class PuzzlePieceValidators {
 
 
             if (piece.getLeft() == 0){
-                totalEdges++;
-                leftSum+= piece.getLeft();
+                totalStraightEdges++;
+                leftStraightSum++;
                 if (piece.getTop()==0){
                     topLeftCorners++;
                 }
@@ -79,13 +79,13 @@ public class PuzzlePieceValidators {
                 }
             }
             if (piece.getBottom()==0) {
-                totalEdges++;
-                bottomSum=+ piece.getBottom();
+                totalStraightEdges++;
+                bottomStraightSum++;
 
             }
             if (piece.getRight()==0){
-                totalEdges++;
-                rightSum=+ piece.getRight();
+                totalStraightEdges++;
+                rightStraightSum++;
                 if (piece.getTop()==0){
                     topRightCorners++;
                 }
@@ -94,8 +94,8 @@ public class PuzzlePieceValidators {
                 }
             }
             if (piece.getTop()==0) {
-                totalEdges++;
-                topSum=+ piece.getTop();
+                totalStraightEdges++;
+                topStraightSum++;
             }
             if ((piece.getTop()==0 || piece.getBottom()==0)&& (piece.getRight()==0 || piece.getLeft()==0)) {
                 totalCorners++;
@@ -104,12 +104,12 @@ public class PuzzlePieceValidators {
             totalZero += piece.getLeft() + piece.getTop() + piece.getRight() + piece.getBottom();
         }
 
-        boolean straightEdgesValidationResult = validateStraightEdges(totalEdges, puzzlePieces.size());
+        boolean straightEdgesValidationResult = validateStraightEdges(totalStraightEdges, puzzlePieces.size());
         if (!straightEdgesValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
         }
 
-        boolean sumEdgesZeroValidationResult = validateZero(rightSum, topSum, leftSum, bottomSum , totalZero);
+        boolean sumEdgesZeroValidationResult = validateZero(rightStraightSum, topStraightSum, leftStraightSum, bottomStraightSum, totalZero);
         if (!sumEdgesZeroValidationResult){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
         }
@@ -159,7 +159,7 @@ public class PuzzlePieceValidators {
                return (totalEdges == 4);
            }
        }else{
-           return (Math.min(topSum,bottomSum)*Math.min(leftSum,rightSum)>=puzzeleLength);
+           return (Math.min(topStraightSum, bottomStraightSum)*Math.min(leftStraightSum, rightStraightSum)>=puzzeleLength);
        }
     }
 
