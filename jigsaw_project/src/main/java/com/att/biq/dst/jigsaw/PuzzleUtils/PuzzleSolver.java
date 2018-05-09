@@ -146,10 +146,10 @@ private List<PuzzlePiece> puzzlePieceArray;
 
                     getPuzzlePieceFromIdentityID(ppi);
 
-                    if (getPuzzlePieceFromIdentityID(ppi).isInUse()) {
-                        continue;
+                    if (!getPuzzlePieceFromIdentityID(ppi).isInUse()) {
+                        matchedPieces.add(getPuzzlePieceFromIdentityID(ppi));
                     }
-                    else {matchedPieces.add(getPuzzlePieceFromIdentityID(ppi));}
+
                 }
 
             }
