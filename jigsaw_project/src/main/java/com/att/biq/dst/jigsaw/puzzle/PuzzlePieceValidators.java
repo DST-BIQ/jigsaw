@@ -109,8 +109,9 @@ public class PuzzlePieceValidators {
             errorsManager.addFatalErrorsList("Cannot solve puzzle: wrong number of straight edges");
         }
 
-        boolean sumEdgesZeroValidationResult = validateZero(rightStraightSum, topStraightSum, leftStraightSum, bottomStraightSum, totalZero);
-        if (!sumEdgesZeroValidationResult){
+
+        boolean isTotalEdgesZero = totalZero != 0;
+        if (isTotalEdgesZero){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
         }
         boolean cornersValidationResult = validateCorners(totalCorners);
@@ -120,7 +121,7 @@ public class PuzzlePieceValidators {
 
 
 
-        return (cornersValidationResult && sumEdgesZeroValidationResult && straightEdgesValidationResult);
+        return (cornersValidationResult && isTotalEdgesZero && straightEdgesValidationResult);
     }
 
     /**
@@ -133,14 +134,6 @@ public class PuzzlePieceValidators {
             return (totalCorners >= 4);
         }else{
                return (topLeftCorners>=1 && topRightCorners>=1 && bottomRightCorners>=1 && bottomLeftCorners>=1);
-        }
-    }
-
-    private  boolean validateZero(int rightSum, int topSum, int leftSum, int bottomSum, int totalZero){
-        if (rotate){
-          return (totalZero==0);
-        }else {
-            return (rightSum + leftSum == 0 && topSum + bottomSum == 0);
         }
     }
 
