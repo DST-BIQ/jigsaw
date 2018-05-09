@@ -97,7 +97,7 @@ private List<PuzzlePiece> puzzlePieceArray;
             int columns;
             if (puzzleSize%rows==0){
                 columns = puzzleSize/rows;
-                if ((columns + rows)*2 <= puzzlePieceValidator.getTotalEdges()){
+                if ((columns + rows)*2 <= puzzlePieceValidator.getTotalStraightEdges()){
                     structureOptions.add(new int[]{rows,columns});
                 }
             }
