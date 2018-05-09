@@ -1,7 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzle.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -10,23 +9,25 @@ import java.util.concurrent.TimeUnit;
 public class PuzzleSolver implements Runnable {
 
     Puzzle puzzle;
+    static PuzzleSolution endResult;
     PuzzleSolution solution;
     private ErrorsManager errorsManager = new ErrorsManager();
-private List<PuzzlePiece> puzzlePieceArray;
+    private List<PuzzlePiece> puzzlePieceArray;
 
     public PuzzleSolver( Puzzle puzzle, PuzzleSolution solution){
         this.puzzle=puzzle;
         this.solution = solution;
-    puzzlePieceArray = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
+        puzzlePieceArray = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
     }
 
 
 
     @Override
     public void run() {
-        solution = solve(solution);
+        PuzzleSolution solution = solve(this.solution);
         if (solution!=null && solution.isValid()){
             puzzle.setSolved();
+            setSolution(solution);
         }
     }
 
@@ -50,8 +51,8 @@ private List<PuzzlePiece> puzzlePieceArray;
         threadsManager.getThreadPoolExecutor().awaitTermination(10, TimeUnit.SECONDS);
         if (puzzle.isSolved()){
             threadsManager.getThreadPoolExecutor().shutdown();
-            if (solver!=null) {
-                return solver.solution;
+            if (endResult!=null) {
+                return endResult;
             }else return null;
 
         }else {
@@ -329,7 +330,7 @@ return null;
 
 
     public void setSolution(PuzzleSolution solution) {
-        this.solution = solution;
+        endResult = solution;
     }
 
 
