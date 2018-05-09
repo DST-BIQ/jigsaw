@@ -110,8 +110,8 @@ public class PuzzlePieceValidators {
         }
 
 
-        boolean isTotalEdgesZero = totalZero != 0;
-        if (isTotalEdgesZero){
+        boolean isTotalEdgesZero = (totalZero == 0);
+        if (!isTotalEdgesZero){
             errorsManager.addFatalErrorsList("Cannot solve puzzle: sum of edges is not zero");
         }
         boolean cornersValidationResult = validateCorners(totalCorners);

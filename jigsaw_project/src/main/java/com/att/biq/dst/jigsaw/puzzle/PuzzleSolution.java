@@ -3,7 +3,7 @@ package com.att.biq.dst.jigsaw.puzzle;
 public class PuzzleSolution {
 
 
-    private PuzzlePiece[][] solution;
+    private PuzzlePieceIdentity[][] solution;
     private int size;
     private int rows;
     private int columns;
@@ -14,12 +14,12 @@ public class PuzzleSolution {
         size = rows * columns;
         this.rows = rows;
         this.columns = columns;
-        solution = new PuzzlePiece[rows][columns];
+        solution = new PuzzlePieceIdentity[rows][columns];
 
     }
 
 
-    public PuzzlePiece[][] getSolution() {
+    public PuzzlePieceIdentity[][] getSolution() {
         return solution;
     }
 
@@ -68,7 +68,7 @@ public class PuzzleSolution {
 
 
 
-    public void insertPiece(PuzzlePiece piece) {
+    public void insertPiece(PuzzlePieceIdentity piece) {
         solution[curRow][curCol] = piece;
         moveSolutionForward();
     }
@@ -108,22 +108,22 @@ public class PuzzleSolution {
         for ( int column = 0; column < columns; column++ ) {
             for ( int row = 0; row < rows; row++ ) {
                 if (row == 0) {
-                    if (solution[row][column].getTop() != 0) {
+                    if (solution[row][column].getShape().getTop() != 0) {
                         return false;
                     }
-                    if (row != rows - 1 && solution[row][column].getBottom() + solution[row + 1][column].getTop() != 0) {
+                    if (row != rows - 1 && solution[row][column].getShape().getBottom() + solution[row + 1][column].getShape().getTop() != 0) {
                         return false;
                     }
                 } else if (row == rows - 1) {
-                    if (solution[row][column].getBottom() != 0) {
+                    if (solution[row][column].getShape().getBottom() != 0) {
                         return false;
                     }
-                    if (solution[row][column].getTop() + solution[row - 1][column].getBottom() != 0) {
+                    if (solution[row][column].getShape().getTop() + solution[row - 1][column].getShape().getBottom() != 0) {
                         return false;
                     }
                 } else {
-                    if (solution[row][column].getTop() + solution[row - 1][column].getBottom() != 0 ||
-                            solution[row][column].getBottom() + solution[row + 1][column].getTop() != 0) {
+                    if (solution[row][column].getShape().getTop() + solution[row - 1][column].getShape().getBottom() != 0 ||
+                            solution[row][column].getShape().getBottom() + solution[row + 1][column].getShape().getTop() != 0) {
                         return false;
                     }
                 }
@@ -137,22 +137,22 @@ public class PuzzleSolution {
         for ( int row = 0; row < rows; row++ ) {
             for ( int column = 0; column < columns; column++ ) {
                 if (column == 0) {
-                    if (solution[row][column].getLeft() != 0) {
+                    if (solution[row][column].getShape().getLeft() != 0) {
                         return false;
                     }
-                    if (column != columns - 1 && solution[row][column].getRight() + solution[row][column + 1].getLeft() != 0) {
+                    if (column != columns - 1 && solution[row][column].getShape().getRight() + solution[row][column + 1].getShape().getLeft() != 0) {
                         return false;
                     }
                 } else if (column == columns - 1) {
-                    if (solution[row][column].getRight() != 0) {
+                    if (solution[row][column].getShape().getRight() != 0) {
                         return false;
                     }
-                    if (solution[row][column].getLeft() + solution[row][column - 1].getRight() != 0) {
+                    if (solution[row][column].getShape().getLeft() + solution[row][column - 1].getShape().getRight() != 0) {
                         return false;
                     }
                 } else {
-                    if (solution[row][column].getLeft() + solution[row][column - 1].getRight() != 0 ||
-                            solution[row][column].getRight() + solution[row][column + 1].getLeft() != 0) {
+                    if (solution[row][column].getShape().getLeft() + solution[row][column - 1].getShape().getRight() != 0 ||
+                            solution[row][column].getShape().getRight() + solution[row][column + 1].getShape().getLeft() != 0) {
                         return false;
                     }
                 }
@@ -178,11 +178,11 @@ public class PuzzleSolution {
         return curCol;
     }
 
-    public void setSolution(PuzzlePiece[][] solution) {
+    public void setSolution(PuzzlePieceIdentity[][] solution) {
         this.solution = solution;
     }
 
-    public PuzzlePiece getFormerPiece() {
+    public PuzzlePieceIdentity getFormerPiece() {
         if (curCol == 0 && curRow > 0) {
             return solution[curRow - 1][columns - 1];
         } else if (curCol == 0 && curRow == 0) {
@@ -191,7 +191,7 @@ public class PuzzleSolution {
 
     }
 
-    public PuzzlePiece getAbovePiece() {
+    public PuzzlePieceIdentity getAbovePiece() {
         if (curRow == 0) {
             return null;
         }

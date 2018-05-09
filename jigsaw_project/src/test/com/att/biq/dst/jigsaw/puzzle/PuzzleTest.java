@@ -19,7 +19,7 @@ class PuzzleTest {
     @BeforeEach
     public void setUp() {
         errorsManager = new ErrorsManager();
-        puzzle = new Puzzle(errorsManager);
+        puzzle = new Puzzle(errorsManager, false);
         puzzleSolution = new PuzzleSolution(4, 4);
         puzzleSolver = new PuzzleSolver(puzzle, puzzleSolution);
 

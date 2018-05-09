@@ -30,7 +30,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void validatePuzzleRotate(){
-        puzzle = new Puzzle(new ErrorsManager());
+        puzzle = new Puzzle(new ErrorsManager(), true);
         puzzleArray = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         int[] pa1 = new int[] {1,0,-1,0,1};

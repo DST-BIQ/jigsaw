@@ -3,13 +3,13 @@ package com.att.biq.dst.jigsaw.puzzle;
 public class PuzzlePieceIdentity {
 
     int puzzlePieceID;
+    PieceShape shape;
     int rotation;
 
-    public PuzzlePieceIdentity(int puzzlePieceID, int rotation){
+    public PuzzlePieceIdentity(int puzzlePieceID, int rotation, PieceShape shape){
         this.puzzlePieceID = puzzlePieceID;
         this.rotation=rotation;
-
-
+        this.shape = shape;
     }
 
 
@@ -22,4 +22,19 @@ public class PuzzlePieceIdentity {
         return rotation;
     }
 
+    public PieceShape getShape() {
+        return shape;
+    }
+
+    public void setShape(PieceShape shape) {
+        this.shape = shape;
+    }
+
+    @Override
+    public String toString() {
+        if (rotation!=0){
+            return puzzlePieceID +"["+ rotation+"] ";
+        }else {return puzzlePieceID+" ";}
+
+    }
 }

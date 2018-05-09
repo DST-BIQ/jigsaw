@@ -44,6 +44,23 @@ public class PieceShape {
         return edges[0]+","+edges[1]+","+edges[2]+","+edges[3];
     }
 
+    public int getTop(){
+        return edges[1];
+    }
+
+    public int getLeft(){
+        return edges[0];
+    }
+
+    public int getRight(){
+        return edges[2];
+    }
+
+    public int getBottom(){
+        return edges[3];
+    }
+
+
 
 
 }

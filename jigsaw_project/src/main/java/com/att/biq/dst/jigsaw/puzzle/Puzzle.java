@@ -19,12 +19,13 @@ public class Puzzle {
     private List<PuzzlePiece> puzzlePieces;
     private Map<PieceShape, ArrayList<PuzzlePieceIdentity>> treeMap = new HashMap();
 
-    private boolean rotate=true;
+    private boolean rotate;
     private boolean isSolved = false;
 
 
-    public Puzzle(ErrorsManager errorsManager) {
+    public Puzzle(ErrorsManager errorsManager, boolean rotate) {
         this.errorsManager = errorsManager;
+        this.rotate=rotate;
     }
 
     /**
@@ -107,14 +108,7 @@ public class Puzzle {
         return isSolved;
     }
 
-    public boolean isAllPuzzlePiecesInUse(){
-        for (PuzzlePiece puzzlePiece: puzzlePieces){
-            if (!puzzlePiece.isInUse()) {
-                return false;
-            }
-        }
-        return true ;
-    }
+
 
 
 
@@ -128,13 +122,13 @@ public class Puzzle {
 
         for ( PuzzlePiece puzzlePiece : puzzlePieces ) {
             if (!isRotate) {
-                ppi = createIdentityToPiece(puzzlePiece);
+                ppi = createIdentityToPiece(puzzlePiece, createShapeFromPiece(puzzlePiece));
                 putPuzzlePieceIdentityInTreeMap(ppi,puzzlePiece);
             }
             else{
                 for (int i=1;i<=3;i++){
                     puzzlePiece.rotate(1);
-                    ppi = createIdentityToPiece(puzzlePiece);
+                    ppi = createIdentityToPiece(puzzlePiece, createShapeFromPiece(puzzlePiece));
                     putPuzzlePieceIdentityInTreeMap(ppi,puzzlePiece);
                 }
             }
@@ -148,6 +142,11 @@ public class Puzzle {
         }
 
 
+    }
+
+    private PieceShape createShapeFromPiece(PuzzlePiece puzzlePiece) {
+
+        return new PieceShape(puzzlePiece.getLeft(), puzzlePiece.getTop(), puzzlePiece.getRight(), puzzlePiece.getBottom());
     }
 
     private void putPuzzlePieceIdentityInTreeMap(PuzzlePieceIdentity ppi, PuzzlePiece puzzlePiece ){
@@ -164,8 +163,8 @@ public class Puzzle {
         }
     }
 
-    private PuzzlePieceIdentity createIdentityToPiece(PuzzlePiece puzzlePiece) {
-        return new PuzzlePieceIdentity(puzzlePiece.getId(),puzzlePiece.getRotation());
+    private PuzzlePieceIdentity createIdentityToPiece(PuzzlePiece puzzlePiece, PieceShape shape) {
+        return new PuzzlePieceIdentity(puzzlePiece.getId(),puzzlePiece.getRotation(), shape);
     }
 
     public Map<PieceShape, ArrayList<PuzzlePieceIdentity>> getTreeMap() {

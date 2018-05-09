@@ -66,7 +66,7 @@ public class PuzzleManager {
         solutionStructures = new ArrayList<>();
         fileInputParser = new FileInputParser();
         this.errorsManager = new ErrorsManager();
-        puzzle = new Puzzle(errorsManager);
+        puzzle = new Puzzle(errorsManager, rotate);
         threadsManager = new ThreadsManager(this.threadNumber);
 
     }
@@ -119,7 +119,7 @@ public class PuzzleManager {
      * @param solution
      */
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
-        PuzzlePiece[][] winnerSolution = solution.getSolution();
+        PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
         for ( int i = 0; i < winnerSolution.length; i++ ) {
             reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
         }
@@ -132,10 +132,10 @@ public class PuzzleManager {
      * @param puzzlePieces - array containing solution's puzzle pieces.
      * @return
      */
-    private String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {
+    private String convertPuzzlePiecesToString(PuzzlePieceIdentity[] puzzlePieces) {
 
         StringBuilder builder = new StringBuilder();
-        for ( PuzzlePiece piece : puzzlePieces ) {
+        for ( PuzzlePieceIdentity piece : puzzlePieces ) {
             builder.append(piece.toString());
         }
 
