@@ -46,12 +46,8 @@ public class SystemTest {
 
     public void AbleToLoadPuzzle(String filePath) throws IOException, InterruptedException {
         preparation(filePath);
-
-        try {
             assertEquals(FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @ParameterizedTest(name = "System Test for puzzles")
