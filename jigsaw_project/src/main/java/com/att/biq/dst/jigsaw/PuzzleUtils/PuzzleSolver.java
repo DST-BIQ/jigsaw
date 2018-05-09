@@ -26,7 +26,6 @@ private List<PuzzlePiece> puzzlePieceArray;
     public void run() {
         solution = solve(solution);
         if (solution!=null && solution.isValid()){
-            setSolution(solution);
             puzzle.setSolved();
         }
     }
@@ -43,11 +42,9 @@ private List<PuzzlePiece> puzzlePieceArray;
     public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) throws InterruptedException {
 //        int counter=0;
         PuzzleSolver solver=null;
-        List<Runnable> solvers = new ArrayList<>();
         for(int[] structure:puzzleStructures) {
             PuzzleSolution attemptSolution = new PuzzleSolution(structure[0], structure[1]);
             solver = new PuzzleSolver(puzzle, attemptSolution);
-            solvers.add(solver);
             threadsManager.getThreadPoolExecutor().execute(solver);
         }
         threadsManager.getThreadPoolExecutor().awaitTermination(10, TimeUnit.SECONDS);
@@ -91,9 +88,15 @@ private List<PuzzlePiece> puzzlePieceArray;
      * @return available solutions list (e.g: 1,6 ; 6,1 ; 2;3)
      */
 
-    public static List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize){
+    public static List<int[]> calculateSolutionStructure(PuzzlePieceValidators puzzlePieceValidator, int puzzleSize, boolean rotate){
         List<int[]> structureOptions = new ArrayList<>();
-        for (int rows=1; rows<=puzzleSize;rows++){
+        int maxIndex;
+        if (rotate){
+            maxIndex = (int) Math.sqrt(puzzleSize);
+        }else{
+            maxIndex = puzzleSize;
+        }
+        for (int rows=1; rows<=maxIndex;rows++){
             int columns;
             if (puzzleSize%rows==0){
                 columns = puzzleSize/rows;
@@ -135,8 +138,8 @@ private List<PuzzlePiece> puzzlePieceArray;
      */
 
 
-    public List<PuzzlePiece> getMatch(int left, int top, int right, int bottom) {
-        List<PuzzlePiece> matchedPieces = new ArrayList<>();
+    public List<PuzzlePieceIdentity> getMatch(int left, int top, int right, int bottom) {
+        List<PuzzlePieceIdentity> matchedPiecesIdentities = new ArrayList<>();
         PieceShape ps = new PieceShape(left, top, right, bottom);
         for ( Map.Entry<PieceShape, ArrayList<PuzzlePieceIdentity>> treeEntry : puzzle.getTreeMap().entrySet()) {
 
@@ -144,10 +147,8 @@ private List<PuzzlePiece> puzzlePieceArray;
 
                 for ( PuzzlePieceIdentity ppi : treeEntry.getValue() ) { // rotate on this node and take the first that is not "INUSE"
 
-                    getPuzzlePieceFromIdentityID(ppi);
-
                     if (!getPuzzlePieceFromIdentityID(ppi).isInUse()) {
-                        matchedPieces.add(getPuzzlePieceFromIdentityID(ppi));
+                        matchedPiecesIdentities.add(ppi);
                     }
 
                 }
@@ -157,7 +158,7 @@ private List<PuzzlePiece> puzzlePieceArray;
 
         }
 
-        return matchedPieces;
+        return matchedPiecesIdentities;
     }
 
     private PuzzlePiece getPuzzlePieceFromIdentityID(PuzzlePieceIdentity ppi) {
@@ -182,17 +183,17 @@ return null;
         if (foundSolution(solution)) {return solution;}
         if (puzzle.isSolved()){return null;}
         else if (noMorePiecesAndNoValidSolution()){return null;}
-        List<PuzzlePiece> foundPieces =null;
+        List<PuzzlePieceIdentity> foundPieces =null;
         if (isOnFirstRow(solution)) {
-            foundPieces = handleFirstRowSolution(solution, foundPieces);
+            foundPieces = handleFirstRowSolution(solution);
         }else if (isOnLastRow(solution)){
             foundPieces = handleBottomRowSolution(solution);
         }else {
             foundPieces = handleBetweenTopAndBottomRows(solution);
         }
         if (foundPieces!=null) {
-            PuzzleSolution possibleSolution = findSolution(solution, foundPieces);
-            if (possibleSolution != null) return possibleSolution;
+                PuzzleSolution possibleSolution = findSolution(solution, foundPieces);
+                if (possibleSolution != null) {return possibleSolution;}
         }
         return null;
     }
@@ -203,24 +204,33 @@ return null;
      * * @return list of matched pieces
      */
 
-    private List<PuzzlePiece> handleBetweenTopAndBottomRows(PuzzleSolution solution) {
-        List<PuzzlePiece> foundPieces;
+    private List<PuzzlePieceIdentity> handleBetweenTopAndBottomRows(PuzzleSolution solution) {
+        List<PuzzlePieceIdentity> foundPieces;
         if (isOnFirstColumn(solution)){
-            foundPieces = getMatch(0 , 0-solution.getAbovePiece().getBottom(), 2, 2);
+            foundPieces = getMatch(0 , 0-solution.getAbovePiece().getShape().getBottom(), 2, 2);
         }else if (isOnLastColumn(solution)){
-            foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 0, 2);
+            foundPieces = getMatch(0-solution.getFormerPiece().getShape().getRight() , 0-solution.getAbovePiece().getShape().getBottom(), 0, 2);
         }else{
-            foundPieces = getMatch(0-solution.getFormerPiece().getRight() , 0-solution.getAbovePiece().getBottom(), 2, 2);
+            foundPieces = getMatch(0-solution.getFormerPiece().getShape().getRight() , 0-solution.getAbovePiece().getShape().getBottom(), 2, 2);
         }
         return foundPieces;
     }
 
     private boolean noMorePiecesAndNoValidSolution() {
-        return puzzle.isAllPuzzlePiecesInUse();
+        return isAllPuzzlePiecesInUse() && !puzzle.isSolved() ;
+    }
+
+    public boolean isAllPuzzlePiecesInUse(){
+        for (PuzzlePiece puzzlePiece: this.puzzlePieceArray){
+            if (!puzzlePiece.isInUse()) {
+                return false;
+            }
+        }
+        return true ;
     }
 
     private boolean foundSolution(PuzzleSolution solution) {
-        return  solution.isValid() && puzzle.isAllPuzzlePiecesInUse();
+        return  solution.isValid() && isAllPuzzlePiecesInUse();
     }
 
 
@@ -234,14 +244,14 @@ return null;
      * * @return list of matched pieces
      */
 
-    private List<PuzzlePiece> handleBottomRowSolution(PuzzleSolution solution) {
-        List<PuzzlePiece> foundPieces =null;
+    private List<PuzzlePieceIdentity> handleBottomRowSolution(PuzzleSolution solution) {
+        List<PuzzlePieceIdentity> foundPieces =null;
         if (isOnFirstColumn(solution)) {
-            foundPieces = getMatch(0, 0-solution.getAbovePiece().getBottom(), 2, 0);
+            foundPieces = getMatch(0, 0-solution.getAbovePiece().getShape().getBottom(), 2, 0);
         } else if (isBetweenFirstAndLastColumns(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 2, 0);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getShape().getRight(), 0-solution.getAbovePiece().getShape().getBottom(), 2, 0);
         }else if (isOnLastColumn(solution)){
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0-solution.getAbovePiece().getBottom(), 0, 0);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getShape().getRight(), 0-solution.getAbovePiece().getShape().getBottom(), 0, 0);
         }
         return foundPieces;
     }
@@ -250,16 +260,18 @@ return null;
      * get available pieces for first row
      * @param solution - current solution
      *
+
      * @return list of matched pieces
      */
 
-    private List<PuzzlePiece> handleFirstRowSolution(PuzzleSolution solution, List<PuzzlePiece> foundPieces) {
+    private List<PuzzlePieceIdentity> handleFirstRowSolution(PuzzleSolution solution) {
+        List<PuzzlePieceIdentity> foundPieces = new ArrayList<>();
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0, 2, 2);
         } else if (isBetweenFirstAndLastColumns(solution)) {
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 2, 2);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getShape().getRight(), 0, 2, 2);
         }else if (isOnLastColumn(solution)){
-            foundPieces = getMatch(0 - solution.getFormerPiece().getRight(), 0, 0, 2);
+            foundPieces = getMatch(0 - solution.getFormerPiece().getShape().getRight(), 0, 0, 2);
         }
         return foundPieces;
     }
@@ -288,16 +300,16 @@ return null;
      * @param foundPieces
      * @return possible solution found
      */
-    private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePiece> foundPieces) {
-        for ( PuzzlePiece piece : foundPieces ) {
+    private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePieceIdentity> foundPieces) {
+        for ( PuzzlePieceIdentity piece : foundPieces ) {
             solution.insertPiece(piece);
-            piece.setInUse(true);
+            getPuzzlePieceFromIdentityID(piece).setInUse(true);
             PuzzleSolution possibleSolution = solve(solution);
-            if (possibleSolution != null && possibleSolution.isValid()) {
+            if (possibleSolution != null) {
                 return possibleSolution;
             }else {
                 solution.removePiece();
-                piece.setInUse(false);
+                getPuzzlePieceFromIdentityID(piece).setInUse(false);
             }
         }
         return null;

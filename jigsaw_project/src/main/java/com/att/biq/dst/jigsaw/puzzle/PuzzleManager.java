@@ -97,7 +97,7 @@ public class PuzzleManager {
      * @throws IOException
      */
     public void playPuzzle() throws IOException, InterruptedException {
-        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
+        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size(), rotate);
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
