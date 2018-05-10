@@ -54,7 +54,7 @@ public class PuzzleManager {
     }
 
 
-    public PuzzleManager( String [] args) {
+    public PuzzleManager(String[] args) {
 
         argumentsManager.handleCommandLineOptions(args);
         this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
@@ -80,13 +80,13 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void loadPuzzle() throws IOException {
+    public void loadPuzzle() {
         puzzle.getPuzzlePiecesArray(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
-            reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
+            reportErrors();
         }
 
-        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(),argumentsManager.getRotationStatus());
+        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
 
     }
 
@@ -96,7 +96,7 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle() throws IOException, InterruptedException {
+    public void playPuzzle(){
         solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size(), rotate);
         if (reportList.size() > 0) {
             reportData(reportList, "file");
@@ -108,7 +108,7 @@ public class PuzzleManager {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
         } else if (puzzle.getErrorsManager().hasFatalErrors()) {
-            reportErrors("A FATAL Error has occurred, cannot solve Puzzle");
+            reportErrors();
         }
     }
 
@@ -150,19 +150,16 @@ public class PuzzleManager {
      * @param dataList
      * @param reportMethod
      */
-    private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
-        FileWriter fw;
-        BufferedWriter bw = null;
+    private void reportData(ArrayList<String> dataList, String reportMethod) {
 
-        try {
+
+        try (FileWriter fw = new FileWriter(outputFilePath, true); BufferedWriter bw = new BufferedWriter(fw)) {
 
             if (isDirectory(outputFilePath)) {
                 outputFilePath = outputFilePath + "output_" + getTimeStamp() + ".txt";
 
             }
 
-            fw = new FileWriter(outputFilePath, true);
-            bw = new BufferedWriter(fw);
 
             for ( String dataLine : dataList ) {
                 switch (reportMethod) {
@@ -177,12 +174,9 @@ public class PuzzleManager {
             }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        } finally {
-            if (bw != null) {
-                bw.close();
-            }
         }
-        }
+
+    }
 
 
     /**
@@ -234,10 +228,9 @@ public class PuzzleManager {
     /**
      * send errors to reportData method.
      *
-     * @param message
      * @throws IOException
      */
-    private void reportErrors(String message) throws IOException {
+    private void reportErrors() {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
@@ -276,7 +269,6 @@ public class PuzzleManager {
 
 
     /**
-     *
      * @return
      */
 

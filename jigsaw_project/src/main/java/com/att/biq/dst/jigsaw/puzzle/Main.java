@@ -22,7 +22,7 @@ import java.io.IOException;
 
  */
 public class Main {
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
 
 
         PuzzleManager puzzleManager = new PuzzleManager(args);
