@@ -1,5 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+/**
+ * This class represents the solution structure by rows and columns of PuzzlePieceIdentity
+ */
 public class PuzzleSolution {
 
 

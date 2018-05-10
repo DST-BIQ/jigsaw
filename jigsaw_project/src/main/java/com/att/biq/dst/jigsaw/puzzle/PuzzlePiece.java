@@ -1,5 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+/**
+ * this class represents the PuzzlePiece with all edges after converting and the rotation
+ */
 public class PuzzlePiece {
 
     private int id;
@@ -27,6 +30,10 @@ public class PuzzlePiece {
         return rotation;
     }
 
+    /**
+     *
+     * @param numTimesToRotate
+     */
     public void setRotation(int numTimesToRotate) {
 
         int[] array=new int[4];
