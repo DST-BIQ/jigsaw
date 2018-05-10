@@ -1,5 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+/**
+ * This class represents the PuzzlePieceIdentity which include the puzzlePieceID , PieceShape and the rotation
+ */
 public class PuzzlePieceIdentity {
 
     int puzzlePieceID;

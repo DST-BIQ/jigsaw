@@ -11,7 +11,9 @@ import java.util.Map;
 //TODO implement pieceShape in all solution areas
 
 /**
- * The puzzle class calculates the puzzle solution.
+ * The puzzle class holds the list of the PuzzlePieces after converting from input file
+ * and indexing them to treeMap of PuzzlePieceIdentity.
+ * the methods of the class is converting the puzzle content to PuzzlePieces and indexing
  */
 
 public class Puzzle {

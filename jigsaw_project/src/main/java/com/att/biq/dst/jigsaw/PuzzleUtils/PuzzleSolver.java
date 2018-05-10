@@ -11,7 +11,7 @@ public class PuzzleSolver implements Runnable {
     Puzzle puzzle;
     static PuzzleSolution endResult;
     PuzzleSolution solution;
-    private ErrorsManager errorsManager = new ErrorsManager();
+    private com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager errorsManager = new com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager();
     private List<PuzzlePiece> puzzlePieceArray;
 
     public PuzzleSolver( Puzzle puzzle, PuzzleSolution solution){
@@ -40,7 +40,7 @@ public class PuzzleSolver implements Runnable {
      * @return possible puzzle solution if found. else returns null.
      */
 
-    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle)  {
+    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, com.att.biq.dst.jigsaw.puzzleUtils.ThreadsManager threadsManager, Puzzle puzzle)  {
         PuzzleSolver solver=null;
         for(int[] structure:puzzleStructures) {
             PuzzleSolution attemptSolution = new PuzzleSolution(structure[0], structure[1]);
@@ -319,7 +319,7 @@ return null;
         return null;
     }
 
-    public ErrorsManager getErrorsManager() {
+    public com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager getErrorsManager() {
         return errorsManager;
     }
 

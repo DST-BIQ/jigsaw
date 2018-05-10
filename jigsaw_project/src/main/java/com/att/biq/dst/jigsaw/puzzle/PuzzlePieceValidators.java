@@ -4,6 +4,9 @@ import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
 
 import java.util.List;
 
+/**
+ * This class makes the validations on PuzzlePieces list
+ */
 public class PuzzlePieceValidators {
 
     int topStraightSum =0;
