@@ -1,5 +1,42 @@
 DST Team Jigsaw project known issues:
 
+****** Second submission - 11.5.2018 *************
+From Amir's Review:
+1. TODO - Packages: no need for two packages (or not clear what is the separation between the two).
+Done - Package name - lower case.
+
+Done - main(String[] args) throws IOException, InterruptedException
+Why main throws these exceptions?
+
+Done - threadsManager = new ThreadsManager(Integer.valueOf(args[3]));
+You assume the position of the argument and I think it's not as required.
+
+Done - It is better not to have too much login in Main.
+Better to parse the command lune argument and pass them on but keep the task of creating ThreadManager etc. to the PuzzleManager or similar class. Not in main.
+
+Done - public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException
+Why do you let these exceptions get out of the manager?
+
+TODO ?
+That's not the way to wait for ThreadPool to finish:
+       while (solution==null && counter<200){//TODO - find another exit criteria
+            Thread.sleep(10);
+            counter++;
+        }
+
+
+Done - private boolean isSolved = false;
+Should probably be AtomicBoolean
+
+TODO -
+As the TODOs say: Puzzle and PuzzleSolver should be refactored.
+- write down what are the roles of each one
+- draw sequence diagram for their major methods
+
+
+
+
+
 ****** First submission - 13.4.2018 *************
 
 1. Missing system tests - will be added on next version
