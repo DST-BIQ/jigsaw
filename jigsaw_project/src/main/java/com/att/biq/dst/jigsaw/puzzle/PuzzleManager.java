@@ -103,7 +103,6 @@ public class PuzzleManager {
 
         }
         solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
-//        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
