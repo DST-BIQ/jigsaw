@@ -84,9 +84,10 @@ public class PuzzleManager {
         puzzle.getPuzzlePiecesArray(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors();
+            throw new  RuntimeException ("cannot continue with the process.");
         }
 
-        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
+      puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
 
     }
 
@@ -214,7 +215,7 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data, BufferedWriter bw) throws IOException {
+    private void writeToFile(String data, BufferedWriter bw) {
 
         try {
             bw.write(data);
@@ -233,8 +234,9 @@ public class PuzzleManager {
     private void reportErrors() {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
-            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
-        } else if (puzzle.getErrorsManager().hasNonFatalErrors()) {
+//            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
+        }
+        if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
     }

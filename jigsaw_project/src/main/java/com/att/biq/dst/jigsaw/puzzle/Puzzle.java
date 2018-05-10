@@ -76,15 +76,6 @@ public class Puzzle {
         return puzzlePieces;
     }
 
-//    private void rotatePiece(PuzzlePiece pp) {
-//        if ((pp.getBottom() == pp.getTop()) && (pp.getLeft() == pp.getRight()) && (pp.getRight() != pp.getTop())) {
-//            puzzlePieces.add(pp.rotate(1,90));
-//        } else if ((pp.getBottom() != pp.getTop()) || (pp.getLeft() != pp.getRight())) {
-//            puzzlePieces.add(pp.rotate(1,90));
-//            puzzlePieces.add(pp.rotate(2,180));
-//            puzzlePieces.add(pp.rotate(3,270));
-//        }
-//    }
 
     public int getStraightEdgesSum () {
         int totalStraightEdges = 0;
