@@ -134,7 +134,8 @@ public class PuzzlePieceValidators {
      */
     private  boolean validateCorners(int totalCorners) {
         if (rotate) {
-            return (totalCorners >= 4);
+
+            return (topLeftCorners+topRightCorners+ bottomRightCorners +bottomLeftCorners >=4);
         }else{
                return (topLeftCorners>=1 && topRightCorners>=1 && bottomRightCorners>=1 && bottomLeftCorners>=1);
         }
