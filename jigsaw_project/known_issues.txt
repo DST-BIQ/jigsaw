@@ -1,8 +1,14 @@
 DST Team Jigsaw project known issues:
 
 ****** Second submission - 11.5.2018 *************
+
+TODO !!!! - we have a known issue on writing solution to file. This is a regression that we coult not find to that point what is the issue.
+there is a chance that solutions will not be created to file in some cases...
+we are working on that.
+
+
 From Amir's Review:
-1. TODO - Packages: no need for two packages (or not clear what is the separation between the two).
+Done - Packages: no need for two packages (or not clear what is the separation between the two).
 Done - Package name - lower case.
 
 Done - main(String[] args) throws IOException, InterruptedException
@@ -17,9 +23,9 @@ Better to parse the command lune argument and pass them on but keep the task of 
 Done - public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException
 Why do you let these exceptions get out of the manager?
 
-TODO ?
+Done -
 That's not the way to wait for ThreadPool to finish:
-       while (solution==null && counter<200){//TODO - find another exit criteria
+       while (solution==null && counter<200)
             Thread.sleep(10);
             counter++;
         }
