@@ -79,7 +79,8 @@ public class SystemTest {
 
     @ParameterizedTest(name = "System Test for puzzles - no rotation and one thread. solution is available")
     @ValueSource(strings = {
-            "./src/main/resources/input/AdvancedPuzzleTests/Input/test1.in",
+            "./src/main/resources/input/AdvancedPuzzleTests/Input/test1.in"
+            ,
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test2.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test9.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test11.in",
