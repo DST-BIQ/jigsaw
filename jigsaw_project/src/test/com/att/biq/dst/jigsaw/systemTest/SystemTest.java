@@ -67,13 +67,13 @@ public class SystemTest {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test15.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test16.in",
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test17.in",
-            "./src/main/resources/input/AdvancedPuzzleTests/Input/test18.in"
+
     })
 
     public void noRotationOneThread(String filePath) throws IOException, InterruptedException {
 
-        preparation(filePath,false,1,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
-            assertEquals(FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")));
+        preparation(filePath,false,4,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
+            assertEquals(FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
 
     }
 
@@ -93,8 +93,8 @@ public class SystemTest {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test18.in"
     })
     public void useRotation(String filePath) throws IOException {
-        preparation(filePath,true,1,"./src/main/resources/input/AdvancedPuzzleTests/OutputRotation/");
-        assertEquals(FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")));
+        preparation(filePath,true,4,"./src/main/resources/input/AdvancedPuzzleTests/OutputRotation/");
+        assertEquals(FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
 
     }
 
@@ -119,7 +119,7 @@ public class SystemTest {
     );
 
         try {
-            assertEquals( FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")),FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")));
+            assertEquals( FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")),FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
         } catch (IOException e) {
             e.getMessage();
         }

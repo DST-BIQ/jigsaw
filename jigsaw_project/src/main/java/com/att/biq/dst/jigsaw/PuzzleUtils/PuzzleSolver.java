@@ -1,4 +1,10 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
+/**
+ * this class contains the algorithm for puzzle solving.
+ * including how to handle puzzle piece's location, and where to put it, according to
+ * all defined input algorithm and input puzzle structure.
+ * This class implements runnabld, and execute the threads on different solutions calculation..
+ */
 
 import com.att.biq.dst.jigsaw.puzzle.*;
 
