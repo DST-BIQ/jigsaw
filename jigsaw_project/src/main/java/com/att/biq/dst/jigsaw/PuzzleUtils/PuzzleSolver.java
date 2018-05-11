@@ -236,7 +236,7 @@ public class PuzzleSolver implements Runnable {
     }
 
     private boolean foundSolution(PuzzleSolution solution) {
-        return  solution.isValid() && isAllPuzzlePiecesInUse();
+        return  solution.isValid();
     }
 
 
