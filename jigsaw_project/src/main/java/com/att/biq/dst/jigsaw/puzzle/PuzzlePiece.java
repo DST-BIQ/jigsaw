@@ -1,6 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 /**
+ * @ author - Dorit, Stav, Tal
  * this class represents the PuzzlePiece with all edges after converting and the rotation
  */
 public class PuzzlePiece {

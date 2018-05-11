@@ -1,8 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.puzzleUtils.FileInputParser;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +8,8 @@ import java.util.Map;
 
 
 /**
+ *
+ * @ author Dorit, Stav, Tal
  * The puzzle class holds the list of the PuzzlePieces after converting from input file
  * and indexing them to treeMap of PuzzlePieceIdentity.
  * the methods of the class is converting the puzzle content to PuzzlePieces and indexing

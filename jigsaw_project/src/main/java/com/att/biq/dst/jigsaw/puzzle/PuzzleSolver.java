@@ -1,12 +1,12 @@
-package com.att.biq.dst.jigsaw.puzzleUtils;
+package com.att.biq.dst.jigsaw.puzzle;
 /**
+ *
+ * @author Tal
  * this class contains the algorithm for puzzle solving.
  * including how to handle puzzle piece's location, and where to put it, according to
  * all defined input algorithm and input puzzle structure.
  * This class implements runnabld, and execute the threads on different solutions calculation..
  */
-
-import com.att.biq.dst.jigsaw.puzzle.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class PuzzleSolver implements Runnable {
     Puzzle puzzle;
     static PuzzleSolution endResult;
     PuzzleSolution solution;
-    private ErrorsManager errorsManager = new com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager();
+    private ErrorsManager errorsManager = new ErrorsManager();
     private Map<Integer, PuzzlePiece> puzzlePieceMap;
 
     public PuzzleSolver( Puzzle puzzle, PuzzleSolution solution){

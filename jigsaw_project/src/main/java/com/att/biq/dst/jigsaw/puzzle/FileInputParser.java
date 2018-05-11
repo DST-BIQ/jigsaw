@@ -1,6 +1,4 @@
-package com.att.biq.dst.jigsaw.puzzleUtils;
-
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
+package com.att.biq.dst.jigsaw.puzzle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +6,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
+ *
+ * @ author Dorit
  * The road to success is always under construction.
  *
  * this class is dealing with parsing the input file, that will be later used for puzzle processing.
@@ -185,7 +185,7 @@ public class FileInputParser {
     }
 
 
-    static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
+    public static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
         List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
         for ( int[] puzzlePiece : puzzleArray ) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
@@ -201,7 +201,7 @@ public class FileInputParser {
      * @param line from file input
      * @return string contains the puzzle piece
      */
-    static String getPuzzlePieceData(String line) {
+    public static String getPuzzlePieceData(String line) {
         try {
             String lineTemp = trimRedundantSpacesFromLine(line);
             String[] lineArr = lineTemp.split(" ");
@@ -225,7 +225,7 @@ public class FileInputParser {
      * @param line line to inspect
      * @return true/false
      */
-    static boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
+    public static boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
 
         int numberOfElements = getNumberOfElements(list, errorsManager);
         int puzzlePieceID = getLinePuzzlePieceID(line);
@@ -245,7 +245,7 @@ public class FileInputParser {
      * @param line from file
      * @return true/false
      */
-    static boolean isLineContainsOnlySpaces(String line) {
+    public static boolean isLineContainsOnlySpaces(String line) {
         if (line.length() == line.chars().filter(ch -> ch == ' ').count()) {
             return true;
         }
@@ -268,7 +268,7 @@ public class FileInputParser {
      * @param line from file
      * @return pieceID
      */
-    static int getLinePuzzlePieceID(String line) {
+    public static int getLinePuzzlePieceID(String line) {
         try {
             String tempLine = trimRedundantSpacesFromLine(line);
             String[] lineArr = tempLine.split(" ");
@@ -287,7 +287,7 @@ public class FileInputParser {
      * @return true/false
      */
 
-    static boolean isLineBeginswithDash(String line) {
+    public static boolean isLineBeginswithDash(String line) {
         line = trimRedundantSpacesFromLine(line);
         return line.startsWith("#");
     }
@@ -299,7 +299,7 @@ public class FileInputParser {
      * @param pieceArray       - missing elements in the file
      * @return set for print the IDs of missing elements
      */
-    static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
+    public static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
         SortedSet<Integer> missingIDs = new TreeSet<>();
         SortedSet<Integer> existingIDs = new TreeSet<>();
@@ -333,7 +333,7 @@ public class FileInputParser {
      * @param line from file
      * @return true/false
      */
-    public  boolean isWrongElementFormat(String[] line) {
+    public static boolean isWrongElementFormat(String[] line) {
 
 
         for ( int i = 1; i <= 4; i++ ) {

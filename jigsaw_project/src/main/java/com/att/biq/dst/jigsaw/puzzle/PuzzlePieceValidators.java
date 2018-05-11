@@ -1,10 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
-
 import java.util.List;
 
 /**
+ * @ author Stav
  * This class makes the validations on PuzzlePieces list, if validation fails, we won't continue to the puzzle solution stage.
  */
 public class PuzzlePieceValidators {

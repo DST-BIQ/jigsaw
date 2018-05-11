@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.parameters;
+package com.att.biq.dst.jigsaw.puzzle;
 
 /**
  * author = dorit

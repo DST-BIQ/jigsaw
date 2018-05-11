@@ -1,11 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.parameters.ArgumentsManager;
-import com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.puzzleUtils.FileInputParser;
-import com.att.biq.dst.jigsaw.puzzleUtils.PuzzleSolver;
-import com.att.biq.dst.jigsaw.puzzleUtils.ThreadsManager;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
