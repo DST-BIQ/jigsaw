@@ -238,7 +238,6 @@ public class PuzzleManager {
     private void reportErrors() {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
-//            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
         if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
@@ -257,7 +256,6 @@ public class PuzzleManager {
         return df.format(cal.getTime());
     }
 
-
     /**
      * delete file is exists.
      *
@@ -270,29 +268,6 @@ public class PuzzleManager {
             file.delete();
         }
 
-
-    }
-
-
-    /**
-     * @return
-     */
-
-    public boolean isRotate() {
-        return rotate;
-    }
-
-    public int getThreadNumber() {
-        return threadNumber;
-    }
-
-
-    public String getInputFilePath() {
-        return inputFilePath;
-    }
-
-    public String getOutputFilePath() {
-        return outputFilePath;
     }
 
 
