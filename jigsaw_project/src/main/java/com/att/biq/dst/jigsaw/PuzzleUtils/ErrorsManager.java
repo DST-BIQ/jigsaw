@@ -1,5 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
 
+/**
+ * Manages the error collecting. holds array list for fatal and non-fatal errors.
+ */
+
 import java.util.ArrayList;
 
 public class ErrorsManager {

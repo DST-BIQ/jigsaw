@@ -1,6 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import java.io.IOException;
 // TODO handle wrong input file in produce array
 /**
  * author: dorit

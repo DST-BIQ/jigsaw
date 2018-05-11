@@ -1,11 +1,12 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-
+//TODO implement pieceShape in all solution areas
 /**
- * @author dorit rieur
+ * @author dorit
  * this class represents the shape structure of the puzzle piece
  * relevant values = 0,1,-1
- * if 2 = means do not count this value on comparison
+ * if 2 = means do not count this value on comparison.
+ * We are using this class when using indexing -> creating map's keys, and later filtering.
  */
 public class PieceShape {
 

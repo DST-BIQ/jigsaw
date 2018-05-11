@@ -10,7 +10,7 @@ import java.util.TreeSet;
 /**
  * The road to success is always under construction.
  *
- * this document is dealing with parsing the input file, that will be later used for puzzle processing.
+ * this class is dealing with parsing the input file, that will be later used for puzzle processing.
  */
 
 public class FileInputParser {

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO implement pieceShape in all solution areas
+
 
 /**
  * The puzzle class holds the list of the PuzzlePieces after converting from input file
@@ -164,5 +164,7 @@ public class Puzzle {
         return this.treeMap;
     }
 
-
+    public void  setTreeMap(Map<PieceShape, ArrayList<PuzzlePieceIdentity>> treemap) {
+        this.treeMap = treemap;
+    }
 }
