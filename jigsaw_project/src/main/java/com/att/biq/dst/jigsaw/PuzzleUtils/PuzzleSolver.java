@@ -7,23 +7,25 @@ package com.att.biq.dst.jigsaw.puzzleUtils;
  */
 
 import com.att.biq.dst.jigsaw.puzzle.*;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class PuzzleSolver implements Runnable {
 
     Puzzle puzzle;
     static PuzzleSolution endResult;
     PuzzleSolution solution;
-    private com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager errorsManager = new com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager();
-    private List<PuzzlePiece> puzzlePieceArray;
+    private ErrorsManager errorsManager = new com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager();
+    private Map<Integer, PuzzlePiece> puzzlePieceMap;
 
     public PuzzleSolver( Puzzle puzzle, PuzzleSolution solution){
         this.puzzle=puzzle;
         this.solution = solution;
-        puzzlePieceArray = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
+        puzzlePieceMap = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
     }
 
 
@@ -46,26 +48,26 @@ public class PuzzleSolver implements Runnable {
      * @return possible puzzle solution if found. else returns null.
      */
 
-    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, com.att.biq.dst.jigsaw.puzzleUtils.ThreadsManager threadsManager, Puzzle puzzle)  {
-        PuzzleSolver solver=null;
-        for(int[] structure:puzzleStructures) {
-            PuzzleSolution attemptSolution = new PuzzleSolution(structure[0], structure[1]);
+    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) throws InterruptedException {
+//        int counter=0;
+        PuzzleSolver solver;
+        ThreadPoolExecutor threadPoolExecutor = threadsManager.getThreadPoolExecutor();
+        for(int i = puzzleStructures.size()-1; i>=0; i--) {
+            PuzzleSolution attemptSolution = new PuzzleSolution(puzzleStructures.get(i)[0], puzzleStructures.get(i)[1]);
             solver = new PuzzleSolver(puzzle, attemptSolution);
-            threadsManager.getThreadPoolExecutor().execute(solver);
+            threadPoolExecutor.execute(solver);
         }
-        try {
-            threadsManager.getThreadPoolExecutor().awaitTermination(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (puzzle.isSolved()){
-            threadsManager.getThreadPoolExecutor().shutdown();
-            if (endResult!=null) {
+        while (threadPoolExecutor.getActiveCount()>0) {
+            if (puzzle.isSolved()) {
+                threadPoolExecutor.shutdown();
                 return endResult;
-            }else return null;
-
-        }else {
-
+            }
+        }
+        if (puzzle.isSolved()) {
+            threadPoolExecutor.shutdown();
+            return endResult;
+        } else {
+            threadPoolExecutor.shutdown();
             return null;
         }
     }
@@ -143,7 +145,7 @@ public class PuzzleSolver implements Runnable {
      * @param top    - top side condition
      * @param right  - right side condition
      * @param bottom - bottom side condition
-     *               //     * @param puzzlePieceArray - list of all puzzle pieces.
+     *               //     * @param puzzlePieceMap - list of all puzzle pieces.
      * @return list of matched puzzle pieces.
      */
 
@@ -157,7 +159,7 @@ public class PuzzleSolver implements Runnable {
 
                 for ( PuzzlePieceIdentity ppi : treeEntry.getValue() ) { // rotate on this node and take the first that is not "INUSE"
 
-                    if (!getPuzzlePieceFromIdentityID(ppi).isInUse()) {
+                    if (!puzzlePieceMap.get(ppi.getPuzzlePieceID()).isInUse()) {
                         matchedPiecesIdentities.add(ppi);
                     }
 
@@ -173,14 +175,14 @@ public class PuzzleSolver implements Runnable {
 
     private PuzzlePiece getPuzzlePieceFromIdentityID(PuzzlePieceIdentity ppi) {
 
-        for (PuzzlePiece pp: puzzlePieceArray){
+        for (PuzzlePiece pp: puzzlePieceMap.values()){
 
             if (ppi.getPuzzlePieceID()==pp.getId()){
                 return pp;
             }
 
         }
-return null;
+    return null;
     }
 
     /**
@@ -202,8 +204,8 @@ return null;
             foundPieces = handleBetweenTopAndBottomRows(solution);
         }
         if (foundPieces!=null) {
-                PuzzleSolution possibleSolution = findSolution(solution, foundPieces);
-                if (possibleSolution != null) {return possibleSolution;}
+            PuzzleSolution possibleSolution = findSolution(solution, foundPieces);
+            if (possibleSolution != null) {return possibleSolution;}
         }
         return null;
     }
@@ -231,7 +233,7 @@ return null;
     }
 
     public boolean isAllPuzzlePiecesInUse(){
-        for (PuzzlePiece puzzlePiece: this.puzzlePieceArray){
+        for (PuzzlePiece puzzlePiece: this.puzzlePieceMap.values()){
             if (!puzzlePiece.isInUse()) {
                 return false;
             }
@@ -311,21 +313,22 @@ return null;
      * @return possible solution found
      */
     private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePieceIdentity> foundPieces) {
+        PuzzleSolution possibleSolution;
         for ( PuzzlePieceIdentity piece : foundPieces ) {
             solution.insertPiece(piece);
-            getPuzzlePieceFromIdentityID(piece).setInUse(true);
-            PuzzleSolution possibleSolution = solve(solution);
+            puzzlePieceMap.get(piece.getPuzzlePieceID()).setInUse(true);
+            possibleSolution = solve(solution);
             if (possibleSolution != null) {
                 return possibleSolution;
             }else {
                 solution.removePiece();
-                getPuzzlePieceFromIdentityID(piece).setInUse(false);
+                puzzlePieceMap.get(piece.getPuzzlePieceID()).setInUse(false);
             }
         }
         return null;
     }
 
-    public com.att.biq.dst.jigsaw.puzzleUtils.ErrorsManager getErrorsManager() {
+    public ErrorsManager getErrorsManager() {
         return errorsManager;
     }
 
@@ -351,12 +354,12 @@ return null;
      * @return new list of puzzlePieces without the removed piece
      */
 
-    private  List<PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces){
-        List<PuzzlePiece> newPuzzlePiecesList = new ArrayList<>();
+    private  Map<Integer, PuzzlePiece> clonePuzzlePiecesList(List<PuzzlePiece> puzzlePieces){
+        Map<Integer, PuzzlePiece> newPuzzlePiecesList = new HashMap<>();
         for (PuzzlePiece piece: puzzlePieces){
 
-                newPuzzlePiecesList.add(piece);
-                   }
+            newPuzzlePiecesList.put(piece.getId(),piece);
+        }
         return newPuzzlePiecesList;
     }
 

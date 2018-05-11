@@ -126,12 +126,6 @@ public class Puzzle {
                 }
             }
 
-
-            // rotate to return to the original piece state.
-            for (int i=1;i<=3;i++){
-                puzzlePiece.rotate(1);
-             }
-
         }
 
 
