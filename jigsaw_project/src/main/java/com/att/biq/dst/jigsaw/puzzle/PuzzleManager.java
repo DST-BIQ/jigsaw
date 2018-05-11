@@ -24,6 +24,7 @@ import static java.nio.file.Files.readAllLines;
  * @author dorit, tal
  * Puzzle manager should handle the puzzle creation process.
  * Including, reading from file, error handling, finind solution and reporting
+ * This class is inserting the puzzle pieces to index.
  */
 
 public class PuzzleManager {

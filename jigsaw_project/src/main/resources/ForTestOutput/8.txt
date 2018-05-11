@@ -1,0 +1,4 @@
+Puzzle ID <1> as wrong data: <0 -2 0 0
+Puzzle ID <1> as wrong data: <0 E 0 E
+Puzzle ID <1> as wrong data: <E 0 0 -1
+Missing puzzle element(s) with the following IDs: 2, 3, 4

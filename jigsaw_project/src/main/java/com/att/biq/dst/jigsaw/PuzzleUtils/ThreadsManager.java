@@ -1,4 +1,7 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
+/**
+ * created the thread pool executer according to defined arguments.
+ */
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

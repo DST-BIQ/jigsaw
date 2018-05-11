@@ -1,5 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
 
+/**
+ * creates demo puzzles
+ */
+
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 
 import java.io.BufferedWriter;
