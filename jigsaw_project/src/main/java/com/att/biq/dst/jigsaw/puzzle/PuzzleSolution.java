@@ -86,9 +86,13 @@ public class PuzzleSolution {
 
 
     private void moveSolutionBackward() {
-        if (curCol == 0 && !(curRow == 0)) {
-            curRow--;
-            curCol = columns - 1;
+        if (curCol == 0 ){
+            if(curRow != 0) {
+                curRow--;
+                curCol = columns - 1;
+            }else {
+                return;
+            }
         } else {
             curCol--;
         }

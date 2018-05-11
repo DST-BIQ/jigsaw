@@ -104,7 +104,10 @@ public class PuzzleManager {
             reportData(reportList, "file");
 
         }
-        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
+        try {
+            solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
+        } catch (InterruptedException e) { throw  new RuntimeException("Failed to solve puzzle");
+        }
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
