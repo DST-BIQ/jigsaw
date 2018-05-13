@@ -1,3 +1,0 @@
-Puzzle of size 4 cannot have the following IDs: 5
-Puzzle ID <1> as wrong data: <5 0 0 0
-Missing puzzle element(s) with the following IDs: 4
