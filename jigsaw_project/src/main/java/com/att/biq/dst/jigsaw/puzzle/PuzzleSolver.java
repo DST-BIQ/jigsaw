@@ -48,8 +48,8 @@ public class PuzzleSolver implements Runnable {
      * @return possible puzzle solution if found. else returns null.
      */
 
-    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) throws InterruptedException {
-//        int counter=0;
+    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) {
+
         PuzzleSolver solver;
         ThreadPoolExecutor threadPoolExecutor = threadsManager.getThreadPoolExecutor();
         for(int i = puzzleStructures.size()-1; i>=0; i--) {
@@ -59,10 +59,11 @@ public class PuzzleSolver implements Runnable {
         }
         while (threadPoolExecutor.getActiveCount()>0) {
             if (puzzle.isSolved()) {
-                threadPoolExecutor.shutdown();
+                threadPoolExecutor.shutdownNow();
                 return endResult;
             }
         }
+        threadPoolExecutor.shutdownNow();
         if (puzzle.isSolved()) {
             threadPoolExecutor.shutdown();
             return endResult;

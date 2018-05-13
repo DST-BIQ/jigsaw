@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 /**
@@ -21,7 +21,7 @@ public class Puzzle {
     private Map<PieceShape, ArrayList<PuzzlePieceIdentity>> treeMap = new HashMap();
 
     private boolean rotate;
-    private boolean isSolved = false;
+    private AtomicBoolean isSolved = new AtomicBoolean(false);
 
 
     public Puzzle(ErrorsManager errorsManager, boolean rotate) {
@@ -89,7 +89,7 @@ public class Puzzle {
     }
 
     public void setSolved() {
-        isSolved = true;
+        isSolved.set(true);
     }
 
     public ErrorsManager getErrorsManager() {
@@ -97,7 +97,7 @@ public class Puzzle {
     }
 
     public boolean isSolved() {
-        return isSolved;
+        return isSolved.get();
     }
 
 

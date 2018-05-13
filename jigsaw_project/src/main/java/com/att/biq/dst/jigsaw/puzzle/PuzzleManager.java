@@ -99,10 +99,7 @@ public class PuzzleManager {
             reportData(reportList, "file");
 
         }
-        try {
-            solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
-        } catch (InterruptedException e) { throw  new RuntimeException("Failed to solve puzzle");
-        }
+        solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
 
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
@@ -150,10 +147,22 @@ public class PuzzleManager {
      * @param dataList
      * @param reportMethod
      */
-    private void reportData(ArrayList<String> dataList, String reportMethod) {
+    private  synchronized void reportData(ArrayList<String> dataList, String reportMethod) {
 
+        FileWriter fw=null;
+        BufferedWriter bw=null;
+        File file= new File(outputFilePath);
+        if (!file.exists()){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create file");
+            }
+        }
 
-        try (FileWriter fw = new FileWriter(outputFilePath, true); BufferedWriter bw = new BufferedWriter(fw)) {
+        try {
+            fw = new FileWriter(outputFilePath, true);
+            bw = new BufferedWriter(fw);
 
             if (isDirectory(outputFilePath)) {
                 outputFilePath = outputFilePath + "output_" + getTimeStamp() + ".txt";
@@ -174,6 +183,12 @@ public class PuzzleManager {
             }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
+        }finally {
+            try {
+                bw.close();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not write to file");
+            }
         }
 
     }

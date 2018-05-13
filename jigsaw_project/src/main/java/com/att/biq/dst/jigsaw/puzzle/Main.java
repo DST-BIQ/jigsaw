@@ -23,10 +23,9 @@ package com.att.biq.dst.jigsaw.puzzle;
 public class Main {
     public static void main(String[] args) {
 
-
         PuzzleManager puzzleManager = new PuzzleManager(args);
-       puzzleManager.loadPuzzle();
-      puzzleManager.playPuzzle();
+        puzzleManager.loadPuzzle();
+        puzzleManager.playPuzzle();
 
-            }
+    }
 }
