@@ -107,7 +107,7 @@ public class PuzzleManager {
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
-        } else if (puzzle.getErrorsManager().hasFatalErrors()) {
+        } else if (puzzle.getErrorsManager().hasFatalErrors()||puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportErrors();
         }
     }
