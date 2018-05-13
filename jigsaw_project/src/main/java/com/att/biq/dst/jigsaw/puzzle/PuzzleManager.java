@@ -80,10 +80,10 @@ public class PuzzleManager {
         puzzle.getPuzzlePiecesArray(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
             reportErrors();
-            throw new  RuntimeException ("cannot continue with the process.");
+            throw new RuntimeException("cannot continue with the process.");
         }
 
-      puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
+        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
 
     }
 
@@ -93,7 +93,7 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle(){
+    public void playPuzzle() {
         solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size(), rotate);
         if (reportList.size() > 0) {
             reportData(reportList, "file");
@@ -104,7 +104,7 @@ public class PuzzleManager {
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
-        } else if (puzzle.getErrorsManager().hasFatalErrors()||puzzle.getErrorsManager().hasNonFatalErrors()) {
+        } else if (puzzle.getErrorsManager().hasFatalErrors() || puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportErrors();
         }
     }
@@ -116,7 +116,7 @@ public class PuzzleManager {
      */
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
         PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
-        for ( int i = 0; i < winnerSolution.length; i++ ) {
+        for (int i = 0; i < winnerSolution.length; i++) {
             reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
         }
 
@@ -131,7 +131,7 @@ public class PuzzleManager {
     private String convertPuzzlePiecesToString(PuzzlePieceIdentity[] puzzlePieces) {
 
         StringBuilder builder = new StringBuilder();
-        for ( PuzzlePieceIdentity piece : puzzlePieces ) {
+        for (PuzzlePieceIdentity piece : puzzlePieces) {
             builder.append(piece.toString());
         }
 
@@ -147,17 +147,22 @@ public class PuzzleManager {
      * @param dataList
      * @param reportMethod
      */
-    private  synchronized void reportData(ArrayList<String> dataList, String reportMethod) {
+    private void reportData(ArrayList<String> dataList, String reportMethod) {
 
-        FileWriter fw=null;
-        BufferedWriter bw=null;
-        File file= new File(outputFilePath);
-        if (!file.exists()){
-            try {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        File file = new File(outputFilePath);
+        try {
+            if (!file.exists()) {
+
                 file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create file");
+
+            } else {
+                file.delete();
+                file.createNewFile();
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create file");
         }
 
         try {
@@ -170,7 +175,7 @@ public class PuzzleManager {
             }
 
 
-            for ( String dataLine : dataList ) {
+            for (String dataLine : dataList) {
                 switch (reportMethod) {
                     case "file":
                         writeToFile(dataLine, bw);
@@ -183,7 +188,7 @@ public class PuzzleManager {
             }
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
-        }finally {
+        } finally {
             try {
                 bw.close();
             } catch (IOException e) {

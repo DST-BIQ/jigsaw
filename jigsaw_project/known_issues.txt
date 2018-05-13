@@ -2,11 +2,7 @@ DST Team Jigsaw project known issues:
 
 ****** Second submission - 11.5.2018 *************
 
-TODO !!!! - we have a known issue on writing solution to file. This is a regression that we coult not find to that point what is the issue.
-there is a chance that solutions will not be created to file in some cases...
-we are working on that.
-
-
+TODO - fix errors print to fit expected format and order
 From Amir's Review:
 Done - Packages: no need for two packages (or not clear what is the separation between the two).
 Done - Package name - lower case.
@@ -34,10 +30,10 @@ That's not the way to wait for ThreadPool to finish:
 Done - private boolean isSolved = false;
 Should probably be AtomicBoolean
 
-TODO -
-As the TODOs say: Puzzle and PuzzleSolver should be refactored.
+
+Done :As the TODOs say: Puzzle and PuzzleSolver should be refactored.
 - write down what are the roles of each one
-- draw sequence diagram for their major methods
+TODO: - draw sequence diagram for their major methods
 
 
 

@@ -23,6 +23,7 @@ public class SystemTest {
     String baseOutputFolder="./src/main/resources/ForTestOutput/";
 
     public void preparation(String filePath,boolean rotate,int numberOfThreads,String expectedFilesLocations) {
+
         PuzzleManager puzzleManager1 = new PuzzleManager();
         String[] args =new String[7];
 
@@ -114,19 +115,15 @@ public class SystemTest {
 
     public void notAbleToLoadPuzzle(String filePath){
 
-        Throwable exception = assertThrows(RuntimeException.class,() -> {
+        assertThrows(RuntimeException.class,() -> {
             preparation(filePath,false,1,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
         }
     );
-
         try {
             assertEquals( FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")),FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
         } catch (IOException e) {
             e.getMessage();
         }
-
-
-
 
     }
 

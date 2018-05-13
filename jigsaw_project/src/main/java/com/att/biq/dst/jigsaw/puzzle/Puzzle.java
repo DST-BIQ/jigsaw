@@ -88,7 +88,7 @@ public class Puzzle {
         return totalStraightEdges;
     }
 
-    public void setSolved() {
+    public synchronized void setSolved() {
         isSolved.set(true);
     }
 
