@@ -81,8 +81,9 @@ public class PuzzleSolution {
 
 
     public void removePiece() {
-        solution[curRow][curCol] = null;
         moveSolutionBackward();
+        solution[curRow][curCol] = null;
+
     }
 
 
