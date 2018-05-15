@@ -335,8 +335,9 @@ public class PuzzleSolver implements Runnable {
             if (possibleSolution != null) {
                 return possibleSolution;
             } else {
-                solution.removePiece();
                 puzzlePieceMap.get(piece.getPuzzlePieceID()).setInUse(false);
+                solution.removePiece();
+
             }
         }
         return null;
@@ -368,10 +369,8 @@ public class PuzzleSolver implements Runnable {
         Map<Integer, PuzzlePiece> newPuzzlePiecesList = new HashMap<>();
         for (PuzzlePiece piece : puzzlePieces) {
 
-            newPuzzlePiecesList.put(piece.getId(), piece);
+            newPuzzlePiecesList.put(piece.getId(), new PuzzlePiece(piece.getId(),piece.getLeft(), piece.getTop(), piece.getRight(), piece.getBottom()));
         }
         return newPuzzlePiecesList;
     }
-
-
 }
