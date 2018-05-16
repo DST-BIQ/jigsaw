@@ -15,8 +15,8 @@ package com.att.biq.dst.jigsaw.puzzle;
  * there is no importance to the order of the parameters.
  *
  * usage example on the main program arguments:
- * basic:                -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput
- * including rotation:   -hasRotate -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput
+ * basic:                -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput\1.txt
+ * including rotation:   -hasRotate -inputFilePath ./src/main/resources/input/SimplePuzzleTests/input/test1.in -outputFilePath C:\temp\puzzleOutput/test.file
  *
 
  */
