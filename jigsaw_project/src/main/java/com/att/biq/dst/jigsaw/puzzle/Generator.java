@@ -1,4 +1,9 @@
-package com.att.biq.dst.jigsaw.PuzzleUtils;
+package com.att.biq.dst.jigsaw.puzzle;
+
+/**
+ * @ author Tal
+ * creates demo puzzles
+ */
 
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 

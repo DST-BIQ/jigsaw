@@ -1,10 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
-import com.att.biq.dst.jigsaw.PuzzleUtils.FileInputParser;
-import com.att.biq.dst.jigsaw.PuzzleUtils.PuzzleSolver;
-import com.att.biq.dst.jigsaw.PuzzleUtils.ThreadsManager;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -19,11 +14,15 @@ import java.util.List;
 
 import static java.nio.file.Files.readAllLines;
 
+/**
+ * @author dorit, tal
+ * Puzzle manager should handle the puzzle creation process.
+ * Including, reading from file, error handling, finind solution and reporting
+ * This class is inserting the puzzle pieces to index.
+ */
+
 public class PuzzleManager {
 
-    /**
-     * Puzzle manager should handle the puzzle creation process. Including, reading from file, error handling, finind solution and reporting
-     */
 
     /////////////////////////////////////////   Class members
 
@@ -35,11 +34,14 @@ public class PuzzleManager {
     private ArrayList<String> reportList; // all reports to file will be written to this list
     private List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
+    private ArgumentsManager argumentsManager = new ArgumentsManager();
+    private boolean rotate;
+    private int threadNumber;
     private ErrorsManager errorsManager;
-    private PuzzleSolver puzzleSolver;
+    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
-//    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-//    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+    ThreadsManager threadsManager;
 
     /////////////////////////////////////////   class constructors
 
@@ -47,15 +49,21 @@ public class PuzzleManager {
 
     }
 
-    public PuzzleManager(String inputFilePath, String outputFilePath) {
-        this.inputFilePath = inputFilePath;
-        this.outputFilePath = outputFilePath;
-        puzzlePieceValidators = new PuzzlePieceValidators();
+
+    public PuzzleManager(String[] args) {
+
+        argumentsManager.handleCommandLineOptions(args);
+        this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
+        this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
+        this.rotate = argumentsManager.getRotationStatus();
+        this.threadNumber = argumentsManager.getThreadNumberFromCommandLine();
+        puzzlePieceValidators = new PuzzlePieceValidators(rotate);
         reportList = new ArrayList<>();
         solutionStructures = new ArrayList<>();
         fileInputParser = new FileInputParser();
         this.errorsManager = new ErrorsManager();
-        puzzle = new Puzzle(errorsManager);
+        puzzle = new Puzzle(errorsManager, rotate);
+        threadsManager = new ThreadsManager(this.threadNumber);
 
     }
 
@@ -68,11 +76,15 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void loadPuzzle() throws IOException {
-        puzzle.getPuzzle(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
+    public void loadPuzzle() {
+        puzzle.getPuzzlePiecesArray(fileInputParser, readFromFile(Paths.get(inputFilePath)), puzzlePieceValidators);
         if (puzzle.getPuzzlePieces() == null) {
-            reportErrors("A FATAL Error has occurred, cannot load Puzzle ");
+            reportErrors();
+            throw new RuntimeException("cannot continue with the process.");
         }
+
+        puzzle.indexingPuzzlePiecesToTree(puzzle.getPuzzlePieces(), argumentsManager.getRotationStatus());
+
     }
 
     /**
@@ -81,8 +93,8 @@ public class PuzzleManager {
      *
      * @throws IOException
      */
-    public void playPuzzle(ThreadsManager threadsManager) throws IOException, InterruptedException {
-        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size());
+    public void playPuzzle() {
+        solutionStructures = PuzzleSolver.calculateSolutionStructure(puzzlePieceValidators, puzzle.getPuzzlePieces().size(), rotate);
         if (reportList.size() > 0) {
             reportData(reportList, "file");
 
@@ -92,8 +104,8 @@ public class PuzzleManager {
         if (solution != null) {
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
-        } else if (puzzle.getErrorsManager().hasFatalErrors()) {
-            reportErrors("A FATAL Error has occurred, cannot solve Puzzle");
+        } else if (puzzle.getErrorsManager().hasFatalErrors() || puzzle.getErrorsManager().hasNonFatalErrors()) {
+            reportErrors();
         }
     }
 
@@ -103,8 +115,8 @@ public class PuzzleManager {
      * @param solution
      */
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
-        PuzzlePiece[][] winnerSolution = solution.getSolution();
-        for ( int i = 0; i < winnerSolution.length; i++ ) {
+        PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
+        for (int i = 0; i < winnerSolution.length; i++) {
             reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
         }
 
@@ -113,13 +125,13 @@ public class PuzzleManager {
     /**
      * convert pieces array to String, in order to report it to the output file
      *
-     * @param puzzlePieces - array containint solution's puzzle pieces.
+     * @param puzzlePieces - array containing solution's puzzle pieces.
      * @return
      */
-    private String convertPuzzlePiecesToString(PuzzlePiece[] puzzlePieces) {
+    private String convertPuzzlePiecesToString(PuzzlePieceIdentity[] puzzlePieces) {
 
         StringBuilder builder = new StringBuilder();
-        for ( PuzzlePiece piece : puzzlePieces ) {
+        for (PuzzlePieceIdentity piece : puzzlePieces) {
             builder.append(piece.toString());
         }
 
@@ -135,21 +147,35 @@ public class PuzzleManager {
      * @param dataList
      * @param reportMethod
      */
-    private void reportData(ArrayList<String> dataList, String reportMethod) throws IOException {
-        FileWriter fw;
+    private void reportData(ArrayList<String> dataList, String reportMethod) {
+
+        FileWriter fw = null;
         BufferedWriter bw = null;
+        File file = new File(outputFilePath);
+        try {
+            if (!file.exists()) {
+
+                file.createNewFile();
+
+            } else {
+                file.delete();
+                file.createNewFile();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create file");
+        }
 
         try {
+            fw = new FileWriter(outputFilePath, true);
+            bw = new BufferedWriter(fw);
 
             if (isDirectory(outputFilePath)) {
                 outputFilePath = outputFilePath + "output_" + getTimeStamp() + ".txt";
 
             }
 
-            fw = new FileWriter(outputFilePath, true);
-            bw = new BufferedWriter(fw);
 
-            for ( String dataLine : dataList ) {
+            for (String dataLine : dataList) {
                 switch (reportMethod) {
                     case "file":
                         writeToFile(dataLine, bw);
@@ -163,11 +189,14 @@ public class PuzzleManager {
         } catch (IOException e) {
             throw new RuntimeException("Error writing to file");
         } finally {
-            if (bw != null) {
+            try {
                 bw.close();
+            } catch (IOException e) {
+                throw new RuntimeException("Could not write to file");
             }
         }
-        }
+
+    }
 
 
     /**
@@ -205,7 +234,7 @@ public class PuzzleManager {
      * @param -    file - the file to write into
      */
 
-    private void writeToFile(String data, BufferedWriter bw) throws IOException {
+    private void writeToFile(String data, BufferedWriter bw) {
 
         try {
             bw.write(data);
@@ -219,14 +248,13 @@ public class PuzzleManager {
     /**
      * send errors to reportData method.
      *
-     * @param message
      * @throws IOException
      */
-    private void reportErrors(String message) throws IOException {
+    private void reportErrors() {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
-            reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
-        } else if (puzzle.getErrorsManager().hasNonFatalErrors()) {
+        }
+        if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
     }
@@ -243,7 +271,6 @@ public class PuzzleManager {
         return df.format(cal.getTime());
     }
 
-
     /**
      * delete file is exists.
      *
@@ -255,7 +282,6 @@ public class PuzzleManager {
         if (file.exists()) {
             file.delete();
         }
-
 
     }
 

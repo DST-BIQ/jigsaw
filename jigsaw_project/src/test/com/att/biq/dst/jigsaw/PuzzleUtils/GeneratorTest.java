@@ -1,5 +1,6 @@
-package com.att.biq.dst.jigsaw.PuzzleUtils;
+package com.att.biq.dst.jigsaw.puzzleUtils;
 
+import com.att.biq.dst.jigsaw.puzzle.Generator;
 import org.junit.jupiter.api.Test;
 
 public class GeneratorTest {

@@ -1,4 +1,10 @@
-package com.att.biq.dst.jigsaw.PuzzleUtils;
+package com.att.biq.dst.jigsaw.puzzle;
+
+/**
+ *
+ * @ author Tal
+ * Manages the error collecting. holds array list for fatal and non-fatal errors.
+ */
 
 import java.util.ArrayList;
 

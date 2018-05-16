@@ -1,5 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+/**
+ * @ author - Dorit, Stav, Tal
+ * this class represents the PuzzlePiece with all edges after converting and the rotation
+ */
 public class PuzzlePiece {
 
     private int id;
@@ -8,6 +12,8 @@ public class PuzzlePiece {
     private int right;
     private int left;
     private int sumEdges;
+    private boolean inUse;
+
     private int rotation=0;
 
 
@@ -18,28 +24,58 @@ public class PuzzlePiece {
         this.left = left;
         this.right = right;
         this.sumEdges = top+bottom+left+right;
+        this.inUse=false;
     }
 
     public int getRotation() {
         return rotation;
     }
 
-    public void setRotation(int rotation) {
-        this.rotation = rotation;
+    /**
+     *
+     * @param numTimesToRotate
+     */
+    public void setRotation(int numTimesToRotate) {
+
+        int[] array=new int[4];
+        array[0]=0;array[1]=90;array[2]=180;array[3]=270;
+
+        int newLocation=decideCurrentLocation(this.rotation);
+        for (int i=1;i<=numTimesToRotate;i++){
+            newLocation = (newLocation + 1) % 4;
+        }
+        this.rotation = array[newLocation];
+
+
     }
 
-    public PuzzlePiece rotate(int num, int rotation) {
-        PuzzlePiece puzzlePiece = new PuzzlePiece(getId(),left,top,right,bottom);
-        int temp=0;
-        for (int i=0 ;i<num ;i++) {
-            temp = puzzlePiece.top;
-            puzzlePiece.top = puzzlePiece.left;
-            puzzlePiece.left = puzzlePiece.bottom;
-            puzzlePiece.bottom = puzzlePiece.right;
-            puzzlePiece.right = temp;
+    private int decideCurrentLocation(int rotation) {
+        switch (rotation){
+            case 0: return 0;
+
+            case 90: return 1;
+
+            case 180: return 2;
+
+            case 270: return 3;
+
+
         }
-        setRotation(rotation);
-        return puzzlePiece;
+        return -1;
+    }
+
+    public void rotate(int numTimesToRotate) {
+
+        int temp;
+        for (int i=0 ;i<numTimesToRotate ;i++) {
+            temp = this.top;
+            this.top = this.left;
+            this.left = this.bottom;
+            this.bottom = this.right;
+            this.right = temp;
+        }
+        setRotation(numTimesToRotate);
+
     }
 
     public boolean isTopLeft() {
@@ -102,6 +138,19 @@ public class PuzzlePiece {
         return sumEdges;
     }
 
+
+    public PieceShape getEdgesFromPiece(){
+
+        int[] edges = new int[4];
+        edges[0]=getLeft();
+        edges[1]=getTop();
+        edges[2]=getRight();
+        edges[3]=getBottom();
+
+        return new PieceShape(edges[0],edges[1],edges[2],edges[3]);
+
+    }
+
     @Override
     public boolean equals(Object other){
         if(!(other instanceof PuzzlePiece)) {
@@ -119,5 +168,13 @@ public class PuzzlePiece {
         } else {
             return (id + " ");
         }
+    }
+
+    public boolean isInUse() {
+        return inUse;
+    }
+
+    public void setInUse(boolean inUse) {
+        this.inUse = inUse;
     }
 }

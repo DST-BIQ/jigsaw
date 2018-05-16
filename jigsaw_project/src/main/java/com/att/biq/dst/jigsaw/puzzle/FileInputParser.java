@@ -1,24 +1,33 @@
-package com.att.biq.dst.jigsaw.PuzzleUtils;
-
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
+package com.att.biq.dst.jigsaw.puzzle;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-//TODO javadoc desc
+/**
+ *
+ * @ author Dorit
+ * The road to success is always under construction.
+ *
+ * this class is dealing with parsing the input file, that will be later used for puzzle processing.
+ */
+
 public class FileInputParser {
 
     private static int numberOfElements;
-    private ArrayList<Integer> piecesID; // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList;
+    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
 
-    public FileInputParser() {
+//    public FileInputParser(ArrayList<Integer> piecesID,ArrayList<int[]> puzzlePieceList){
+//
+//        this.piecesID  = new ArrayList<>();
+//        this.puzzlePieceList = new ArrayList<>();
+//
+//    }
 
-        this.piecesID = new ArrayList<>();
-        this.puzzlePieceList = new ArrayList<>();
+    public FileInputParser(){
 
     }
 
@@ -27,12 +36,12 @@ public class FileInputParser {
      * get number of elements by reading the first line in the file.
      * if there is an error on the first line, return -1, and report to file.
      *
-     * @param stringListsFromInput of lines in the file
+     * @param list of lines in the file
      * @return int containing number of elements
      */
-    public static int getNumberOfElements(List<String> stringListsFromInput, ErrorsManager errorsManager) {
+    public static int getNumberOfElements(List<String> list, ErrorsManager errorsManager) {
 // TODO verify the array contains 2 elements only, verify syntax
-        String firstLine = stringListsFromInput.get(0).trim();
+        String firstLine = list.get(0).trim();
         String[] firstLineArr = firstLine.split("\\s*=\\s*");
         try {
             if ((firstLineArr[0].equals("NumElements")) && (firstLineArr.length == 2)) {
@@ -60,86 +69,92 @@ public class FileInputParser {
 
 
     /**
+     * verify if line on the list is empty - report error and return indication
+     *
+     * @param line from input file
+     * @return true if line is empty
+     */
+    public static boolean isLineEmpty(String line) {
+        return line.isEmpty();
+
+    }
+
+
+    /**
      * recieves list of lines from the file, return valid lines for puzzle
      *
-     * @param stringListsFromInput list of lines from file
+     * @param list list of lines from file
      * @return list of puzzle pieces
      */
 
-    public ArrayList<int[]> produceArrayForPuzzle(List<String> stringListsFromInput, ErrorsManager errorsManager) {
+    public  ArrayList<int[]> produceArrayForPuzzle(List<String> list, ErrorsManager errorsManager) {
         int indexLines = 0;
         List<String> wrongElementIDs = new ArrayList<>();
         List<Integer> missingElementsIDs = new ArrayList<>();
 
 
-// TODO consider move to sseperate method
-        for ( String line : stringListsFromInput ) {
+// TODO consider move to separate method
+        for ( String line : list ) {
+            line = trimRedundantSpacesFromLine(line);
+            String[] splittedLine = line.split(" ");
 
-            String[] splittedLine=reformatLine(line);
             int countErrors = 0;
-            if (line.contains("Num"))  // ignore first line
+            if (!line.contains("Num"))  // ignore first line
             {
-                continue;
-            }
+                if (isLineContainsOnlySpaces(line) || isLineEmpty(line)) {
+                    countErrors += 1;
+                    errorsManager.addNonFatalErrorsList("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
 
-
-            if (isLineContainsOnlySpaces(line) || line.isEmpty()) {
-                countErrors += 1;
-                errorsManager.addNonFatalErrorsList("lineNumber:  " + indexLines + "  contains only spaces or is empty ");
-
-            }
-
-            if (isLineBeginswithDash(line)) {
-                countErrors++;
-                errorsManager.addFatalErrorsList("lineNumber:  " + indexLines + "  begins with dash, ignore ");
-
-            }
-
-
-            if (!idInRange(stringListsFromInput, line, errorsManager)) {
-                countErrors += 1;
-                wrongElementIDs.add(String.valueOf(getLinePuzzlePieceID(line)));
-
-                errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(stringListsFromInput, errorsManager) + " cannot have the following IDs: " + getCsvFromStringArray(wrongElementIDs));
-            }
-
-
-            if (line.split(" ").length != 5) {
-                countErrors += 1;
-                errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
-            }
-
-            if (isWrongElementFormat(splittedLine)) {
-                countErrors += 1;
-                errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
-            }
-
-//            Puzzle ID <id> has wrong data: <complete line from file including ID>
-            //check if line is valid
-
-            if (countErrors == 0) {
-
-                int[] puzzlePieceArray = new int[5]; // create new array in list size - max number of lines
-
-                for ( int i = 0; i <= 4; i++ ) {
-
-                    puzzlePieceArray[i] = Integer.valueOf(splittedLine[i]);
                 }
 
-                puzzlePieceList.add(puzzlePieceArray);
+                if (isLineBeginswithDash(line)) {
+                    countErrors += 1;
+                    errorsManager.addFatalErrorsList("lineNumber:  " + indexLines + "  begins with dash, ignore ");
 
+                }
+
+
+                if (!idInRange(list, line, errorsManager)) {
+                    countErrors += 1;
+                    wrongElementIDs.add(String.valueOf(getLinePuzzlePieceID(line)));
+
+                    errorsManager.addFatalErrorsList("Puzzle of size " + getNumberOfElements(list, errorsManager) + " cannot have the following IDs: " + getCsvFromStringArray(wrongElementIDs));
+                }
+
+
+                if (line.split(" ").length!=5){
+                    countErrors += 1;
+                    errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
+                }
+
+                if (isWrongElementFormat(splittedLine)) {
+                    countErrors += 1;
+                    errorsManager.addFatalErrorsList("Puzzle ID <" + indexLines + "> as wrong data: <" + getPuzzlePieceData(line));
+                }
+
+//            Puzzle ID <id> has wrong data: <complete line from file including ID>
+                //check if line is valid
+
+                if (countErrors == 0) {
+
+                    int[] puzzlePieceArray = new int[5]; // create new array in list size - max number of lines
+
+                    for ( int i = 0; i <= 4; i++ ) {
+
+                        puzzlePieceArray[i] = Integer.valueOf(splittedLine[i]);
+                    }
+
+                    puzzlePieceList.add(puzzlePieceArray);
+
+
+                }
 
             }
-
 
             indexLines = +1;
         }
 
-        if (!
-
-                validateMissingIds(puzzlePieceList, missingElementsIDs))
-
-        {
+        if (!validateMissingIds(puzzlePieceList,missingElementsIDs)) {
             errorsManager.addFatalErrorsList("Missing puzzle element(s) with the following IDs: " + getCsvFromIntArray(missingElementsIDs));
             return null;
         }
@@ -170,7 +185,7 @@ public class FileInputParser {
     }
 
 
-    static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
+    public static List<PuzzlePiece> convertPuzzleArray(List<int[]> puzzleArray) {
         List<PuzzlePiece> puzzlePiecesList = new ArrayList<>();
         for ( int[] puzzlePiece : puzzleArray ) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
@@ -186,7 +201,7 @@ public class FileInputParser {
      * @param line from file input
      * @return string contains the puzzle piece
      */
-    static String getPuzzlePieceData(String line) {
+    public static String getPuzzlePieceData(String line) {
         try {
             String lineTemp = trimRedundantSpacesFromLine(line);
             String[] lineArr = lineTemp.split(" ");
@@ -210,16 +225,18 @@ public class FileInputParser {
      * @param line line to inspect
      * @return true/false
      */
-    boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
+    public static boolean idInRange(List<String> list, String line, ErrorsManager errorsManager) {
 
         int numberOfElements = getNumberOfElements(list, errorsManager);
         int puzzlePieceID = getLinePuzzlePieceID(line);
-
-        return puzzlePieceID<=numberOfElements;
-
-
+        if (puzzlePieceID <= numberOfElements) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
+
 
 
     /**
@@ -228,7 +245,7 @@ public class FileInputParser {
      * @param line from file
      * @return true/false
      */
-    static boolean isLineContainsOnlySpaces(String line) {
+    public static boolean isLineContainsOnlySpaces(String line) {
         if (line.length() == line.chars().filter(ch -> ch == ' ').count()) {
             return true;
         }
@@ -237,17 +254,24 @@ public class FileInputParser {
 
 
     /**
+     * get the file ID range
+     *
+     * @param list of lines from file
+     * @return String
+     */
+
+
+
+    /**
      * get line puzzle piece ID
      *
      * @param line from file
      * @return pieceID
      */
-    int getLinePuzzlePieceID(String line) {
+    public static int getLinePuzzlePieceID(String line) {
         try {
-
-            String[] lineArr= reformatLine(line);
-
-
+            String tempLine = trimRedundantSpacesFromLine(line);
+            String[] lineArr = tempLine.split(" ");
             return Integer.valueOf(lineArr[0]);
 
         } catch (NumberFormatException e) {
@@ -263,8 +287,7 @@ public class FileInputParser {
      * @return true/false
      */
 
-    static boolean isLineBeginswithDash(String line) {
-
+    public static boolean isLineBeginswithDash(String line) {
         line = trimRedundantSpacesFromLine(line);
         return line.startsWith("#");
     }
@@ -276,7 +299,7 @@ public class FileInputParser {
      * @param pieceArray       - missing elements in the file
      * @return set for print the IDs of missing elements
      */
-    static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
+    public static SortedSet<Integer> listMissingElementInInputFile(int[][] pieceArray, int numberOfElements) {
 
         SortedSet<Integer> missingIDs = new TreeSet<>();
         SortedSet<Integer> existingIDs = new TreeSet<>();
@@ -310,7 +333,7 @@ public class FileInputParser {
      * @param line from file
      * @return true/false
      */
-    public boolean isWrongElementFormat(String[] line) {
+    public static boolean isWrongElementFormat(String[] line) {
 
 
         for ( int i = 1; i <= 4; i++ ) {
@@ -331,7 +354,7 @@ public class FileInputParser {
      * @param missingIds missing IDs list
      * @return true/false
      */
-    public boolean validateMissingIds(ArrayList<int[]> piecesListFromFile, List<Integer> missingIds) {
+    public boolean validateMissingIds(ArrayList<int[]> piecesListFromFile,List<Integer> missingIds) {
 
 
         piecesID = getIDslistFromInputFile(piecesListFromFile);
@@ -352,7 +375,7 @@ public class FileInputParser {
      * @param puzzlePieceList
      * @return
      */
-    private ArrayList<Integer> getIDslistFromInputFile(ArrayList<int[]> puzzlePieceList) {
+    private ArrayList<Integer> getIDslistFromInputFile(ArrayList<int[]> puzzlePieceList ) {
 
 
         for ( int i = 0; i < puzzlePieceList.size(); i++ ) {
@@ -363,15 +386,7 @@ public class FileInputParser {
 
 
     protected static String trimRedundantSpacesFromLine(String line) {
-// todo replace with regex
         String after = line.trim().replaceAll(" +", " ");
         return after;
-    }
-
-
-    public String[] reformatLine(String line) {
-
-        String lineTemp = trimRedundantSpacesFromLine(line);
-        return lineTemp.split(" ");
     }
 }

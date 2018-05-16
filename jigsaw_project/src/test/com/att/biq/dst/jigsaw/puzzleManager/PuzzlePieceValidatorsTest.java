@@ -1,6 +1,6 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
-import com.att.biq.dst.jigsaw.PuzzleUtils.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzle.Puzzle;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
 import com.att.biq.dst.jigsaw.puzzle.PuzzlePieceValidators;
@@ -10,10 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-//import org.junit.Test;
-//import static junit.framework.TestCase.assertFalse;
-//import static junit.framework.TestCase.assertTrue;
 
 
 public class PuzzlePieceValidatorsTest {
@@ -30,7 +26,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void validatePuzzleRotate(){
-        puzzle = new Puzzle(new ErrorsManager());
+        puzzle = new Puzzle(new ErrorsManager(), true);
         puzzleArray = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         int[] pa1 = new int[] {1,0,-1,0,1};
@@ -54,7 +50,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateAllPossitve(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,-1,1);
@@ -78,7 +74,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTLCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,-1,-1,1);
@@ -97,7 +93,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTRCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,1,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,-1,0,-1);
@@ -115,7 +111,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBRCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,0,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,0,0,-1);
@@ -133,7 +129,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBLCorner(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,1,0,0,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,0,-1);
@@ -151,7 +147,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateEdgesNotZero(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,0,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,0,-1);
@@ -169,7 +165,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateWorngStraightEdges(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
@@ -193,7 +189,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateAllErrorsCombination(){
-        ppv = new PuzzlePieceValidators();
+        ppv = new PuzzlePieceValidators(true);
         puzzlePieces = new ArrayList<>();
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,1,1,1,0);
