@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.puzzle;
+package com.att.biq.dst.jigsaw.puzzle.server;
 /**
  * @author Tal
  * this class contains the algorithm for puzzle solving.
@@ -6,6 +6,9 @@ package com.att.biq.dst.jigsaw.puzzle;
  * all defined input algorithm and input puzzle structure.
  * This class implements runnabld, and execute the threads on different solutions calculation..
  */
+
+import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzle.ThreadsManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

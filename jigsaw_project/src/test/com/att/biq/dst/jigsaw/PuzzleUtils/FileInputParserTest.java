@@ -1,8 +1,8 @@
 package com.att.biq.dst.jigsaw.puzzleUtils;
 
 import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
-import com.att.biq.dst.jigsaw.puzzle.FileInputParser;
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
+import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
+import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
 //import org.junit.Test;
 import org.junit.jupiter.api.Test;
 

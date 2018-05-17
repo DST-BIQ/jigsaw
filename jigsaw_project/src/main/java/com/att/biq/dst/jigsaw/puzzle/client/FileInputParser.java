@@ -1,4 +1,7 @@
-package com.att.biq.dst.jigsaw.puzzle;
+package com.att.biq.dst.jigsaw.puzzle.client;
+
+import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
+import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
 
 import java.util.ArrayList;
 import java.util.List;

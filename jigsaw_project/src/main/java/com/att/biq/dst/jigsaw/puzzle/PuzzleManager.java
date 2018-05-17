@@ -1,5 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
+import com.att.biq.dst.jigsaw.puzzle.*;
+import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
+import com.att.biq.dst.jigsaw.puzzle.server.*;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

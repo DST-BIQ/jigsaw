@@ -1,4 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
+import com.att.biq.dst.jigsaw.puzzle.server.PieceShape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

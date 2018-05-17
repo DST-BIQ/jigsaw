@@ -1,9 +1,9 @@
 package com.att.biq.dst.jigsaw.puzzleManager;
 
 import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
-import com.att.biq.dst.jigsaw.puzzle.Puzzle;
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePieceValidators;
+import com.att.biq.dst.jigsaw.puzzle.server.Puzzle;
+import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
+import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePieceValidators;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

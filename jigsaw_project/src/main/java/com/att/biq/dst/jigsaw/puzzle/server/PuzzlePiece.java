@@ -1,4 +1,4 @@
-package com.att.biq.dst.jigsaw.puzzle;
+package com.att.biq.dst.jigsaw.puzzle.server;
 
 /**
  * @ author - Dorit, Stav, Tal

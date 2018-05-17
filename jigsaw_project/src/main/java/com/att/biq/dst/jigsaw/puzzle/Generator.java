@@ -5,7 +5,7 @@ package com.att.biq.dst.jigsaw.puzzle;
  * creates demo puzzles
  */
 
-import com.att.biq.dst.jigsaw.puzzle.PuzzlePiece;
+import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
