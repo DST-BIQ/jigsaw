@@ -38,7 +38,7 @@ public class PuzzleManager {
     private ArrayList<String> reportList; // all reports to file will be written to this list
     private List<int[]> solutionStructures;
     private FileInputParser fileInputParser;
-    private ArgumentsManager argumentsManager = new ArgumentsManager();
+    private ArgumentsManager argumentsManager;
     private boolean rotate;
     private int threadNumber;
     private ErrorsManager errorsManager;
@@ -55,8 +55,8 @@ public class PuzzleManager {
 
 
     public PuzzleManager(String[] args) {
-
-        argumentsManager.handleCommandLineOptions(args);
+        this.argumentsManager = new ArgumentsManager(args,true);
+        argumentsManager.setOptionsFromArguments();
         this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
         this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
         this.rotate = argumentsManager.getRotationStatus();
