@@ -2,11 +2,11 @@ package com.att.biq.dst.jigsaw.puzzle.server;
 
 import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -32,6 +32,40 @@ public class Puzzle {
         this.rotate=rotate;
     }
 
+//    /**
+//     * creates available list of puzzlePieces
+//     * @param puzzleContent - list of strings, represent the valid file input lines
+//     * @param puzzlePieceValidators - object that it's purpose to validate the puzzle piece
+//     * @return Array list of PuzzlePieces
+//     */
+//    public List<PuzzlePiece> getPuzzlePiecesArray(FileInputParser fim, List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators) {
+//
+//
+//        ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
+//        if (puzzleArray == null) {
+//            return null;
+//        }
+//
+//
+//        puzzlePieces = convertPuzzleArray(puzzleArray);
+//
+//
+//        if (puzzlePieces == null || !puzzlePieceValidators.validatePuzzle(puzzlePieces, errorsManager)) {
+//
+//            return null;
+//
+//        }
+//
+//        return puzzlePieces;
+//    }
+//
+    public List<PuzzlePiece> getPuzzlePieces() {
+        return puzzlePieces;
+
+    }
+
+
+
     /**
      * creates available list of puzzlePieces
      * @param puzzleContent - list of strings, represent the valid file input lines
@@ -39,16 +73,18 @@ public class Puzzle {
      * @return Array list of PuzzlePieces
      */
     public List<PuzzlePiece> getPuzzlePiecesArray(FileInputParser fim, List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators) {
+            JsonObject puzzle;
 
         ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
         if (puzzleArray == null) {
             return null;
         }
 
-        puzzlePieces = convertPuzzleArray(puzzleArray);
+        puzzle = fim.createJsonObjectFromPuzzlePieceList(rotate);
+        puzzlePieces = convertJsonToPuzzlePiece(puzzle);
 
 
-        if (puzzlePieces == null || !puzzlePieceValidators.validatePuzzle(puzzlePieces, errorsManager)) {
+        if (puzzle == null || !puzzlePieceValidators.validatePuzzle(puzzlePieces, errorsManager)) {
 
             return null;
 
@@ -57,10 +93,14 @@ public class Puzzle {
         return puzzlePieces;
     }
 
-    public List<PuzzlePiece> getPuzzlePieces() {
-        return puzzlePieces;
 
-    }
+
+//    public void setPuzzlePieces(List<PuzzlePiece> puzzlePieces) {
+//        this.puzzlePieces = puzzlePieces;
+//
+//    }
+
+
 
     /**
      * convert puzzle array from list of integers to list of puzzlePieces
@@ -72,13 +112,39 @@ public class Puzzle {
         for (int[] puzzlePiece : puzzleArray) {
             PuzzlePiece pp = new PuzzlePiece(puzzlePiece[0], puzzlePiece[1], puzzlePiece[2], puzzlePiece[3], puzzlePiece[4]);
             puzzlePieces.add(pp);
-            if (rotate) {
-                //TODO here? or dismiss to somewhere else?
-//                rotatePiece(pp);
-            }
+
         }
         return puzzlePieces;
     }
+
+    /**
+     * convert puzzle array from list of integers to list of puzzlePieces
+     * @param jsonPuzzle - puzzle as json object
+     * @return list of puzzle pieces
+     */
+    public List<PuzzlePiece> convertJsonToPuzzlePiece(JsonObject jsonPuzzle) {
+        puzzlePieces = new ArrayList<>();
+
+        JsonElement piecesArray = jsonPuzzle.get("Pieces");
+JsonArray jsonArray = piecesArray.getAsJsonArray();
+Iterator iterator = jsonArray.iterator();
+int index=0;
+while (index<jsonArray.size()){
+    JsonElement jsonElement = jsonArray.get(index++);
+JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+PuzzlePiece pp = new PuzzlePiece(jsonObject.get("ID").getAsInt(),
+        jsonObject.get("Piece").getAsJsonArray().get(0).getAsInt(),
+        jsonObject.get("Piece").getAsJsonArray().get(1).getAsInt(),
+        jsonObject.get("Piece").getAsJsonArray().get(2).getAsInt(),
+        jsonObject.get("Piece").getAsJsonArray().get(3).getAsInt());
+
+puzzlePieces.add(pp);
+}
+
+        return puzzlePieces;
+    }
+
 
 
     public int getStraightEdgesSum () {

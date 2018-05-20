@@ -170,19 +170,18 @@ public class FileInputParser {
 
     /**
      * create the main json object from the puzzle piece list, get teh rotation status as input
+     * operate once you have the puzzle piece list
      * return json object to sent to server
      * @param isRotate true/false, according to main arguments.
      * @return jSOn object
      */
     public JsonObject createJsonObjectFromPuzzlePieceList(boolean isRotate){
 
-        JsonObject mainObject=new JsonObject();
         JsonObject puzzle = new JsonObject();
-        mainObject.add("Puzzle",puzzle);
         puzzle.addProperty("Rotate",isRotate);
         JsonArray piecesArray = createJsonPieceArray();
         puzzle.add("Pieces",piecesArray);
-        return mainObject;
+        return puzzle;
 
 
     }
@@ -196,7 +195,7 @@ public class FileInputParser {
         for (int[] line: puzzlePieceList){
             JsonObject piece = new JsonObject();
 
-            String id = "<"+line[0]+">";
+            int id = line[0];
             piece.addProperty("ID",id);
             JsonArray pieceArr =createLinePieceJsonArray( line);
 
