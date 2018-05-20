@@ -313,7 +313,7 @@ public class FileInputParserTest {
     System.out.println(object);
 assertNotNull(object);
 
-assertEquals("{\"Puzzle\":{\"Rotate\":true,\"Pieces\":[{\"ID\":\"<1>\",\"Piece\":[1,1,1,1]},{\"ID\":\"<2>\",\"Piece\":[1,0,0,-1]}]}}",object.toString());
+assertEquals("{\"Rotate\":true,\"Pieces\":[{\"ID\":1,\"Piece\":[1,1,1,1]},{\"ID\":2,\"Piece\":[1,0,0,-1]}]}",object.toString());
 
 }
 
