@@ -1,6 +1,5 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
-import com.att.biq.dst.jigsaw.puzzle.*;
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
 import com.att.biq.dst.jigsaw.puzzle.server.*;
 
@@ -55,7 +54,7 @@ public class PuzzleManager {
 
 
     public PuzzleManager(String[] args) {
-        this.argumentsManager = new ArgumentsManager(args,true);
+        this.argumentsManager = new ArgumentsManager(args,false); //TODO when splitting client/server
         argumentsManager.setOptionsFromArguments();
         this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
         this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();

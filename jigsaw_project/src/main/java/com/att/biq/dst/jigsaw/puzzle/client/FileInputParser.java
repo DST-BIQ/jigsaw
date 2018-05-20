@@ -2,6 +2,9 @@ package com.att.biq.dst.jigsaw.puzzle.client;
 
 import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,7 @@ public class FileInputParser {
 
     private static int numberOfElements;
     private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+    private  ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
 
 //    public FileInputParser(ArrayList<Integer> piecesID,ArrayList<int[]> puzzlePieceList){
@@ -166,11 +169,70 @@ public class FileInputParser {
     }
 
     /**
+     * create the main json object from the puzzle piece list, get teh rotation status as input
+     * return json object to sent to server
+     * @param isRotate true/false, according to main arguments.
+     * @return jSOn object
+     */
+    public JsonObject createJsonObjectFromPuzzlePieceList(boolean isRotate){
+
+        JsonObject mainObject=new JsonObject();
+        JsonObject puzzle = new JsonObject();
+        mainObject.add("Puzzle",puzzle);
+        puzzle.addProperty("Rotate",isRotate);
+        JsonArray piecesArray = createJsonPieceArray();
+        puzzle.add("Pieces",piecesArray);
+        return mainObject;
+
+
+    }
+
+    /**
+     * create array of pieces as json object
+     * @return
+     */
+    public JsonArray createJsonPieceArray(){
+        JsonArray piecesArray = new JsonArray();
+        for (int[] line: puzzlePieceList){
+            JsonObject piece = new JsonObject();
+
+            String id = "<"+line[0]+">";
+            piece.addProperty("ID",id);
+            JsonArray pieceArr =createLinePieceJsonArray( line);
+
+            piece.add("Piece",pieceArr);
+
+            piecesArray.add(piece);
+        }
+
+return piecesArray;
+    }
+
+    /**
+     * create the "shape" of piece. return json object.
+     * @param line
+     * @return
+     */
+
+    public JsonArray createLinePieceJsonArray(int[] line){
+        JsonArray pieceArr = new JsonArray();
+        for (int i=1;i<line.length;i++){
+
+            JsonPrimitive jSonValue = new JsonPrimitive(line[i]);
+            pieceArr.add(jSonValue);
+        }
+
+        return pieceArr;
+    }
+    /**
      * in order to adjust to spec specifications, returning array list as CSV string
      *
      * @param listToConvert of integers
      * @return String
      */
+
+
+
     private static String getCsvFromIntArray(List<Integer> listToConvert) {
         String formattedList = "";
         for ( int currentValue : listToConvert ) {
@@ -392,4 +454,8 @@ public class FileInputParser {
         String after = line.trim().replaceAll(" +", " ");
         return after;
     }
+
+public void setPuzzlePieceList(ArrayList<int[]> puzzlePieceList){
+        this.puzzlePieceList=puzzlePieceList;
+}
 }

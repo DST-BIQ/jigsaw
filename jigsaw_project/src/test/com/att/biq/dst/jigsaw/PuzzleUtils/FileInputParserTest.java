@@ -4,6 +4,7 @@ import com.att.biq.dst.jigsaw.puzzle.ErrorsManager;
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
 import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePiece;
 //import org.junit.Test;
+import com.google.gson.JsonObject;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -297,6 +298,23 @@ public class FileInputParserTest {
     }
 
 
+@Test
+    public void createJsonArrayForPieces() {
+    FileInputParser fip = new FileInputParser();
+    ArrayList<int[]> pieceList = new ArrayList<>();
+    int[] piece = {1, 1, 1, 1, 1};
+    int[] piece1 = {2, 1, 0, 0, -1};
 
+    pieceList.add(piece);
+    pieceList.add(piece1);
+
+    fip.setPuzzlePieceList(pieceList);
+   JsonObject object = fip.createJsonObjectFromPuzzlePieceList(true);
+    System.out.println(object);
+assertNotNull(object);
+
+assertEquals("{\"Puzzle\":{\"Rotate\":true,\"Pieces\":[{\"ID\":\"<1>\",\"Piece\":[1,1,1,1]},{\"ID\":\"<2>\",\"Piece\":[1,0,0,-1]}]}}",object.toString());
+
+}
 
 }

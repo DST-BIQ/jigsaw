@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //TODO polish error messages on system tests.
+//TODO adjust to client/server. currently supports only "client"
 /**
  * Parameterized test to verify E2E flow from input to output
  */
@@ -22,10 +23,10 @@ public class SystemTest {
     File outputFile;
     String baseOutputFolder="./src/main/resources/ForTestOutput/";
 
-    public void preparation(String filePath,boolean rotate,int numberOfThreads,String expectedFilesLocations) {
+    public void preparation(String filePath,boolean rotate,String expectedFilesLocations) {
 
         PuzzleManager puzzleManager1 = new PuzzleManager();
-        String[] args =new String[7];
+        String[] args =new String[5];
 
         String[] takeStringForFilePath = filePath.split("Input/test");
         takeStringForFilePath[1].substring(0, takeStringForFilePath[1].length() - 3);
@@ -40,10 +41,8 @@ public class SystemTest {
         args[1] = outputFilePath;
         args[2] = "-inputFilePath";
         args[3] = filePath;
-        args[4] = "-numThreads";
-        args[5] = String.valueOf(numberOfThreads);
-        if (rotate) { args[6]="-hasRotate";}
-        else {args[6]="";}
+        if (rotate) { args[4]="-hasRotate";}
+        else {args[4]="";}
 
 
 
@@ -71,9 +70,9 @@ public class SystemTest {
 
     })
 
-    public void noRotationOneThread(String filePath) throws IOException, InterruptedException {
+    public void noRotation(String filePath) throws IOException, InterruptedException {
 
-        preparation(filePath,false,4,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
+        preparation(filePath,false,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
             assertEquals(FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
 
     }
@@ -95,7 +94,7 @@ public class SystemTest {
             "./src/main/resources/input/AdvancedPuzzleTests/Input/test18.in"
     })
     public void useRotation(String filePath) throws IOException {
-        preparation(filePath,true,4,"./src/main/resources/input/AdvancedPuzzleTests/OutputRotation/");
+        preparation(filePath,true,"./src/main/resources/input/AdvancedPuzzleTests/OutputRotation/");
         assertEquals(FileUtils.readFileToString(new File(expectedOutputFilePath), Charset.forName("UTF-8")), FileUtils.readFileToString(new File(outputFilePath), Charset.forName("UTF-8")));
 
     }
@@ -116,7 +115,7 @@ public class SystemTest {
     public void notAbleToLoadPuzzle(String filePath){
 
         assertThrows(RuntimeException.class,() -> {
-            preparation(filePath,false,1,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
+            preparation(filePath,false,"./src/main/resources/input/AdvancedPuzzleTests/Output/");
         }
     );
         try {
