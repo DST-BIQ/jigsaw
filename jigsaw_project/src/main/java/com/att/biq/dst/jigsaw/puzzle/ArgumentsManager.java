@@ -9,8 +9,8 @@ import org.apache.commons.cli.*;
  * this class come to read the arguments line and set the correct parameters on the puzzleManager according to the args line
  * this class is using the apache cli library
  * if argument appear - you can will set the value, else it will ignore it.
- * hasRotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
- * numThreads - Number of threads to use. in case this parameter is not provided number will be 4.
+ * rotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
+ * threads - Number of threads to use. in case this parameter is not provided number will be 4.
  * inputFilePath - input file location e.g. c:\temp\input.txt (this  parameter is mandatory)
  * outputFilePath - output file  e.g. c:\temp\myoutput.txt (this parameter is mandatory)
  * ip - ip of the server - this is a mandatory parameter. e.g. 127.0.0.1 for localhost
@@ -18,12 +18,12 @@ import org.apache.commons.cli.*;
  *
  * for server:
  *
- * numThreads - Number of threads to use. in case this parameter is not provided number will be 4.
+ * threads - Number of threads to use. in case this parameter is not provided number will be 4.
  * port - port of the server. if not mentioned, default will be 7095, otherwise port stated.
  *
  *
  * for client:
- * * hasRotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
+ * * rotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
  * inputFilePath - input file location e.g. c:\temp\input.txt (this  parameter is mandatory)
  * outputFilePath - output file  e.g. c:\temp\myoutput.txt (this parameter is mandatory)
  * ip - ip of the server - this is a mandatory parameter. e.g. 127.0.0.1 for localhost
