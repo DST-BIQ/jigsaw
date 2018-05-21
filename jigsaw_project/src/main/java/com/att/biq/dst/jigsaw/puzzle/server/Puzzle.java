@@ -32,33 +32,7 @@ public class Puzzle {
         this.rotate=rotate;
     }
 
-//    /**
-//     * creates available list of puzzlePieces
-//     * @param puzzleContent - list of strings, represent the valid file input lines
-//     * @param puzzlePieceValidators - object that it's purpose to validate the puzzle piece
-//     * @return Array list of PuzzlePieces
-//     */
-//    public List<PuzzlePiece> getPuzzlePiecesArray(FileInputParser fim, List<String> puzzleContent, PuzzlePieceValidators puzzlePieceValidators) {
-//
-//
-//        ArrayList<int[]> puzzleArray = fim.produceArrayForPuzzle(puzzleContent, errorsManager);
-//        if (puzzleArray == null) {
-//            return null;
-//        }
-//
-//
-//        puzzlePieces = convertPuzzleArray(puzzleArray);
-//
-//
-//        if (puzzlePieces == null || !puzzlePieceValidators.validatePuzzle(puzzlePieces, errorsManager)) {
-//
-//            return null;
-//
-//        }
-//
-//        return puzzlePieces;
-//    }
-//
+
     public List<PuzzlePiece> getPuzzlePieces() {
         return puzzlePieces;
 
@@ -127,7 +101,7 @@ public class Puzzle {
 
         JsonElement piecesArray = jsonPuzzle.get("Pieces");
 JsonArray jsonArray = piecesArray.getAsJsonArray();
-Iterator iterator = jsonArray.iterator();
+
 int index=0;
 while (index<jsonArray.size()){
     JsonElement jsonElement = jsonArray.get(index++);

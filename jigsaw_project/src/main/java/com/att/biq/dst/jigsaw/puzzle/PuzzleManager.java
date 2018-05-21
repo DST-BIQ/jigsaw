@@ -41,8 +41,8 @@ public class PuzzleManager {
     private boolean rotate;
     private int threadNumber;
     private ErrorsManager errorsManager;
-    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+//    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
+//    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
 
     ThreadsManager threadsManager;
 
