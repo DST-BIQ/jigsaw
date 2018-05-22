@@ -2,6 +2,8 @@ package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
 import com.att.biq.dst.jigsaw.puzzle.server.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -54,7 +56,7 @@ public class PuzzleManager {
 
 
     public PuzzleManager(String[] args) {
-        this.argumentsManager = new ArgumentsManager(args,false); //TODO when splitting client/server
+        this.argumentsManager = new ArgumentsManager(args, false); //TODO when splitting client/server
         argumentsManager.setOptionsFromArguments();
         this.inputFilePath = argumentsManager.getInputFilePathFromCommandLine();
         this.outputFilePath = argumentsManager.getOutputFilePathFileFromCommandLine();
@@ -105,8 +107,10 @@ public class PuzzleManager {
         solution = PuzzleSolver.calculatePuzzleSolution(solutionStructures, threadsManager, puzzle);
 
         if (solution != null) {
+
             preparePuzzleSolutionToPrint(solution);
             reportData(reportList, "file");
+
         } else if (puzzle.getErrorsManager().hasFatalErrors() || puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportErrors();
         }
@@ -119,9 +123,12 @@ public class PuzzleManager {
      */
     private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
         PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
-        for (int i = 0; i < winnerSolution.length; i++) {
-            reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
+        for ( int i = 0; i < winnerSolution.length; i++ ) {
+            reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());//todo convert from json
+
+
         }
+        convertPuzzlePiecesToJson(winnerSolution);
 
     }
 
@@ -134,7 +141,7 @@ public class PuzzleManager {
     private String convertPuzzlePiecesToString(PuzzlePieceIdentity[] puzzlePieces) {
 
         StringBuilder builder = new StringBuilder();
-        for (PuzzlePieceIdentity piece : puzzlePieces) {
+        for ( PuzzlePieceIdentity piece : puzzlePieces ) {
             builder.append(piece.toString());
         }
 
@@ -178,7 +185,7 @@ public class PuzzleManager {
             }
 
 
-            for (String dataLine : dataList) {
+            for ( String dataLine : dataList ) {
                 switch (reportMethod) {
                     case "file":
                         writeToFile(dataLine, bw);
@@ -298,4 +305,90 @@ public class PuzzleManager {
         return false;
 
     }
+
+
+    public void convertPuzzlePiecesToJson(PuzzlePieceIdentity[][] puzzlePieces) {
+        JsonObject outputReport = new JsonObject();
+        JsonObject puzzle = new JsonObject();
+
+        JsonObject solution = new JsonObject();
+//        JsonObject errors = new JsonObject();
+        JsonArray solutionPieces;
+
+
+        outputReport.add("PuzzleSolution", puzzle);
+        puzzle.addProperty("SolutionExists", this.puzzle.isSolved());
+        if (this.puzzle.isSolved()) {
+            puzzle.add("PuzzleSolution", solution);
+            solution.addProperty("Rows", puzzlePieces.length);
+            solutionPieces = createSolutionPiecesArray(puzzlePieces);
+            solution.add("SolutionPieces", solutionPieces);
+        } else {
+
+            puzzle.add("Errors", createSolutionErrorsArray(errorsManager));
+        }
+
+
+    }
+
+    /**
+     * create solution pieces array, in case there is a solution
+     *
+     * @param puzzlePieces
+     * @return JsonArray
+     */
+    private JsonArray createSolutionPiecesArray(PuzzlePieceIdentity[][] puzzlePieces) {
+
+        JsonArray solutionPieces = new JsonArray();
+        JsonObject piece = new JsonObject();
+        JsonArray rowSolutionPieces = new JsonArray();
+        for (int i=0;i<puzzlePieces.length;i++){
+
+            for ( PuzzlePieceIdentity ppi : puzzlePieces[i] ) {
+                piece.addProperty("id", ppi.getPuzzlePieceID());
+                if (rotate) {
+                    piece.addProperty("rotate", ppi.getRotation());
+                }
+                rowSolutionPieces.add(piece);
+            }
+            solutionPieces.add(rowSolutionPieces);
+//            rowSolutionPieces=null;
+        }
+
+
+        return solutionPieces;
+    }
+
+    /**
+     * Create error json objects
+     * *
+     *
+     * @return JsonArray
+     */
+    private JsonArray createSolutionErrorsArray(ErrorsManager errorsManager) {
+
+
+        JsonArray errors = new JsonArray();
+        if (!errorsManager.getFatalErrorsList().isEmpty()) {
+            for ( String error : errorsManager.getFatalErrorsList() ) {
+
+                errors.add(error);
+
+            }
+        }
+        if (!errorsManager.getNonFatalErrorsList().isEmpty()) {
+            for ( String error : errorsManager.getNonFatalErrorsList() ) {
+
+                errors.add(error);
+
+            }
+        }
+
+        return errors;
+    }
+
+    public void setPuzzle(Puzzle puzzle){
+        this.puzzle=puzzle;
+}
+
 }
