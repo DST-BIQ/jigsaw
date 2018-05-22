@@ -340,11 +340,12 @@ public class PuzzleManager {
     private JsonArray createSolutionPiecesArray(PuzzlePieceIdentity[][] puzzlePieces) {
 
         JsonArray solutionPieces = new JsonArray();
-        JsonObject piece = new JsonObject();
+
         JsonArray rowSolutionPieces = new JsonArray();
         for (int i=0;i<puzzlePieces.length;i++){
 
             for ( PuzzlePieceIdentity ppi : puzzlePieces[i] ) {
+                JsonObject piece = new JsonObject();
                 piece.addProperty("id", ppi.getPuzzlePieceID());
                 if (rotate) {
                     piece.addProperty("rotate", ppi.getRotation());
