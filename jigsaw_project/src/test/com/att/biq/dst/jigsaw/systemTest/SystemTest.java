@@ -41,7 +41,7 @@ public class SystemTest {
         args[1] = outputFilePath;
         args[2] = "-inputFilePath";
         args[3] = filePath;
-        if (rotate) { args[4]="-hasRotate";}
+        if (rotate) { args[4]="-rotate";}
         else {args[4]="";}
 
 
