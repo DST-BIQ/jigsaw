@@ -40,9 +40,9 @@ public class SystemTest {
         args[1] = outputFilePath;
         args[2] = "-inputFilePath";
         args[3] = filePath;
-        args[4] = "-numThreads";
+        args[4] = "-threads";
         args[5] = String.valueOf(numberOfThreads);
-        if (rotate) { args[6]="-hasRotate";}
+        if (rotate) { args[6]="-rotate";}
         else {args[6]="";}
 
 
