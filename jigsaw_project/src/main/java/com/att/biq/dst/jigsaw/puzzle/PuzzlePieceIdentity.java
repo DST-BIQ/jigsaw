@@ -37,7 +37,7 @@ public class PuzzlePieceIdentity {
     @Override
     public String toString() {
         if (rotation!=0){
-            return puzzlePieceID +"["+ rotation+"] ";
+            return puzzlePieceID +" ["+ rotation+"] ";
         }else {return puzzlePieceID+" ";}
 
     }
