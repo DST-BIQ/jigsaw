@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="5">
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5p #%x(%X{UNIQUE-IDENTIFIER}) %logger - %msg%n"/>
+        </Console>
+        <RollingFile name="server" fileName="logs\server.log" filePattern="logs\%d{yyyy-MM-dd-hh-mm}%i.log">
+            <PatternLayout>
+                <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5p #%x(%X{UNIQUE-IDENTIFIER}) %logger - %msg%n"/>
+                <!--TODO decide what identifiers do we want to insert to the log-->
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+        <RollingFile name="client" fileName="logs\client.log" filePattern="logs\%d{yyyy-MM-dd-hh-mm}%i.log">
+            <PatternLayout>
+                <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5p #%x(%X{UNIQUE-IDENTIFIER}) %logger - %msg%n"/>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+
+
+    <Loggers>
+        <logger name="com.att.biq.dst.jigsaw.puzzle.client" level="TRACE" additivity="false">
+            <AppenderRef ref="client"/>
+        </logger>
+        <logger name="com.att.biq.dst.jigsaw.puzzle.server" level="TRACE" additivity="false">
+            <AppenderRef ref="server"/>
+        </logger>
+        <logger name="com.att.biq.dst.jigsaw.puzzle" level="INFO" additivity="false">
+            <AppenderRef ref="console"/>
+        </logger>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
