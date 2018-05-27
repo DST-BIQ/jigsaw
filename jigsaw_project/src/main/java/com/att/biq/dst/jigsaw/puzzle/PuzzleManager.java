@@ -2,8 +2,6 @@ package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
 import com.att.biq.dst.jigsaw.puzzle.server.*;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -121,15 +119,16 @@ public class PuzzleManager {
      *
      * @param solution
      */
-    private void preparePuzzleSolutionToPrint(PuzzleSolution solution) {
+    private void preparePuzzleSolutionToPrint(com.att.biq.dst.jigsaw.puzzle.server.PuzzleSolution puzzleSolution) {
         PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
         for ( int i = 0; i < winnerSolution.length; i++ ) {
             reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());//todo convert from json
 
 
         }
-        convertPuzzlePiecesToJson(winnerSolution);
 
+//        convertPuzzlePiecesToJson(solution);//todo convert from json
+        ReportFormatter reportFormatter = new ReportFormatter();
     }
 
     /**
@@ -267,6 +266,10 @@ public class PuzzleManager {
         if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
         }
+
+
+        ReportFormatter reportFormatter = new ReportFormatter();
+        reportFormatter.ReportFormatter(errorsManager);//TODO json
     }
 
     /**
@@ -307,86 +310,6 @@ public class PuzzleManager {
     }
 
 
-    public void convertPuzzlePiecesToJson(PuzzlePieceIdentity[][] puzzlePieces) {
-        JsonObject outputReport = new JsonObject();
-        JsonObject puzzle = new JsonObject();
-
-        JsonObject solution = new JsonObject();
-//        JsonObject errors = new JsonObject();
-        JsonArray solutionPieces;
-
-
-        outputReport.add("PuzzleSolution", puzzle);
-        puzzle.addProperty("SolutionExists", this.puzzle.isSolved());
-        if (this.puzzle.isSolved()) {
-            puzzle.add("PuzzleSolution", solution);
-            solution.addProperty("Rows", puzzlePieces.length);
-            solutionPieces = createSolutionPiecesArray(puzzlePieces);
-            solution.add("SolutionPieces", solutionPieces);
-        } else {
-
-            puzzle.add("Errors", createSolutionErrorsArray(errorsManager));
-        }
-
-
-    }
-
-    /**
-     * create solution pieces array, in case there is a solution
-     *
-     * @param puzzlePieces
-     * @return JsonArray
-     */
-    private JsonArray createSolutionPiecesArray(PuzzlePieceIdentity[][] puzzlePieces) {
-
-        JsonArray solutionPieces = new JsonArray();
-
-        JsonArray rowSolutionPieces = new JsonArray();
-        for (int i=0;i<puzzlePieces.length;i++){
-
-            for ( PuzzlePieceIdentity ppi : puzzlePieces[i] ) {
-                JsonObject piece = new JsonObject();
-                piece.addProperty("id", ppi.getPuzzlePieceID());
-                if (rotate) {
-                    piece.addProperty("rotate", ppi.getRotation());
-                }
-                rowSolutionPieces.add(piece);
-            }
-            solutionPieces.add(rowSolutionPieces);
-//            rowSolutionPieces=null;
-        }
-
-
-        return solutionPieces;
-    }
-
-    /**
-     * Create error json objects
-     * *
-     *
-     * @return JsonArray
-     */
-    private JsonArray createSolutionErrorsArray(ErrorsManager errorsManager) {
-
-
-        JsonArray errors = new JsonArray();
-        if (!errorsManager.getFatalErrorsList().isEmpty()) {
-            for ( String error : errorsManager.getFatalErrorsList() ) {
-
-                errors.add(error);
-
-            }
-        }
-        if (!errorsManager.getNonFatalErrorsList().isEmpty()) {
-            for ( String error : errorsManager.getNonFatalErrorsList() ) {
-
-                errors.add(error);
-
-            }
-        }
-
-        return errors;
-    }
 
     public void setPuzzle(Puzzle puzzle){
         this.puzzle=puzzle;
