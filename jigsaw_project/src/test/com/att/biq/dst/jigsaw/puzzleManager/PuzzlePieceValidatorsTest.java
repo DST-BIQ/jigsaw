@@ -74,7 +74,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTLCorner(){
-        ppv = new PuzzlePieceValidators(true);
+        ppv = new PuzzlePieceValidators(false);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,1,1,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,-1,-1,1);
@@ -93,7 +93,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingTRCorner(){
-        ppv = new PuzzlePieceValidators(true);
+        ppv = new PuzzlePieceValidators(false);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,1,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,-1,0,-1);
@@ -111,7 +111,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBRCorner(){
-        ppv = new PuzzlePieceValidators(true);
+        ppv = new PuzzlePieceValidators(false);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,0,0,0,1);
         PuzzlePiece p2 = new PuzzlePiece(2,-1,0,0,-1);
@@ -129,7 +129,7 @@ public class PuzzlePieceValidatorsTest {
 
     @Test
     public void ValidateMissingBLCorner(){
-        ppv = new PuzzlePieceValidators(true);
+        ppv = new PuzzlePieceValidators(false);
         puzzlePieces = new ArrayList<>();
         PuzzlePiece p1 = new PuzzlePiece(1,1,0,0,0);
         PuzzlePiece p2 = new PuzzlePiece(2,0,0,0,-1);
