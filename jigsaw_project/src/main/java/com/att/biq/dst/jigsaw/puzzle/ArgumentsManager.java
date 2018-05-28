@@ -7,7 +7,11 @@ import org.apache.commons.cli.*;
  * this class come to read the arguments line and set the correct parameters on the puzzleManager according to the args line
  * this class is using the apache cli library
  * if argument appear - you can will set the value, else it will ignore it.
+ * rotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
+ * threads - Number of threads to use. in case this parameter is not provided number will be 4.
+ * threads - Number of threads to use. in case this parameter is not provided number will be 4.
  *
+ * * rotate - if the parameter exists  - rotation is available, else it won't be calculated using rotation.
  *
  */
 

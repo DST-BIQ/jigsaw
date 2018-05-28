@@ -11,8 +11,8 @@ package com.att.biq.dst.jigsaw.puzzle;
 public class GlobalParameters {
 
     // command line parameters (used on apache CLI
-    public static final String OPTION_ROTATE  = "hasRotate";
-    public static final String OPTION_THREADS  = "numThreads";
+    public static final String OPTION_ROTATE  = "rotate";
+    public static final String OPTION_THREADS  = "threads";
     public static final String OPTION_INPUTFILE  = "inputFilePath";
     public static final String OPTION_OUTPUTFILE  = "outputFilePath";
 
