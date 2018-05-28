@@ -55,18 +55,10 @@ public class PuzzleSolver implements Runnable {
             solver = new PuzzleSolver(puzzle, attemptSolution);
             threadPoolExecutor.execute(solver);
         }
-
-//        try {
-//            threadPoolExecutor.awaitTermination(10, TimeUnit.SECONDS);
-//
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         threadPoolExecutor.shutdown();
         int activeCount = threadPoolExecutor.getActiveCount();
         int queueSize = threadPoolExecutor.getQueue().size();
         while (activeCount !=0 || queueSize !=0) {
-            System.out.println("Active: " + activeCount + " Queue: "+ queueSize);
             if (puzzle.isSolved()) {
                 threadPoolExecutor.shutdownNow();
                 return endResult;

@@ -42,9 +42,10 @@ public class PuzzlePieceValidatorsTest {
     }
 
     private void assertArrayEquals(List<PuzzlePiece> puzzlePieces, List<PuzzlePiece> puzzlePieces1) {
-        for (int i=0;i<puzzlePieces.size();i++) {
-            assertEquals(puzzlePieces.get(i),puzzlePieces1.get(i));
-
+        if (puzzlePieces.size()==puzzlePieces1.size()) {
+            for (int i = 0; i < puzzlePieces.size(); i++) {
+                assertEquals(puzzlePieces.get(i), puzzlePieces1.get(i));
+            }
         }
     }
 
