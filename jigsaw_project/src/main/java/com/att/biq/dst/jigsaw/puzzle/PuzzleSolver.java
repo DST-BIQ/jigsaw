@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class PuzzleSolver implements Runnable {
 
@@ -57,20 +56,24 @@ public class PuzzleSolver implements Runnable {
             threadPoolExecutor.execute(solver);
         }
 
-        try {
-            threadPoolExecutor.awaitTermination(3, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        try {
+//            threadPoolExecutor.awaitTermination(10, TimeUnit.SECONDS);
+//
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        threadPoolExecutor.shutdown();
+        int activeCount = threadPoolExecutor.getActiveCount();
+        int queueSize = threadPoolExecutor.getQueue().size();
+        while (activeCount !=0 || queueSize !=0) {
+            System.out.println("Active: " + activeCount + " Queue: "+ queueSize);
+            if (puzzle.isSolved()) {
+                threadPoolExecutor.shutdownNow();
+                return endResult;
+            }
         }
-        if (puzzle.isSolved()) {
-            threadPoolExecutor.shutdownNow();
-            return endResult;
-        } else
-
-        {
-            threadPoolExecutor.shutdownNow();
-            return null;
-        }
+        threadPoolExecutor.shutdownNow();
+        return endResult;
 
     }
 
