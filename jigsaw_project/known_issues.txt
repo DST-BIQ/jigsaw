@@ -1,5 +1,10 @@
 DST Team Jigsaw project known issues:
 
+****** Re-submission - 28.5.2018 ***********
+
+Known issue - project does not solve puzzles with over 40 pieces in reasonable time
+TODO - fix errors print to fit expected format and order
+
 ****** Second submission - 11.5.2018 *************
 
 TODO - fix errors print to fit expected format and order
