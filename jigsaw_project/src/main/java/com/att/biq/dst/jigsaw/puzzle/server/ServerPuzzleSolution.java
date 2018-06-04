@@ -9,7 +9,7 @@ import com.att.biq.dst.jigsaw.puzzle.server.PuzzlePieceIdentity;
  *
  *
  */
-public class PuzzleSolution {
+public class ServerPuzzleSolution {
 
 
     private PuzzlePieceIdentity[][] solution;
@@ -19,7 +19,7 @@ public class PuzzleSolution {
     private int curRow = 0;
     private int curCol = 0;
 
-    public PuzzleSolution(int rows, int columns) {
+    public ServerPuzzleSolution(int rows, int columns) {
         size = rows * columns;
         this.rows = rows;
         this.columns = columns;

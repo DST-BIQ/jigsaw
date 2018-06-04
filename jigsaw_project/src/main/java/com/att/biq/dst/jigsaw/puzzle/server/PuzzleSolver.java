@@ -20,12 +20,12 @@ import java.util.concurrent.TimeUnit;
 public class PuzzleSolver implements Runnable {
 
     Puzzle puzzle;
-    static PuzzleSolution endResult;
-    PuzzleSolution solution;
+    static ServerPuzzleSolution endResult;
+    ServerPuzzleSolution solution;
     private ErrorsManager errorsManager = new ErrorsManager();
     private Map<Integer, PuzzlePiece> puzzlePieceMap;
 
-    public PuzzleSolver(Puzzle puzzle, PuzzleSolution solution) {
+    public PuzzleSolver(Puzzle puzzle, ServerPuzzleSolution solution) {
         this.puzzle = puzzle;
         this.solution = solution;
         puzzlePieceMap = clonePuzzlePiecesList(puzzle.getPuzzlePieces());
@@ -34,7 +34,7 @@ public class PuzzleSolver implements Runnable {
 
     @Override
     public void run() {
-        PuzzleSolution solution = solve(this.solution);
+        ServerPuzzleSolution solution = solve(this.solution);
         if (solution != null && solution.isValid()) {
             puzzle.setSolved();
             setSolution(solution);
@@ -50,12 +50,12 @@ public class PuzzleSolver implements Runnable {
      * @
      */
 
-    public static PuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) {
+    public static ServerPuzzleSolution calculatePuzzleSolution(List<int[]> puzzleStructures, ThreadsManager threadsManager, Puzzle puzzle) {
 
         PuzzleSolver solver;
         ThreadPoolExecutor threadPoolExecutor = threadsManager.getThreadPoolExecutor();
         for (int i = puzzleStructures.size() - 1; i >= 0; i--) {
-            PuzzleSolution attemptSolution = new PuzzleSolution(puzzleStructures.get(i)[0], puzzleStructures.get(i)[1]);
+            ServerPuzzleSolution attemptSolution = new ServerPuzzleSolution(puzzleStructures.get(i)[0], puzzleStructures.get(i)[1]);
             solver = new PuzzleSolver(puzzle, attemptSolution);
             threadPoolExecutor.execute(solver);
         }
@@ -85,7 +85,7 @@ public class PuzzleSolver implements Runnable {
      * @return valid/not valid
      */
 
-    public static boolean checkPuzzleSolution(Puzzle puzzle, PuzzleSolution solution) {
+    public static boolean checkPuzzleSolution(Puzzle puzzle, ServerPuzzleSolution solution) {
         List<PuzzlePiece> pieces = puzzle.getPuzzlePieces();
         if (verifySolutionSize(pieces, solution)) return false;
         for (PuzzlePiece puzzlePiece : pieces) {
@@ -138,7 +138,7 @@ public class PuzzleSolver implements Runnable {
      * @return true/false
      */
 
-    private static boolean verifySolutionSize(List<PuzzlePiece> puzzle, PuzzleSolution solution) {
+    private static boolean verifySolutionSize(List<PuzzlePiece> puzzle, ServerPuzzleSolution solution) {
         if (puzzle.size() == (solution.getSize())) {
             return true;
         }
@@ -201,7 +201,7 @@ public class PuzzleSolver implements Runnable {
      * @return possible solution if found.
      */
 
-    public PuzzleSolution solve(PuzzleSolution solution) {
+    public ServerPuzzleSolution solve(ServerPuzzleSolution solution) {
         if (foundSolution(solution)) {
             return solution;
         }
@@ -219,7 +219,7 @@ public class PuzzleSolver implements Runnable {
             foundPieces = handleBetweenTopAndBottomRows(solution);
         }
         if (foundPieces != null) {
-            PuzzleSolution possibleSolution = findSolution(solution, foundPieces);
+            ServerPuzzleSolution possibleSolution = findSolution(solution, foundPieces);
             if (possibleSolution != null) {
                 return possibleSolution;
             }
@@ -234,7 +234,7 @@ public class PuzzleSolver implements Runnable {
      *                  * @return list of matched pieces
      */
 
-    private List<PuzzlePieceIdentity> handleBetweenTopAndBottomRows(PuzzleSolution solution) {
+    private List<PuzzlePieceIdentity> handleBetweenTopAndBottomRows(ServerPuzzleSolution solution) {
         List<PuzzlePieceIdentity> foundPieces;
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0 - solution.getAbovePiece().getShape().getBottom(), 2, 2);
@@ -259,12 +259,12 @@ public class PuzzleSolver implements Runnable {
         return true;
     }
 
-    private boolean foundSolution(PuzzleSolution solution) {
+    private boolean foundSolution(ServerPuzzleSolution solution) {
         return solution.isValid();
     }
 
 
-    private boolean isOnLastRow(PuzzleSolution solution) {
+    private boolean isOnLastRow(ServerPuzzleSolution solution) {
         return solution.getCurRow() == solution.getRows() - 1;
     }
 
@@ -275,7 +275,7 @@ public class PuzzleSolver implements Runnable {
      *                 * @return list of matched pieces
      */
 
-    private List<PuzzlePieceIdentity> handleBottomRowSolution(PuzzleSolution solution) {
+    private List<PuzzlePieceIdentity> handleBottomRowSolution(ServerPuzzleSolution solution) {
         List<PuzzlePieceIdentity> foundPieces = null;
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0 - solution.getAbovePiece().getShape().getBottom(), 2, 0);
@@ -294,7 +294,7 @@ public class PuzzleSolver implements Runnable {
      * @return list of matched pieces
      */
 
-    private List<PuzzlePieceIdentity> handleFirstRowSolution(PuzzleSolution solution) {
+    private List<PuzzlePieceIdentity> handleFirstRowSolution(ServerPuzzleSolution solution) {
         List<PuzzlePieceIdentity> foundPieces = new ArrayList<>();
         if (isOnFirstColumn(solution)) {
             foundPieces = getMatch(0, 0, 2, 2);
@@ -306,19 +306,19 @@ public class PuzzleSolver implements Runnable {
         return foundPieces;
     }
 
-    private boolean isOnLastColumn(PuzzleSolution solution) {
+    private boolean isOnLastColumn(ServerPuzzleSolution solution) {
         return solution.getCurCol() == solution.getColumns() - 1;
     }
 
-    private boolean isBetweenFirstAndLastColumns(PuzzleSolution solution) {
+    private boolean isBetweenFirstAndLastColumns(ServerPuzzleSolution solution) {
         return solution.getCurCol() < solution.getColumns() - 1;
     }
 
-    private boolean isOnFirstColumn(PuzzleSolution solution) {
+    private boolean isOnFirstColumn(ServerPuzzleSolution solution) {
         return solution.getCurCol() == 0;
     }
 
-    private boolean isOnFirstRow(PuzzleSolution solution) {
+    private boolean isOnFirstRow(ServerPuzzleSolution solution) {
         return solution.getCurRow() == 0;
     }
 
@@ -329,8 +329,8 @@ public class PuzzleSolver implements Runnable {
      * @param foundPieces
      * @return possible solution found
      */
-    private PuzzleSolution findSolution(PuzzleSolution solution, List<PuzzlePieceIdentity> foundPieces) {
-        PuzzleSolution possibleSolution;
+    private ServerPuzzleSolution findSolution(ServerPuzzleSolution solution, List<PuzzlePieceIdentity> foundPieces) {
+        ServerPuzzleSolution possibleSolution;
         for (PuzzlePieceIdentity piece : foundPieces) {
             solution.insertPiece(piece);
             puzzlePieceMap.get(piece.getPuzzlePieceID()).setInUse(true);
@@ -351,12 +351,12 @@ public class PuzzleSolver implements Runnable {
     }
 
 
-    public PuzzleSolution getSolution() {
+    public ServerPuzzleSolution getSolution() {
         return solution;
     }
 
 
-    public void setSolution(PuzzleSolution solution) {
+    public void setSolution(ServerPuzzleSolution solution) {
         endResult = solution;
     }
 
