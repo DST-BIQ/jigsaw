@@ -55,7 +55,7 @@ public class Puzzle {
         }
 
         puzzle = fim.createJsonObjectFromPuzzlePieceList(rotate);
-        puzzlePieces = convertJsonToPuzzlePiece(puzzle);
+        puzzlePieces = convertJsonToPuzzlePiece(puzzle);// send pieces as json TODO here so we know to locate
 
 
         if (puzzle == null || !puzzlePieceValidators.validatePuzzle(puzzlePieces, errorsManager)) {

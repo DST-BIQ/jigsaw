@@ -1,7 +1,11 @@
 package com.att.biq.dst.jigsaw.puzzle;
 
 import com.att.biq.dst.jigsaw.puzzle.client.FileInputParser;
+import com.att.biq.dst.jigsaw.puzzle.client.PuzzleError;
+import com.att.biq.dst.jigsaw.puzzle.client.PuzzleSolution;
+import com.att.biq.dst.jigsaw.puzzle.client.ReportServer;
 import com.att.biq.dst.jigsaw.puzzle.server.*;
+import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,7 +33,7 @@ public class PuzzleManager {
 
     /////////////////////////////////////////   Class members
 
-    private PuzzleSolution solution;
+    private ServerPuzzleSolution solution;
     private PuzzlePieceValidators puzzlePieceValidators;
     private Puzzle puzzle;
     private String inputFilePath; // input file path
@@ -41,8 +45,7 @@ public class PuzzleManager {
     private boolean rotate;
     private int threadNumber;
     private ErrorsManager errorsManager;
-//    private ArrayList<Integer> piecesID = new ArrayList<>(); // list of all IDs from file
-//    private ArrayList<int[]> puzzlePieceList = new ArrayList<>();
+
 
     ThreadsManager threadsManager;
 
@@ -106,31 +109,60 @@ public class PuzzleManager {
 
         if (solution != null) {
 
-            preparePuzzleSolutionToPrint(solution);
+            preparePuzzleSolutionToPrint();
             reportData(reportList, "file");
 
         } else if (puzzle.getErrorsManager().hasFatalErrors() || puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportErrors();
+
         }
     }
 
     /**
      * report solution to general array list
      *
-     * @param solution
+     * @param
      */
-    private void preparePuzzleSolutionToPrint(com.att.biq.dst.jigsaw.puzzle.server.PuzzleSolution puzzleSolution) {
+    private void preparePuzzleSolutionToPrint() {
         PuzzlePieceIdentity[][] winnerSolution = solution.getSolution();
         for ( int i = 0; i < winnerSolution.length; i++ ) {
-            reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());//todo convert from json
+            reportList.add(convertPuzzlePiecesToString(winnerSolution[i]).trim());
 
 
         }
+        System.out.println(sendSolutionAsJson());//todo convert from json
 
-//        convertPuzzlePiecesToJson(solution);//todo convert from json
-        ReportFormatter reportFormatter = new ReportFormatter();
+
     }
 
+    /** report solution as Json
+     *
+     *
+     * @return string in json format
+     */
+    public String sendSolutionAsJson(){
+
+       PuzzleSolution puzzleSolution1 = new PuzzleSolution(solution.getRows(),solution.getColumns(),solution.getSolution(),rotate );
+        ReportServer reportServer = new ReportServer(puzzleSolution1);
+        Gson gson = new Gson();
+
+        return gson.toJson(reportServer);
+    }
+
+
+    /** report solution as Json
+     *
+     *
+     * @return string in json format
+     */
+    public String sendErrorsAsJson(){
+
+        PuzzleError puzzleError = new PuzzleError(errorsManager);
+        ReportServer reportServer = new ReportServer(puzzleError);
+        Gson gson = new Gson();
+
+        return gson.toJson(reportServer);
+    }
     /**
      * convert pieces array to String, in order to report it to the output file
      *
@@ -147,6 +179,7 @@ public class PuzzleManager {
 
         return builder.toString();
     }
+
 
     /**
      * report data to file. select reporting option and what to report.
@@ -262,14 +295,14 @@ public class PuzzleManager {
     private void reportErrors() {
         if (puzzle.getErrorsManager().hasFatalErrors()) {
             reportData(puzzle.getErrorsManager().getFatalErrorsList(), "file");
+
         }
         if (puzzle.getErrorsManager().hasNonFatalErrors()) {
             reportData(puzzle.getErrorsManager().getNonFatalErrorsList(), "file");
+
         }
 
-
-        ReportFormatter reportFormatter = new ReportFormatter();
-        reportFormatter.ReportFormatter(errorsManager);//TODO json
+        System.out.println(sendErrorsAsJson());//TODO Json
     }
 
     /**
@@ -313,6 +346,6 @@ public class PuzzleManager {
 
     public void setPuzzle(Puzzle puzzle){
         this.puzzle=puzzle;
-}
+    }
 
 }
