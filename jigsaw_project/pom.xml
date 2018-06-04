@@ -62,6 +62,11 @@
             <artifactId>log4j-core</artifactId>
             <version>${log4j2-version}</version>
         </dependency>
+        <dependency>
+            <groupId>dst.biq</groupId>
+            <artifactId>jigsaw</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
